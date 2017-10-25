@@ -1,0 +1,45 @@
+language: java
+jdk: oraclejdk8
+notifications:
+  email: false
+env:
+  global:
+  - TERM=dumb
+
+install: ./gradlew setupCIWorkspace -S
+script: ./gradlew build -S
+
+cache:
+  directories:
+    - '$HOME/.m2'
+    - '$HOME/.gradle'
+before_cache:
+    - rm -f $HOME/.gradle/caches/*/*.lock
+
+branches:
+  except:
+  - /^release-.*$/
+
+deploy:
+  - provider: script
+    skip_cleanup: true
+    script: ./gradlew curseforge -S
+    on:
+      all_branches: true
+      repo: CyclopsMC/EnergeticSheep
+      tags: true
+  - provider: releases
+    skip_cleanup: true
+    api_key:
+      secure: TODO
+    on:
+      all_branches: true
+      repo: CyclopsMC/EnergeticSheep
+      tags: true
+  - provider: script
+    skip_cleanup: true
+    script: ./gradlew uploadArchives -S
+    on:
+      all_branches: true
+      repo: CyclopsMC/EnergeticSheep
+      condition: "$TRAVIS_BRANCH =~ ^(master|release).*$"

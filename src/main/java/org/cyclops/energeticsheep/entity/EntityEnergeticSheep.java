@@ -18,6 +18,9 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.event.entity.EntityStruckByLightningEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.cyclops.cyclopscore.config.configurable.IConfigurable;
 import org.cyclops.cyclopscore.config.extendedconfig.ExtendedConfig;
 
@@ -28,6 +31,7 @@ import javax.annotation.Nullable;
  * @author rubensworks
  *
  */
+@Mod.EventBusSubscriber
 public class EntityEnergeticSheep extends EntitySheep implements IConfigurable {
 
     private static final DataParameter<Integer> ENERGY = EntityDataManager.<Integer>createKey(EntityEnergeticSheep.class, DataSerializers.VARINT);
@@ -61,6 +65,29 @@ public class EntityEnergeticSheep extends EntitySheep implements IConfigurable {
         };
         this.energyStorage.receiveEnergy(this.energyStorage.getMaxEnergyStored(), false);
         this.experienceValue = 10;
+        this.isImmuneToFire = true;
+    }
+
+    @SubscribeEvent
+    public static void onLightning(EntityStruckByLightningEvent event) {
+        if (event.getEntity().getClass() == EntitySheep.class) {
+            EntitySheep sheep = (EntitySheep) event.getEntity();
+            EntityEnergeticSheep energeticSheep = new EntityEnergeticSheep(sheep.world);
+
+            if (sheep.hasCustomName()) {
+                energeticSheep.setCustomNameTag(sheep.getCustomNameTag());
+            }
+            energeticSheep.growingAge = sheep.getGrowingAge();
+            energeticSheep.setSheared(sheep.getSheared());
+            energeticSheep.setFleeceColor(sheep.getFleeceColor());
+            energeticSheep.setPositionAndRotation(sheep.posX, sheep.posY, sheep.posZ,
+                    sheep.rotationYaw, sheep.rotationPitch);
+
+            sheep.world.removeEntity(sheep);
+            sheep.world.spawnEntity(energeticSheep);
+
+            event.getLightning().setDead();
+        }
     }
 
     @Override
@@ -75,6 +102,8 @@ public class EntityEnergeticSheep extends EntitySheep implements IConfigurable {
         this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.23D * (1 + ratio));
         if (energy == 0) {
             this.setSheared(true);
+        } else if (this.getSheared()) {
+            this.setSheared(false);
         }
     }
 

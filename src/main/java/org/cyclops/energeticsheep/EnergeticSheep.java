@@ -131,6 +131,7 @@ public class EnergeticSheep extends ModBaseVersionable {
     @Override
     public void onMainConfigsRegister(ConfigHandler configHandler) {
         configHandler.add(new EntityEnergeticSheepConfig());
+        configHandler.add(new ItemEnergeticShearsConfig());
     }
 
     @Override

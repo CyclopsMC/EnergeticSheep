@@ -1,0 +1,26 @@
+itemGroup.energeticsheep=Energetic Sheep
+general.energeticsheep.energy_unit.name=RF
+
+# Items
+item.items.energeticsheep.energetic_shears.name=Energetic Shears
+item.items.energeticsheep.energetic_shears.info=Shear energy from any entity. Also acts like regular Shears that run on energy.
+
+# Entities
+entity.energeticsheep.energetic_sheep.name=Energetic Sheep
+
+# Configuration
+config.energeticsheep=%s configuration
+
+## Config categories
+config.energeticsheep.general=General settings
+config.energeticsheep.general.tooltip=General settings
+config.energeticsheep.core=Core settings
+config.energeticsheep.core.tooltip=Core settings
+
+## Core settings
+config.energeticsheep.general.analytics=Send anonymous analytics
+config.energeticsheep.general.crashOnInvalidRecipe=Crash on invalid Recipe
+config.energeticsheep.general.crashOnModCompatCrash=Crash on Compatibility issue
+config.energeticsheep.general.debug=Develop mode
+config.energeticsheep.general.version=Version
+config.energeticsheep.general.versionChecker=Version check

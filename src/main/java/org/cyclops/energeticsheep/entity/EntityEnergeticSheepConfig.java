@@ -36,7 +36,7 @@ public class EntityEnergeticSheepConfig extends MobConfig<EntityEnergeticSheep> 
      * The 1/X chance on having an energetic baby when breeding.
      */
     @ConfigurableProperty(category = ConfigurableTypeCategory.MOB, comment = "The 1/X chance on having an energetic baby when breeding.")
-    public static int babyChance = 10;
+    public static int babyChance = 3;
 
     /**
      * Make a new instance.

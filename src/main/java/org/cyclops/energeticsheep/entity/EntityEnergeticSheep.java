@@ -1,16 +1,22 @@
 package org.cyclops.energeticsheep.entity;
 
 import net.minecraft.entity.EntityAgeable;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.passive.EntitySheep;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumDyeColor;
+import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootTableList;
@@ -25,6 +31,7 @@ import org.cyclops.cyclopscore.config.configurable.IConfigurable;
 import org.cyclops.cyclopscore.config.extendedconfig.ExtendedConfig;
 
 import javax.annotation.Nullable;
+import java.util.Random;
 
 /**
  * A sheep that produces energy.
@@ -79,7 +86,7 @@ public class EntityEnergeticSheep extends EntitySheep implements IConfigurable {
             }
             energeticSheep.growingAge = sheep.getGrowingAge();
             energeticSheep.setSheared(sheep.getSheared());
-            energeticSheep.setFleeceColor(sheep.getFleeceColor());
+            energeticSheep.setFleeceColorInternal(sheep.getFleeceColor());
             energeticSheep.setPositionAndRotation(sheep.posX, sheep.posY, sheep.posZ,
                     sheep.rotationYaw, sheep.rotationPitch);
 
@@ -135,6 +142,7 @@ public class EntityEnergeticSheep extends EntitySheep implements IConfigurable {
     public void readEntityFromNBT(NBTTagCompound compound) {
         super.readEntityFromNBT(compound);
         this.energyStorage.receiveEnergy(compound.getInteger("energy"), false);
+        this.setFleeceColorInternal(EnumDyeColor.byMetadata(compound.getByte("Color")));
     }
 
     @Override
@@ -155,7 +163,18 @@ public class EntityEnergeticSheep extends EntitySheep implements IConfigurable {
     public EntitySheep createChild(EntityAgeable ageable) {
         if (EntityEnergeticSheepConfig.babyChance > 0
                 && this.rand.nextInt(EntityEnergeticSheepConfig.babyChance) == 0) {
-            return new EntityEnergeticSheep(getEntityWorld());
+            EntityEnergeticSheep child = new EntityEnergeticSheep(getEntityWorld());
+
+            // If parents have equal color, child has same color, otherwise random.
+            EnumDyeColor color;
+            if (this.getFleeceColor() == ((EntityEnergeticSheep) ageable).getFleeceColor()) {
+                color = this.getFleeceColor();
+            } else {
+                color = getRandomColor(this.world.rand);
+            }
+            child.setFleeceColorInternal(color);
+
+            return child;
         }
         return super.createChild(ageable);
     }
@@ -163,13 +182,39 @@ public class EntityEnergeticSheep extends EntitySheep implements IConfigurable {
     @Override
     protected float getSoundPitch() {
         return this.isChild()
-                ? (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.75F
-                : (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.25F;
+                ? (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 2.0F
+                : (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.5F;
     }
 
     @Nullable
     @Override
     protected ResourceLocation getLootTable() {
         return LootTableList.ENTITIES_SHEEP;
+    }
+
+    @Nullable
+    public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
+        livingdata = super.onInitialSpawn(difficulty, livingdata);
+        this.setFleeceColorInternal(getRandomColor(this.world.rand));
+        return livingdata;
+    }
+
+    @Override
+    public boolean processInteract(EntityPlayer player, EnumHand hand) {
+        // Stop dying action
+        return player.getHeldItem(hand).getItem() instanceof ItemDye || super.processInteract(player, hand);
+    }
+
+    @Override
+    public void setFleeceColor(EnumDyeColor color) {
+        // Do nothing, we don't allow custom color setting
+    }
+
+    protected void setFleeceColorInternal(EnumDyeColor color) {
+        super.setFleeceColor(color);
+    }
+
+    protected static EnumDyeColor getRandomColor(Random random) {
+        return EnumDyeColor.values()[random.nextInt(EnumDyeColor.values().length)];
     }
 }

@@ -31,7 +31,7 @@ deploy:
   - provider: releases
     skip_cleanup: true
     api_key:
-      secure: TODO
+      secure: ZH6b0OTJeBXrhy1tJLFdHO+rIW27q5d1tFCgaNarEFE+kJSVEiKtrGi+TBTpCRJVdPiMtTZR5t6MDaZ7xNWC4Bu7N+FEr4UHRiljMzMn/SGDVMLWvx+Q+roFqs9KzjtG2N37QkxQdDIQdcEl9rSS15yyCvz2oFaY9va8GrEiszlW4/VVW8hju5S+n1AP9nXPbwF17I84dq7LCbLKaUTZ/MSFcTB64XrMj0BLiWi3KEHfSoyk9bJ0tYjLcA81qX7ivaQW7jS4kf0JnHkDBE6hPvmkMD1mvUJndZa3HjxUIk4ExvmJqKhGPJW7SRdnv2d5GJL5zYmFubF3qgx3ZUQ95jCEPMYz0T2g0/696kQBmU3GeiUFiJhon+qoDfqFLxoB38ZTaIFPBBTl/xrgmKAuJZGUefzsWJf8d6liE8YOEYdI1cYz89aFYsv9FwLMHCFj8H9jI/oBoORzahVpAXyiAw4VQ1Cm15HQZdVv1Frwe+F01u8DEq/AoyyoP5LcDzYOQgSVDs6zv8nEthBTmJ72fatMXVo/EYNLXY21mJePOG5p9lddjBloCJac1kg2jruo6dSxrOTU6w67WtZEpQ28eTF2LBsZ4vAjcYxksZQOPBwjY5biH9EP9NvepTkUfoynoi9BwMucIxmEGSMtzxcwOjZFHsaycaCkFpXG8lQn740=
     on:
       all_branches: true
       repo: CyclopsMC/EnergeticSheep

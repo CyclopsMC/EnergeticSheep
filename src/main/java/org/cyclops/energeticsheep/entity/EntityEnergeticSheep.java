@@ -3,6 +3,8 @@ package org.cyclops.energeticsheep.entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.EntityAIEatGrass;
+import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumDyeColor;
@@ -27,6 +29,7 @@ import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.event.entity.EntityStruckByLightningEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import org.cyclops.cyclopscore.config.configurable.IConfigurable;
 import org.cyclops.cyclopscore.config.extendedconfig.ExtendedConfig;
 
@@ -98,6 +101,22 @@ public class EntityEnergeticSheep extends EntitySheep implements IConfigurable {
     }
 
     @Override
+    protected void initEntityAI() {
+        super.initEntityAI();
+        EntityAIEatGrass eatGrassAi = null;
+        for (EntityAITasks.EntityAITaskEntry taskEntry : this.tasks.taskEntries) {
+            if (taskEntry.action instanceof EntityAIEatGrass) {
+                eatGrassAi = (EntityAIEatGrass) taskEntry.action;
+            }
+        }
+        this.targetTasks.removeTask(eatGrassAi);
+        eatGrassAi = new EntityAIEatGrassFast(this);
+        this.targetTasks.addTask(5, eatGrassAi);
+        ReflectionHelper.setPrivateValue(EntitySheep.class, this, eatGrassAi,
+                "field_146087_bs", "entityAIEatGrass");
+    }
+
+    @Override
     protected void entityInit() {
         super.entityInit();
         this.dataManager.register(ENERGY, 0);
@@ -120,6 +139,12 @@ public class EntityEnergeticSheep extends EntitySheep implements IConfigurable {
 
     public int getCapacity() {
         return this.energyStorage.getMaxEnergyStored();
+    }
+
+    @Override
+    public void eatGrassBonus() {
+        super.eatGrassBonus();
+        this.energyStorage.receiveEnergy(this.energyStorage.getMaxEnergyStored(), false);
     }
 
     @Override

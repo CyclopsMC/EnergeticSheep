@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<recipes>
+
+    <recipe type="shaped">
+        <condition type="config">energetic_shears</condition>
+        <input>
+            <grid>
+                <gridrow>
+                    <item type="oredict">materialWoolEnergetic</item>
+                    <item type="oredict">materialWoolEnergetic</item>
+                    <item type="oredict">materialWoolEnergetic</item>
+                </gridrow>
+                <gridrow>
+                    <item type="oredict">materialWoolEnergetic</item>
+                    <item>minecraft:shears</item>
+                    <item type="oredict">materialWoolEnergetic</item>
+                </gridrow>
+                <gridrow>
+                    <item type="oredict">materialWoolEnergetic</item>
+                    <item type="oredict">materialWoolEnergetic</item>
+                    <item type="oredict">materialWoolEnergetic</item>
+                </gridrow>
+            </grid>
+        </input>
+        <output>
+            <item>energeticsheep:energetic_shears</item>
+        </output>
+    </recipe>
+
+</recipes>

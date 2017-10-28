@@ -27,10 +27,16 @@ public class EntityEnergeticSheepConfig extends MobConfig<EntityEnergeticSheep> 
     public static EntityEnergeticSheepConfig _instance;
 
     /**
-     * How much energy the sheep can regenerate each time.
+     * How much base energy the sheep can regenerate each time.
      */
-    @ConfigurableProperty(category = ConfigurableTypeCategory.MOB, comment = "How much energy the sheep can regenerate each time.")
+    @ConfigurableProperty(category = ConfigurableTypeCategory.MOB, comment = "How much base energy the sheep can regenerate each time.")
     public static int capacity = 100000;
+
+    /**
+     * This factor will be multiplied by the ordinal value of the color, and will be multiplied with the base capacity of the sheep.
+     */
+    @ConfigurableProperty(category = ConfigurableTypeCategory.MOB, comment = "This factor will be multiplied by the ordinal value of the color, and will be multiplied with the base capacity of the sheep.")
+    public static double additionalCapacityColorFactor = 0.075D;
 
     /**
      * The 1/X chance on having an energetic baby when breeding.

@@ -46,7 +46,7 @@ public class EntityEnergeticSheep extends EntitySheep implements IConfigurable {
 
     private static final DataParameter<Integer> ENERGY = EntityDataManager.<Integer>createKey(EntityEnergeticSheep.class, DataSerializers.VARINT);
 
-    private final IEnergyStorage energyStorage;
+    private IEnergyStorage energyStorage;
 
     /**
      * Make a new instance.
@@ -54,7 +54,17 @@ public class EntityEnergeticSheep extends EntitySheep implements IConfigurable {
      */
     public EntityEnergeticSheep(World world) {
         super(world);
-        this.energyStorage = new EnergyStorage(EntityEnergeticSheepConfig.capacity) {
+        this.experienceValue = 10;
+        this.isImmuneToFire = true;
+    }
+
+    public static int getCapacity(EnumDyeColor color) {
+        return (int) (EntityEnergeticSheepConfig.capacity * (1 + (EnumDyeColor.values().length - color.ordinal() - 1)
+                * EntityEnergeticSheepConfig.additionalCapacityColorFactor));
+    }
+
+    protected void setEnergyStorage(EnumDyeColor color) {
+        this.energyStorage = new EnergyStorage(getCapacity(color)) {
             @Override
             public int receiveEnergy(int maxReceive, boolean simulate) {
                 int ret = super.receiveEnergy(maxReceive, simulate);
@@ -74,8 +84,6 @@ public class EntityEnergeticSheep extends EntitySheep implements IConfigurable {
             }
         };
         this.energyStorage.receiveEnergy(this.energyStorage.getMaxEnergyStored(), false);
-        this.experienceValue = 10;
-        this.isImmuneToFire = true;
     }
 
     @SubscribeEvent
@@ -166,6 +174,7 @@ public class EntityEnergeticSheep extends EntitySheep implements IConfigurable {
     @Override
     public void readEntityFromNBT(NBTTagCompound compound) {
         super.readEntityFromNBT(compound);
+        this.setEnergyStorage(getFleeceColor());
         this.energyStorage.receiveEnergy(compound.getInteger("energy"), false);
         this.setFleeceColorInternal(EnumDyeColor.byMetadata(compound.getByte("Color")));
     }
@@ -237,6 +246,7 @@ public class EntityEnergeticSheep extends EntitySheep implements IConfigurable {
 
     protected void setFleeceColorInternal(EnumDyeColor color) {
         super.setFleeceColor(color);
+        this.setEnergyStorage(color);
     }
 
     protected static EnumDyeColor getRandomColor(Random random) {

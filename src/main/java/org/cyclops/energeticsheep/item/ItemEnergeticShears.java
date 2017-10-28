@@ -15,6 +15,8 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemShears;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -29,6 +31,7 @@ import org.cyclops.cyclopscore.config.configurable.IConfigurableItem;
 import org.cyclops.cyclopscore.config.extendedconfig.ExtendedConfig;
 import org.cyclops.cyclopscore.config.extendedconfig.ItemConfig;
 import org.cyclops.cyclopscore.helper.L10NHelpers;
+import org.cyclops.cyclopscore.helper.TileHelpers;
 import org.cyclops.cyclopscore.item.IInformationProvider;
 import org.cyclops.cyclopscore.modcompat.capabilities.DefaultCapabilityProvider;
 import org.cyclops.energeticsheep.capability.energystorage.EnergyStorageItem;
@@ -82,6 +85,37 @@ public class ItemEnergeticShears extends ItemShears implements IConfigurableItem
                 + " " + L10NHelpers.localize("general.energeticsheep.energy_unit.name");
         list.add(IInformationProvider.ITEM_PREFIX + line);
         L10NHelpers.addOptionalInfo(list, getUnlocalizedName(itemStack));
+    }
+
+    public static EnumActionResult transferEnergy(EntityPlayer player, BlockPos pos, EnumFacing side, EnumHand hand) {
+        World worldIn = player.world;
+        if (!player.isSneaking()) {
+            IEnergyStorage energyTarget = TileHelpers.getCapability(worldIn, pos, side, CapabilityEnergy.ENERGY);
+            if (energyTarget != null) {
+                ItemStack itemStack = player.getHeldItem(hand);
+                IEnergyStorage energyItem = itemStack.getCapability(CapabilityEnergy.ENERGY, null);
+                if (energyItem != null) {
+                    return energyTarget.receiveEnergy(
+                            energyItem.extractEnergy(
+                                    energyTarget.receiveEnergy(
+                                            energyItem.extractEnergy(ItemEnergeticShearsConfig.usageTransferAmount, true),
+                                            true),
+                                    worldIn.isRemote),
+                            worldIn.isRemote) > 0 ? EnumActionResult.SUCCESS : EnumActionResult.FAIL;
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side,
+                                           float hitX, float hitY, float hitZ, EnumHand hand) {
+        EnumActionResult result = ItemEnergeticShears.transferEnergy(player, pos, side, hand);
+        if (result == null) {
+            return super.onItemUseFirst(player, world, pos, side, hitX, hitY, hitZ, hand);
+        }
+        return result;
     }
 
     @Override

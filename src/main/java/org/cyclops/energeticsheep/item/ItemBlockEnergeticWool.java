@@ -17,7 +17,6 @@ import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.cyclops.cyclopscore.helper.L10NHelpers;
-import org.cyclops.cyclopscore.helper.TileHelpers;
 import org.cyclops.cyclopscore.item.IInformationProvider;
 import org.cyclops.cyclopscore.item.ItemBlockMetadata;
 import org.cyclops.cyclopscore.modcompat.capabilities.DefaultCapabilityProvider;
@@ -50,25 +49,13 @@ public class ItemBlockEnergeticWool extends ItemBlockMetadata {
     }
 
     @Override
-    public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand,
-                                      EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (!player.isSneaking()) {
-            IEnergyStorage energyTarget = TileHelpers.getCapability(worldIn, pos, CapabilityEnergy.ENERGY);
-            if (energyTarget != null) {
-                ItemStack itemStack = player.getHeldItem(hand);
-                IEnergyStorage energyItem = itemStack.getCapability(CapabilityEnergy.ENERGY, null);
-                if (energyItem != null) {
-                    return energyTarget.receiveEnergy(
-                            energyItem.extractEnergy(
-                                    energyTarget.receiveEnergy(
-                                            energyItem.extractEnergy(ItemEnergeticShearsConfig.usageTransferAmount, true),
-                                            true),
-                                    worldIn.isRemote),
-                            worldIn.isRemote) > 0 ? EnumActionResult.SUCCESS : EnumActionResult.FAIL;
-                }
-            }
+    public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side,
+                                           float hitX, float hitY, float hitZ, EnumHand hand) {
+        EnumActionResult result = ItemEnergeticShears.transferEnergy(player, pos, side, hand);
+        if (result == null) {
+            return super.onItemUseFirst(player, world, pos, side, hitX, hitY, hitZ, hand);
         }
-        return super.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
+        return result;
     }
 
     @Override

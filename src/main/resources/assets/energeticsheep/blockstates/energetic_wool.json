@@ -1,0 +1,21 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "color=white": { "model": "minecraft:white_wool" },
+    "color=orange": { "model": "minecraft:orange_wool" },
+    "color=magenta": { "model": "minecraft:magenta_wool" },
+    "color=light_blue": { "model": "minecraft:light_blue_wool" },
+    "color=yellow": { "model": "minecraft:yellow_wool" },
+    "color=lime": { "model": "minecraft:lime_wool" },
+    "color=pink": { "model": "minecraft:pink_wool" },
+    "color=gray": { "model": "minecraft:gray_wool" },
+    "color=silver": { "model": "minecraft:silver_wool" },
+    "color=cyan": { "model": "minecraft:cyan_wool" },
+    "color=purple": { "model": "minecraft:purple_wool" },
+    "color=blue": { "model": "minecraft:blue_wool" },
+    "color=brown": { "model": "minecraft:brown_wool" },
+    "color=green": { "model": "minecraft:green_wool" },
+    "color=red": { "model": "minecraft:red_wool" },
+    "color=black": { "model": "minecraft:black_wool" }
+  }
+}

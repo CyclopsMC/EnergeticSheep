@@ -1,5 +1,6 @@
 package org.cyclops.energeticsheep.entity;
 
+import com.google.common.collect.Lists;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -7,7 +8,9 @@ import net.minecraft.entity.ai.EntityAIEatGrass;
 import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumDyeColor;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -32,8 +35,10 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import org.cyclops.cyclopscore.config.configurable.IConfigurable;
 import org.cyclops.cyclopscore.config.extendedconfig.ExtendedConfig;
+import org.cyclops.energeticsheep.block.BlockEnergeticWool;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -59,7 +64,11 @@ public class EntityEnergeticSheep extends EntitySheep implements IConfigurable {
     }
 
     public static int getCapacity(EnumDyeColor color) {
-        return (int) (EntityEnergeticSheepConfig.capacity * (1 + (EnumDyeColor.values().length - color.ordinal() - 1)
+        return getCapacity(color, EntityEnergeticSheepConfig.sheepBaseCapacity);
+    }
+
+    public static int getCapacity(EnumDyeColor color, int base) {
+        return (int) (base * (1 + (EnumDyeColor.values().length - color.ordinal() - 1)
                 * EntityEnergeticSheepConfig.additionalCapacityColorFactor));
     }
 
@@ -161,8 +170,18 @@ public class EntityEnergeticSheep extends EntitySheep implements IConfigurable {
     }
 
     @Override
-    public boolean isShearable(ItemStack item, IBlockAccess world, BlockPos pos) {
-        return false;
+    public List<ItemStack> onSheared(ItemStack item, IBlockAccess world, BlockPos pos, int fortune) {
+        this.setSheared(true);
+        int i = 1 + this.rand.nextInt(3);
+
+        List<ItemStack> ret = Lists.newArrayList();
+        for (int j = 0; j < i; ++j) {
+            ret.add(new ItemStack(Item.getItemFromBlock(BlockEnergeticWool.getInstance()),
+                    1, this.getFleeceColor().getMetadata()));
+        }
+
+        this.playSound(SoundEvents.ENTITY_SHEEP_SHEAR, 1.0F, 1.0F);
+        return ret;
     }
 
     @Override
@@ -223,7 +242,45 @@ public class EntityEnergeticSheep extends EntitySheep implements IConfigurable {
     @Nullable
     @Override
     protected ResourceLocation getLootTable() {
-        return LootTableList.ENTITIES_SHEEP;
+        if (this.getSheared()) {
+            return LootTableList.ENTITIES_SHEEP;
+        } else {
+            switch (this.getFleeceColor()) {
+                case WHITE:
+                default:
+                    return EntityEnergeticSheepConfig.LOOTTABLE_SHEEP_WHITE;
+                case ORANGE:
+                    return EntityEnergeticSheepConfig.LOOTTABLE_SHEEP_ORANGE;
+                case MAGENTA:
+                    return EntityEnergeticSheepConfig.LOOTTABLE_SHEEP_MAGENTA;
+                case LIGHT_BLUE:
+                    return EntityEnergeticSheepConfig.LOOTTABLE_SHEEP_LIGHT_BLUE;
+                case YELLOW:
+                    return EntityEnergeticSheepConfig.LOOTTABLE_SHEEP_YELLOW;
+                case LIME:
+                    return EntityEnergeticSheepConfig.LOOTTABLE_SHEEP_LIME;
+                case PINK:
+                    return EntityEnergeticSheepConfig.LOOTTABLE_SHEEP_PINK;
+                case GRAY:
+                    return EntityEnergeticSheepConfig.LOOTTABLE_SHEEP_GRAY;
+                case SILVER:
+                    return EntityEnergeticSheepConfig.LOOTTABLE_SHEEP_SILVER;
+                case CYAN:
+                    return EntityEnergeticSheepConfig.LOOTTABLE_SHEEP_CYAN;
+                case PURPLE:
+                    return EntityEnergeticSheepConfig.LOOTTABLE_SHEEP_PURPLE;
+                case BLUE:
+                    return EntityEnergeticSheepConfig.LOOTTABLE_SHEEP_BLUE;
+                case BROWN:
+                    return EntityEnergeticSheepConfig.LOOTTABLE_SHEEP_BROWN;
+                case GREEN:
+                    return EntityEnergeticSheepConfig.LOOTTABLE_SHEEP_GREEN;
+                case RED:
+                    return EntityEnergeticSheepConfig.LOOTTABLE_SHEEP_RED;
+                case BLACK:
+                    return EntityEnergeticSheepConfig.LOOTTABLE_SHEEP_BLACK;
+            }
+        }
     }
 
     @Nullable
@@ -252,4 +309,5 @@ public class EntityEnergeticSheep extends EntitySheep implements IConfigurable {
     protected static EnumDyeColor getRandomColor(Random random) {
         return EnumDyeColor.values()[random.nextInt(EnumDyeColor.values().length)];
     }
+
 }

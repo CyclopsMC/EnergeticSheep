@@ -18,6 +18,7 @@ import org.cyclops.cyclopscore.init.ItemCreativeTab;
 import org.cyclops.cyclopscore.init.ModBaseVersionable;
 import org.cyclops.cyclopscore.init.RecipeHandler;
 import org.cyclops.cyclopscore.proxy.ICommonProxy;
+import org.cyclops.energeticsheep.block.BlockEnergeticWoolConfig;
 import org.cyclops.energeticsheep.entity.EntityEnergeticSheepConfig;
 import org.cyclops.energeticsheep.item.ItemEnergeticShearsConfig;
 
@@ -132,6 +133,7 @@ public class EnergeticSheep extends ModBaseVersionable {
     public void onMainConfigsRegister(ConfigHandler configHandler) {
         configHandler.add(new EntityEnergeticSheepConfig());
         configHandler.add(new ItemEnergeticShearsConfig());
+        configHandler.add(new BlockEnergeticWoolConfig());
     }
 
     @Override

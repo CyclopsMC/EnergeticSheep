@@ -1,6 +1,6 @@
 ## EnergeticSheep
 
-[![Build Status](https://travis-ci.org/CyclopsMC/EnergeticSheep.svg?branch=master-1.10)](https://travis-ci.org/CyclopsMC/EnergeticSheep)
+[![Build Status](https://travis-ci.org/CyclopsMC/EnergeticSheep.svg?branch=master-1.12)](https://travis-ci.org/CyclopsMC/EnergeticSheep)
 [![Download](https://api.bintray.com/packages/cyclopsmc/dev/EnergeticSheep/images/download.svg) ](https://bintray.com/cyclopsmc/dev/EnergeticSheep/_latestVersion)
 [![CurseForge](http://cf.way2muchnoise.eu/full_280602_downloads.svg)](http://minecraft.curseforge.com/projects/280602)
 

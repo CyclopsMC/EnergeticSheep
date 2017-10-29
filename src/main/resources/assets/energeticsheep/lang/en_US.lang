@@ -1,5 +1,6 @@
 itemGroup.energeticsheep=Energetic Sheep
 general.energeticsheep.energy_unit.name=RF
+general.energeticsheep.description=Sheep that generate energy
 
 # Items
 item.items.energeticsheep.energetic_shears.name=Energetic Shears

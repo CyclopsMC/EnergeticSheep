@@ -1,0 +1,29 @@
+{
+  "display": {
+    "icon": {
+      "item": "energeticsheep:energetic_shears"
+    },
+    "title": {
+      "translate": "itemGroup.energeticsheep"
+    },
+    "description": {
+      "translate": "general.energeticsheep.description"
+    },
+    "background": "minecraft:textures/gui/advancements/backgrounds/husbandry.png",
+    "show_toast": false,
+    "announce_to_chat": false
+  },
+  "rewards": {
+    "recipes": [
+      "energeticsheep:energetic_shears"
+    ]
+  },
+  "criteria": {
+    "criteria_0": {
+      "trigger": "cyclopscore:mod_item_obtained",
+      "conditions": {
+        "mod_id": "energeticsheep"
+      }
+    }
+  }
+}

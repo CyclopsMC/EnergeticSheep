@@ -104,8 +104,8 @@ public class EntityEnergeticSheepConfig extends MobConfig<EntityEnergeticSheep> 
     }
 
     @Override
-    public void onForgeRegistered() {
-        super.onForgeRegistered();
+    public void onRegistered() {
+        super.onRegistered();
         for (Biome biome : Biome.REGISTRY) {
             EntityRegistry.addSpawn(EntityEnergeticSheep.class, 5, 2, 4, EnumCreatureType.CREATURE, biome);
         }

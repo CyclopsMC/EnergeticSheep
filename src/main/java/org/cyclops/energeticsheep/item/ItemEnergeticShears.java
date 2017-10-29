@@ -231,6 +231,7 @@ public class ItemEnergeticShears extends ItemShears implements IConfigurableItem
 
     @Nullable
     @Override
+    @SideOnly(Side.CLIENT)
     public IItemColor getItemColorHandler() {
         return null;
     }

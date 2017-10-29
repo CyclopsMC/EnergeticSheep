@@ -172,6 +172,7 @@ public class EntityEnergeticSheep extends EntitySheep implements IConfigurable {
     @Override
     public List<ItemStack> onSheared(ItemStack item, IBlockAccess world, BlockPos pos, int fortune) {
         this.setSheared(true);
+        this.energyStorage.extractEnergy(this.energyStorage.getMaxEnergyStored(), false);
         int i = 1 + this.rand.nextInt(3);
 
         List<ItemStack> ret = Lists.newArrayList();

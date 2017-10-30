@@ -188,7 +188,9 @@ public class EntityEnergeticSheep extends EntitySheep implements IConfigurable {
     @Override
     public void writeEntityToNBT(NBTTagCompound compound) {
         super.writeEntityToNBT(compound);
-        compound.setInteger("energy", this.energyStorage.getEnergyStored());
+        if (this.energyStorage != null) {
+            compound.setInteger("energy", this.energyStorage.getEnergyStored());
+        }
     }
 
     @Override

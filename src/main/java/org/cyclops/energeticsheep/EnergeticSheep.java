@@ -33,7 +33,8 @@ import org.cyclops.energeticsheep.item.ItemEnergeticShearsConfig;
         useMetadata = true,
         version = Reference.MOD_VERSION,
         dependencies = Reference.MOD_DEPENDENCIES,
-        guiFactory = "org.cyclops.energeticsheep.GuiConfigOverview$ExtendedConfigGuiFactory"
+        guiFactory = "org.cyclops.energeticsheep.GuiConfigOverview$ExtendedConfigGuiFactory",
+        certificateFingerprint = Reference.MOD_FINGERPRINT
 )
 public class EnergeticSheep extends ModBaseVersionable {
     

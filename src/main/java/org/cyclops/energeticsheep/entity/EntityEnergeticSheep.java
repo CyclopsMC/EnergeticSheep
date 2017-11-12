@@ -51,6 +51,7 @@ public class EntityEnergeticSheep extends EntitySheep implements IConfigurable {
 
     private static final DataParameter<Integer> ENERGY = EntityDataManager.<Integer>createKey(EntityEnergeticSheep.class, DataSerializers.VARINT);
 
+    @Nullable
     private IEnergyStorage energyStorage;
 
     /**
@@ -155,13 +156,15 @@ public class EntityEnergeticSheep extends EntitySheep implements IConfigurable {
     }
 
     public int getCapacity() {
-        return this.energyStorage.getMaxEnergyStored();
+        return this.energyStorage != null ? this.energyStorage.getMaxEnergyStored() : 0;
     }
 
     @Override
     public void eatGrassBonus() {
         super.eatGrassBonus();
-        this.energyStorage.receiveEnergy(this.energyStorage.getMaxEnergyStored(), false);
+        if (this.energyStorage != null) {
+            this.energyStorage.receiveEnergy(this.energyStorage.getMaxEnergyStored(), false);
+        }
     }
 
     @Override
@@ -172,7 +175,9 @@ public class EntityEnergeticSheep extends EntitySheep implements IConfigurable {
     @Override
     public List<ItemStack> onSheared(ItemStack item, IBlockAccess world, BlockPos pos, int fortune) {
         this.setSheared(true);
-        this.energyStorage.extractEnergy(this.energyStorage.getMaxEnergyStored(), false);
+        if (this.energyStorage != null) {
+            this.energyStorage.extractEnergy(this.energyStorage.getMaxEnergyStored(), false);
+        }
         int i = 1 + this.rand.nextInt(3);
 
         List<ItemStack> ret = Lists.newArrayList();
@@ -209,7 +214,7 @@ public class EntityEnergeticSheep extends EntitySheep implements IConfigurable {
     @Nullable
     @Override
     public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
-        if (capability == CapabilityEnergy.ENERGY) {
+        if (capability == CapabilityEnergy.ENERGY && this.energyStorage != null) {
             return (T) this.energyStorage;
         }
         return super.getCapability(capability, facing);

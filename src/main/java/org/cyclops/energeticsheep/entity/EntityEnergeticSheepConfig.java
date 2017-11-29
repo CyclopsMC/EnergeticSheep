@@ -71,11 +71,12 @@ public class EntityEnergeticSheepConfig extends MobConfig<EntityEnergeticSheep> 
     public static int babyChance = 3;
 
     /**
-     * Allow natural spawning of energetic sheep. If this is false,
-     * energetic sheep will only be created by lightning strikes.
+     * Percentage chance that energetic sheep will spawn in a
+     * chunk. If this is is set to zero, energetic sheep will only be
+     * created by lightning strikes.
      */
-    @ConfigurableProperty(category = ConfigurableTypeCategory.MOB, comment = "Allow natural spawning of energetic sheep. If this is false, energetic sheep will only be created by lightning strikes.")
-    public static Boolean naturalSpawn = true;
+    @ConfigurableProperty(category = ConfigurableTypeCategory.MOB, comment = "Percentage chance that energetic sheep will spawn in a chunk. If this is is set to zero, energetic sheep will only be created by lightning strikes.", minimalValue = 0, maximalValue = 100)
+    public static int spawnChance = 5;
 
     /**
      * Make a new instance.
@@ -113,10 +114,8 @@ public class EntityEnergeticSheepConfig extends MobConfig<EntityEnergeticSheep> 
     @Override
     public void onRegistered() {
         super.onRegistered();
-        if (naturalSpawn) {
-            for (Biome biome : Biome.REGISTRY) {
-                EntityRegistry.addSpawn(EntityEnergeticSheep.class, 5, 2, 4, EnumCreatureType.CREATURE, biome);
-            }
+        for (Biome biome : Biome.REGISTRY) {
+            EntityRegistry.addSpawn(EntityEnergeticSheep.class, spawnChance, 2, 4, EnumCreatureType.CREATURE, biome);
         }
     }
 

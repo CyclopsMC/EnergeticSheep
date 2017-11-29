@@ -77,8 +77,6 @@ public class EntityEnergeticSheepConfig extends MobConfig<EntityEnergeticSheep> 
     @ConfigurableProperty(category = ConfigurableTypeCategory.MOB, comment = "Allow natural spawning of energetic sheep. If this is false, energetic sheep will only be created by lightning strikes.")
     public static Boolean naturalSpawn = true;
 
-
-
     /**
      * Make a new instance.
      */

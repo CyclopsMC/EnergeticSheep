@@ -71,12 +71,11 @@ public class EntityEnergeticSheepConfig extends MobConfig<EntityEnergeticSheep> 
     public static int babyChance = 3;
 
     /**
-     * Percentage chance that energetic sheep will spawn in a
-     * chunk. If this is is set to zero, energetic sheep will only be
-     * created by lightning strikes.
+     * Spawn weight for energetic sheep. If this is is set to 0,
+     * energetic sheep will only be created by lightning strikes.
      */
-    @ConfigurableProperty(category = ConfigurableTypeCategory.MOB, minimalValue = 0, maximalValue = 100, requiresMcRestart = true, comment = "Percentage chance that energetic sheep will spawn in a chunk. If this is is set to zero, energetic sheep will only be created by lightning strikes.")
-    public static int spawnChance = 5;
+    @ConfigurableProperty(category = ConfigurableTypeCategory.MOB, minimalValue = 0, requiresMcRestart = true, comment = "Spawn weight for energetic sheep. If this is is set to 0, energetic sheep will only be created by lightning strikes.")
+    public static int spawnWeight = 5;
 
     /**
      * Make a new instance.
@@ -114,8 +113,10 @@ public class EntityEnergeticSheepConfig extends MobConfig<EntityEnergeticSheep> 
     @Override
     public void onRegistered() {
         super.onRegistered();
-        for (Biome biome : Biome.REGISTRY) {
-            EntityRegistry.addSpawn(EntityEnergeticSheep.class, spawnChance, 2, 4, EnumCreatureType.CREATURE, biome);
+        if (spawnWeight > 0) {
+            for (Biome biome : Biome.REGISTRY) {
+                EntityRegistry.addSpawn(EntityEnergeticSheep.class, spawnWeight, 2, 4, EnumCreatureType.CREATURE, biome);
+            }
         }
     }
 

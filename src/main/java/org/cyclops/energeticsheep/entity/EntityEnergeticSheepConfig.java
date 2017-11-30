@@ -75,7 +75,7 @@ public class EntityEnergeticSheepConfig extends MobConfig<EntityEnergeticSheep> 
      * chunk. If this is is set to zero, energetic sheep will only be
      * created by lightning strikes.
      */
-    @ConfigurableProperty(category = ConfigurableTypeCategory.MOB, comment = "Percentage chance that energetic sheep will spawn in a chunk. If this is is set to zero, energetic sheep will only be created by lightning strikes.", minimalValue = 0, maximalValue = 100)
+    @ConfigurableProperty(category = ConfigurableTypeCategory.MOB, minimalValue = 0, maximalValue = 100, requiresMcRestart = true, comment = "Percentage chance that energetic sheep will spawn in a chunk. If this is is set to zero, energetic sheep will only be created by lightning strikes.")
     public static int spawnChance = 5;
 
     /**

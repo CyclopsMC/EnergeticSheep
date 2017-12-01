@@ -11,11 +11,14 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.cyclops.cyclopscore.config.ConfigurableProperty;
 import org.cyclops.cyclopscore.config.ConfigurableTypeCategory;
+import org.cyclops.cyclopscore.config.IChangedCallback;
 import org.cyclops.cyclopscore.config.extendedconfig.MobConfig;
 import org.cyclops.cyclopscore.helper.Helpers;
 import org.cyclops.energeticsheep.EnergeticSheep;
 import org.cyclops.energeticsheep.Reference;
 import org.cyclops.energeticsheep.client.render.entity.RenderEntityEnergeticSheep;
+
+import com.google.common.collect.Iterables;
 
 /**
  * Config for the {@link EntityEnergeticSheep}.
@@ -74,7 +77,7 @@ public class EntityEnergeticSheepConfig extends MobConfig<EntityEnergeticSheep> 
      * Spawn weight for energetic sheep. If this is is set to 0,
      * energetic sheep will only be created by lightning strikes.
      */
-    @ConfigurableProperty(category = ConfigurableTypeCategory.MOB, minimalValue = 0, requiresMcRestart = true, comment = "Spawn weight for energetic sheep. If this is is set to 0, energetic sheep will only be created by lightning strikes.")
+    @ConfigurableProperty(category = ConfigurableTypeCategory.MOB, minimalValue = 0, comment = "Spawn weight for energetic sheep. If this is is set to 0, energetic sheep will only be created by lightning strikes.", changedCallback = SpawnWeightChangedCallback.class)
     public static int spawnWeight = 5;
 
     /**
@@ -110,13 +113,22 @@ public class EntityEnergeticSheepConfig extends MobConfig<EntityEnergeticSheep> 
         return Helpers.RGBToInt(14, 167, 163);
     }
 
-    @Override
-    public void onRegistered() {
-        super.onRegistered();
-        if (spawnWeight > 0) {
-            for (Biome biome : Biome.REGISTRY) {
-                EntityRegistry.addSpawn(EntityEnergeticSheep.class, spawnWeight, 2, 4, EnumCreatureType.CREATURE, biome);
+    public static class SpawnWeightChangedCallback implements IChangedCallback {
+
+        @Override
+        public void onChanged(Object value) {
+            if(spawnWeight > 0) {
+                // addSpawn actually acts like "add or update spawn"
+                EntityRegistry.addSpawn(EntityEnergeticSheep.class, spawnWeight, 2, 4, EnumCreatureType.CREATURE, Iterables.toArray(Biome.REGISTRY, Biome.class));
+            } else {
+                // Calling removeSpawn when the spawn isn't there is just a no-op
+                EntityRegistry.removeSpawn(EntityEnergeticSheep.class, EnumCreatureType.CREATURE, Iterables.toArray(Biome.REGISTRY, Biome.class));
             }
+        }
+
+        @Override
+        public void onRegisteredPostInit(Object value) {
+            onChanged(value);
         }
     }
 

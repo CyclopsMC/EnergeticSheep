@@ -1,12 +1,14 @@
 ## EnergeticSheep
 
 [![Build Status](https://travis-ci.org/CyclopsMC/EnergeticSheep.svg?branch=master-1.12)](https://travis-ci.org/CyclopsMC/EnergeticSheep)
-[![Download](https://api.bintray.com/packages/cyclopsmc/dev/EnergeticSheep/images/download.svg) ](https://bintray.com/cyclopsmc/dev/EnergeticSheep/_latestVersion)
+[![Download](https://img.shields.io/maven-metadata/v/http/cyclopsmc.jfrog.io/cyclopsmc/libs-release/org/cyclops/energeticsheep/EnergeticSheep/maven-metadata.xml.svg) ](https://cyclopsmc.jfrog.io/cyclopsmc/libs-release/org/cyclops/energeticsheep/EnergeticSheep/)
 [![CurseForge](http://cf.way2muchnoise.eu/full_280602_downloads.svg)](http://minecraft.curseforge.com/projects/280602)
 
 Sheep that generate energy
 
 All stable releases (including deobfuscated builds) can be found on [CurseForge](http://minecraft.curseforge.com/mc-mods/280602/files).
+
+[Development builds](https://cyclopsmc.jfrog.io/cyclopsmc/libs-release/org/cyclops/energeticsheep/EnergeticSheep/) are hosted by [JFrog Artifactory](https://www.jfrog.com/artifactory/).
 
 ### Contributing
 * Before submitting a pull request containing a new feature, please discuss this first with one of the lead developers.

@@ -1,0 +1,8 @@
+As always, don't forget to backup your world before updating!
+Requires CyclopsCore version 0.10.23 or higher.
+
+Changes:
+* Add option to change spawn rate, Closes #7
+
+Fixes:
+* Fix sheep regaining energy after world saving, Closes #8

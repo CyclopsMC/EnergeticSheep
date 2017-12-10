@@ -93,7 +93,6 @@ public class EntityEnergeticSheep extends EntitySheep implements IConfigurable {
                 return ret;
             }
         };
-        this.energyStorage.receiveEnergy(this.energyStorage.getMaxEnergyStored(), false);
     }
 
     @SubscribeEvent
@@ -201,9 +200,8 @@ public class EntityEnergeticSheep extends EntitySheep implements IConfigurable {
     @Override
     public void readEntityFromNBT(NBTTagCompound compound) {
         super.readEntityFromNBT(compound);
-        this.setEnergyStorage(getFleeceColor());
-        this.energyStorage.receiveEnergy(compound.getInteger("energy"), false);
         this.setFleeceColorInternal(EnumDyeColor.byMetadata(compound.getByte("Color")));
+        this.energyStorage.receiveEnergy(compound.getInteger("energy"), false);
     }
 
     @Override
@@ -295,6 +293,7 @@ public class EntityEnergeticSheep extends EntitySheep implements IConfigurable {
     public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
         livingdata = super.onInitialSpawn(difficulty, livingdata);
         this.setFleeceColorInternal(getRandomColor(this.world.rand));
+        this.energyStorage.receiveEnergy(this.energyStorage.getMaxEnergyStored(), false);
         return livingdata;
     }
 

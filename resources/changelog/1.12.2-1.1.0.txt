@@ -1,0 +1,6 @@
+As always, don't forget to backup your world before updating!
+Requires CyclopsCore version 0.10.23 or higher.
+
+Additions:
+* Add 'power-breeding' with certain types of food, Closes #2
+  This allows certain types of food to have a higher chance on producing energetic offspring.

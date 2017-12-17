@@ -19,11 +19,13 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -53,6 +55,7 @@ public class EntityEnergeticSheep extends EntitySheep implements IConfigurable {
 
     @Nullable
     private IEnergyStorage energyStorage;
+    private boolean powerBreeding = false;
 
     /**
      * Make a new instance.
@@ -194,6 +197,7 @@ public class EntityEnergeticSheep extends EntitySheep implements IConfigurable {
         super.writeEntityToNBT(compound);
         if (this.energyStorage != null) {
             compound.setInteger("energy", this.energyStorage.getEnergyStored());
+            compound.setBoolean("powerBreeding", powerBreeding);
         }
     }
 
@@ -202,6 +206,7 @@ public class EntityEnergeticSheep extends EntitySheep implements IConfigurable {
         super.readEntityFromNBT(compound);
         this.setFleeceColorInternal(EnumDyeColor.byMetadata(compound.getByte("Color")));
         this.energyStorage.receiveEnergy(compound.getInteger("energy"), false);
+        this.powerBreeding = compound.getBoolean("powerBreeding");
     }
 
     @Override
@@ -220,8 +225,10 @@ public class EntityEnergeticSheep extends EntitySheep implements IConfigurable {
 
     @Override
     public EntitySheep createChild(EntityAgeable ageable) {
-        if (EntityEnergeticSheepConfig.babyChance > 0
-                && this.rand.nextInt(EntityEnergeticSheepConfig.babyChance) == 0) {
+        int chance = this.powerBreeding
+                ? EntityEnergeticSheepConfig.babyChancePowerBreeding : EntityEnergeticSheepConfig.babyChance;
+        this.powerBreeding = false;
+        if (chance > 0 && this.rand.nextInt(chance) == 0) {
             EntityEnergeticSheep child = new EntityEnergeticSheep(getEntityWorld());
 
             // If parents have equal color, child has same color, otherwise random.
@@ -317,4 +324,29 @@ public class EntityEnergeticSheep extends EntitySheep implements IConfigurable {
         return EnumDyeColor.values()[random.nextInt(EnumDyeColor.values().length)];
     }
 
+    protected boolean isPowerBreedingItem(ItemStack stack) {
+        for(String name : EntityEnergeticSheepConfig.powerBreedingItems) {
+            if(Item.REGISTRY.getNameForObject(stack.getItem()).toString().equals(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isBreedingItem(ItemStack stack) {
+        return super.isBreedingItem(stack) || isPowerBreedingItem(stack);
+    }
+
+    @Override
+    protected void consumeItemFromStack(EntityPlayer player, ItemStack stack) {
+        if (isPowerBreedingItem(stack)) {
+            powerBreeding = true;
+            if (getEntityWorld() instanceof WorldServer) {
+                ((WorldServer) getEntityWorld()).spawnParticle(EnumParticleTypes.SPELL_INSTANT, false,
+                        this.posX, this.posY, this.posZ, 10, 0.5F, 0.5F, 0.5F, 2F);
+            }
+        }
+        super.consumeItemFromStack(player, stack);
+    }
 }

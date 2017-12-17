@@ -74,11 +74,28 @@ public class EntityEnergeticSheepConfig extends MobConfig<EntityEnergeticSheep> 
     public static int babyChance = 3;
 
     /**
+     * The 1/X chance on having an energetic baby when breeding with a power-breeding item.
+     */
+    @ConfigurableProperty(category = ConfigurableTypeCategory.MOB, comment = "The 1/X chance on having an energetic baby when breeding with a power-breeding item.")
+    public static int babyChancePowerBreeding = 1;
+
+    /**
      * Spawn weight for energetic sheep. If this is is set to 0,
      * energetic sheep will only be created by lightning strikes.
      */
     @ConfigurableProperty(category = ConfigurableTypeCategory.MOB, minimalValue = 0, comment = "Spawn weight for energetic sheep. If this is is set to 0, energetic sheep will only be created by lightning strikes.", changedCallback = SpawnWeightChangedCallback.class)
     public static int spawnWeight = 5;
+
+    /**
+     * The items that can be used to power-breed sheep, by unique item name.
+     */
+    @ConfigurableProperty(category = ConfigurableTypeCategory.MOB,
+            comment = "The items that can be used to power-breed sheep, by unique item name.")
+    public static String[] powerBreedingItems = new String[]{
+            "minecraft:rabbit_stew",
+            "minecraft:chorus_fruit",
+            "integrateddynamics:menril_berries",
+    };
 
     /**
      * Make a new instance.

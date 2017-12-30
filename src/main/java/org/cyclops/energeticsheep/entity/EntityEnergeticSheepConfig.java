@@ -84,7 +84,7 @@ public class EntityEnergeticSheepConfig extends MobConfig<EntityEnergeticSheep> 
      * energetic sheep will only be created by lightning strikes.
      */
     @ConfigurableProperty(category = ConfigurableTypeCategory.MOB, minimalValue = 0, comment = "Spawn weight for energetic sheep. If this is is set to 0, energetic sheep will only be created by lightning strikes.", changedCallback = SpawnWeightChangedCallback.class)
-    public static int spawnWeight = 5;
+    public static int spawnWeight = 3;
 
     /**
      * The items that can be used to power-breed sheep, by unique item name.

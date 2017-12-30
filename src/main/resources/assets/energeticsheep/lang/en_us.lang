@@ -8,6 +8,22 @@ item.items.energeticsheep.energetic_shears.info=Shear energy from any entity. Al
 
 # Blocks
 tile.blocks.energeticsheep.energetic_wool.name=Energetic Wool
+tile.blocks.energeticsheep.energetic_wool.white.name=Energetic White Wool
+tile.blocks.energeticsheep.energetic_wool.orange.name=Energetic Orange Wool
+tile.blocks.energeticsheep.energetic_wool.magenta.name=Energetic Magenta Wool
+tile.blocks.energeticsheep.energetic_wool.lightBlue.name=Energetic Light Blue Wool
+tile.blocks.energeticsheep.energetic_wool.yellow.name=Energetic Yellow Wool
+tile.blocks.energeticsheep.energetic_wool.lime.name=Energetic Lime Wool
+tile.blocks.energeticsheep.energetic_wool.pink.name=Energetic Pink Wool
+tile.blocks.energeticsheep.energetic_wool.gray.name=Energetic Gray Wool
+tile.blocks.energeticsheep.energetic_wool.silver.name=Energetic Light Gray Wool
+tile.blocks.energeticsheep.energetic_wool.cyan.name=Energetic Cyan Wool
+tile.blocks.energeticsheep.energetic_wool.purple.name=Energetic Purple Wool
+tile.blocks.energeticsheep.energetic_wool.blue.name=Energetic Blue Wool
+tile.blocks.energeticsheep.energetic_wool.brown.name=Energetic Brown Wool
+tile.blocks.energeticsheep.energetic_wool.green.name=Energetic Green Wool
+tile.blocks.energeticsheep.energetic_wool.red.name=Energetic Red Wool
+tile.blocks.energeticsheep.energetic_wool.black.name=Energetic Black Wool
 tile.blocks.energeticsheep.energetic_wool.info=Shocking!
 
 # Entities

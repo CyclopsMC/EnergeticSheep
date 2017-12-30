@@ -37,6 +37,12 @@ public class ItemBlockEnergeticWool extends ItemBlockMetadata {
         super(block);
     }
 
+    @Override
+    public String getItemStackDisplayName(ItemStack stack) {
+        return L10NHelpers.localize("tile.blocks.energeticsheep.energetic_wool."
+                + EnumDyeColor.byMetadata(stack.getMetadata()).getUnlocalizedName() + ".name");
+    }
+
     @SideOnly(Side.CLIENT)
     @Override
     public void addInformation(ItemStack itemStack, World world, List<String> list, ITooltipFlag flag) {

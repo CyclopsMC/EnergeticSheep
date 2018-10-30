@@ -43,11 +43,11 @@ public class EnergyStorageItem implements IEnergyStorage {
     @Override
     public int receiveEnergy(int energy, boolean simulate) {
         int stored = getEnergyStored();
-        int newEnergy = Math.min(stored + energy, getMaxEnergyStored());
+        int energyReceived = Math.min(getMaxEnergyStored() - stored, energy);
         if(!simulate) {
-            setEnergy(itemStack, newEnergy);
+            setEnergy(itemStack, stored + energyReceived);
         }
-        return newEnergy - stored;
+        return energyReceived;
     }
 
     @Override

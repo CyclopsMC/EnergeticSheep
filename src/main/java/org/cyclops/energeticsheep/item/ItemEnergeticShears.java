@@ -61,7 +61,7 @@ public class ItemEnergeticShears extends ItemShears implements IConfigurableItem
 
     public ItemEnergeticShears(ExtendedConfig<ItemConfig> eConfig) {
         this.setConfig((ItemConfig)eConfig);
-        this.setUnlocalizedName(eConfig.getUnlocalizedName());
+        this.setTranslationKey(eConfig.getTranslationKey());
         this.setMaxDamage(0);
     }
 
@@ -84,7 +84,7 @@ public class ItemEnergeticShears extends ItemShears implements IConfigurableItem
         String line = String.format("%,d", amount) + " / " + String.format("%,d", capacity)
                 + " " + L10NHelpers.localize("general.energeticsheep.energy_unit.name");
         list.add(IInformationProvider.ITEM_PREFIX + line);
-        L10NHelpers.addOptionalInfo(list, getUnlocalizedName(itemStack));
+        L10NHelpers.addOptionalInfo(list, getTranslationKey(itemStack));
     }
 
     public static EnumActionResult transferEnergy(EntityPlayer player, BlockPos pos, EnumFacing side, EnumHand hand) {

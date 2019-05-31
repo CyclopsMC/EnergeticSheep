@@ -1,0 +1,51 @@
+itemGroup.energeticsheep=Energetic Sheep
+general.energeticsheep.energy_unit.name=RF
+general.energeticsheep.description=Får som genererar ström
+
+# Items
+item.items.energeticsheep.energetic_shears.name=Strömfylld sax
+item.items.energeticsheep.energetic_shears.info=Klipper ström ifrån alla entiteter. Fungerar också som vanliga saxar som går på ström.
+
+# Blocks
+tile.blocks.energeticsheep.energetic_wool.name=Strömfylld ull
+tile.blocks.energeticsheep.energetic_wool.white.name=Strömfylld vit ull
+tile.blocks.energeticsheep.energetic_wool.orange.name=Strömfylld orange ull
+tile.blocks.energeticsheep.energetic_wool.magenta.name=Strömfylld ljuslila ull
+tile.blocks.energeticsheep.energetic_wool.lightBlue.name=Strömfylld ljusblå ull
+tile.blocks.energeticsheep.energetic_wool.yellow.name=Strömfylld gul ull
+tile.blocks.energeticsheep.energetic_wool.lime.name=Strömfylld limegrön ull
+tile.blocks.energeticsheep.energetic_wool.pink.name=Strömfylld rosa ull
+tile.blocks.energeticsheep.energetic_wool.gray.name=Strömfylld grå ull
+tile.blocks.energeticsheep.energetic_wool.silver.name=Strömfylld ljusgrå ull
+tile.blocks.energeticsheep.energetic_wool.cyan.name=Strömfylld turkos ull
+tile.blocks.energeticsheep.energetic_wool.purple.name=Strömfylld lila ull
+tile.blocks.energeticsheep.energetic_wool.blue.name=Strömfylld blå ull
+tile.blocks.energeticsheep.energetic_wool.brown.name=Strömfylld brun ull
+tile.blocks.energeticsheep.energetic_wool.green.name=Strömfylld grön ull
+tile.blocks.energeticsheep.energetic_wool.red.name=Strömfylld röd ull
+tile.blocks.energeticsheep.energetic_wool.black.name=Strömfylld svart ull
+tile.blocks.energeticsheep.energetic_wool.info=Chockerande!
+
+# Entities
+entity.energeticsheep.energetic_sheep.name=Strömfyllt får
+
+# Death messages
+death.attack.energeticwool.shock=%1$s chockades till döds
+death.attack.energeticwool.shock.player=%1$s chockades till döds i ett försök att fly från %2$s
+
+# Configuration
+config.energeticsheep=Konfiguration för %s
+
+## Config categories
+config.energeticsheep.general=Allmänna inställningar
+config.energeticsheep.general.tooltip=Allmänna inställningar
+config.energeticsheep.core=Kärninställningar
+config.energeticsheep.core.tooltip=Kärninställningar
+
+## Core settings
+config.energeticsheep.general.analytics=Skicka anonym statistik
+config.energeticsheep.general.crashOnInvalidRecipe=Krascha vid ogiltigt recept
+config.energeticsheep.general.crashOnModCompatCrash=Krascha vid kompatibilitetsproblem
+config.energeticsheep.general.debug=Utvecklarläge
+config.energeticsheep.general.version=Version
+config.energeticsheep.general.versionChecker=Versionskontroll

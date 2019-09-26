@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "energeticsheep:yellow_energetic_wool"
+    }
+  ],
+  "result": {
+    "item": "minecraft:yellow_wool"
+  }
+}

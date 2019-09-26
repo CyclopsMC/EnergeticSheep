@@ -1,9 +1,8 @@
 package org.cyclops.energeticsheep.capability.energystorage;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.energy.IEnergyStorage;
-import org.cyclops.cyclopscore.helper.ItemStackHelpers;
 
 /**
  * {@link IEnergyStorage} implementation for items.
@@ -21,8 +20,8 @@ public class EnergyStorageItem implements IEnergyStorage {
 
     @Override
     public int getEnergyStored() {
-        NBTTagCompound tag = ItemStackHelpers.getSafeTagCompound(itemStack);
-        return tag.getInteger("energy");
+        CompoundNBT tag = itemStack.getTag();
+        return tag == null ? 0 : tag.getInt("energy");
     }
 
     @Override
@@ -61,7 +60,7 @@ public class EnergyStorageItem implements IEnergyStorage {
     }
 
     protected void setEnergy(ItemStack itemStack, int energy) {
-        NBTTagCompound tag = ItemStackHelpers.getSafeTagCompound(itemStack);
-        tag.setInteger("energy", energy);
+        CompoundNBT tag = itemStack.getOrCreateTag();
+        tag.putInt("energy", energy);
     }
 }

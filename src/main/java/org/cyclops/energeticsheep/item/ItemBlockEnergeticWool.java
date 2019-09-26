@@ -1,74 +1,66 @@
 package org.cyclops.energeticsheep.item;
 
-import net.minecraft.block.Block;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.EnumDyeColor;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.item.ItemUseContext;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import org.cyclops.cyclopscore.helper.L10NHelpers;
 import org.cyclops.cyclopscore.item.IInformationProvider;
-import org.cyclops.cyclopscore.item.ItemBlockMetadata;
 import org.cyclops.cyclopscore.modcompat.capabilities.DefaultCapabilityProvider;
+import org.cyclops.energeticsheep.block.BlockEnergeticWool;
 import org.cyclops.energeticsheep.entity.EntityEnergeticSheep;
 import org.cyclops.energeticsheep.entity.EntityEnergeticSheepConfig;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
  * @author rubensworks
  */
-public class ItemBlockEnergeticWool extends ItemBlockMetadata {
-    /**
-     * Make a new instance.
-     * @param block The blockState instance.
-     */
-    public ItemBlockEnergeticWool(Block block) {
-        super(block);
+public class ItemBlockEnergeticWool extends BlockItem {
+
+    public ItemBlockEnergeticWool(BlockEnergeticWool block, Item.Properties builder) {
+        super(block, builder);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    @Override
+    public void addInformation(ItemStack itemStack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        super.addInformation(itemStack, worldIn, tooltip, flagIn);
+        if (CapabilityEnergy.ENERGY != null) { // Can be null during item registration, when caps are not registered yet
+            IEnergyStorage energyStorage = itemStack.getCapability(CapabilityEnergy.ENERGY).orElse(null);
+            int amount = energyStorage.getEnergyStored();
+            String line = String.format("%,d", amount) + " "
+                    + L10NHelpers.localize("general.energeticsheep.energy_unit");
+            tooltip.add(new StringTextComponent(IInformationProvider.ITEM_PREFIX + line));
+        }
+        L10NHelpers.addOptionalInfo(tooltip, "block.energeticsheep.energetic_wool");
     }
 
     @Override
-    public String getItemStackDisplayName(ItemStack stack) {
-        return L10NHelpers.localize("tile.blocks.energeticsheep.energetic_wool."
-                + EnumDyeColor.byMetadata(stack.getMetadata()).getTranslationKey() + ".name");
-    }
-
-    @SideOnly(Side.CLIENT)
-    @Override
-    public void addInformation(ItemStack itemStack, World world, List<String> list, ITooltipFlag flag) {
-        super.addInformation(itemStack, world, list, flag);
-        IEnergyStorage energyStorage = itemStack.getCapability(CapabilityEnergy.ENERGY, null);
-        int amount = energyStorage.getEnergyStored();
-        String line = String.format("%,d", amount) + " "
-                + L10NHelpers.localize("general.energeticsheep.energy_unit.name");
-        list.add(IInformationProvider.ITEM_PREFIX + line);
-    }
-
-    @Override
-    public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side,
-                                           float hitX, float hitY, float hitZ, EnumHand hand) {
-        EnumActionResult result = ItemEnergeticShears.transferEnergy(player, pos, side, hand);
+    public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
+        ActionResultType result = ItemEnergeticShears.transferEnergy(context.getPlayer(), context.getPos(), context.getFace(), context.getHand());
         if (result == null) {
-            return super.onItemUseFirst(player, world, pos, side, hitX, hitY, hitZ, hand);
+            return super.onItemUseFirst(stack, context);
         }
         return result;
     }
 
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
+    public ICapabilityProvider initCapabilities(ItemStack stack, CompoundNBT nbt) {
         return new DefaultCapabilityProvider<>(() -> CapabilityEnergy.ENERGY, new EnergyStorage(
-                EntityEnergeticSheep.getCapacity(EnumDyeColor.byMetadata(stack.getMetadata()),
-                        EntityEnergeticSheepConfig.woolBaseCapacity), stack));
+                EntityEnergeticSheep.getCapacity(((BlockEnergeticWool) this.getBlock()).getColor(), EntityEnergeticSheepConfig.woolBaseCapacity), stack));
     }
 
     public static class EnergyStorage implements IEnergyStorage {

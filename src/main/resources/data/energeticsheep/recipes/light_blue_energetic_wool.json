@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "energeticsheep:light_blue_energetic_wool"
+    }
+  ],
+  "result": {
+    "item": "minecraft:light_blue_wool"
+  }
+}

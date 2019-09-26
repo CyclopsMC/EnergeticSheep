@@ -1,8 +1,9 @@
 package org.cyclops.energeticsheep.item;
 
 
+import net.minecraft.item.Item;
+import net.minecraftforge.fml.config.ModConfig;
 import org.cyclops.cyclopscore.config.ConfigurableProperty;
-import org.cyclops.cyclopscore.config.ConfigurableTypeCategory;
 import org.cyclops.cyclopscore.config.extendedconfig.ItemConfig;
 import org.cyclops.energeticsheep.EnergeticSheep;
 
@@ -13,38 +14,22 @@ import org.cyclops.energeticsheep.EnergeticSheep;
  */
 public class ItemEnergeticShearsConfig extends ItemConfig {
 
-    /**
-     * The unique instance.
-     */
-    public static ItemEnergeticShearsConfig _instance;
-    /**
-     * The amount of energy this item can hold.
-     */
-    @ConfigurableProperty(category = ConfigurableTypeCategory.ITEM, comment = "The amount of energy this item can hold.", requiresMcRestart = true, isCommandable = true)
+    @ConfigurableProperty(category = "item", comment = "The amount of energy this item can hold.", requiresMcRestart = true, isCommandable = true, configLocation = ModConfig.Type.SERVER)
     public static int capacity = 1000000;
 
-    /**
-     * How much energy should be transferred on each usage.
-     */
-    @ConfigurableProperty(category = ConfigurableTypeCategory.ITEM, comment = "How much energy should be transferred on each usage.", isCommandable = true)
+    @ConfigurableProperty(category = "item", comment = "How much energy should be transferred on each usage.", isCommandable = true, configLocation = ModConfig.Type.SERVER)
     public static int usageTransferAmount = 100000;
 
-    /**
-     * How much the regular shear action should consume.
-     */
-    @ConfigurableProperty(category = ConfigurableTypeCategory.ITEM, comment = "How much the regular shear action should consume.", isCommandable = true)
+    @ConfigurableProperty(category = "item", comment = "How much the regular shear action should consume.", isCommandable = true, configLocation = ModConfig.Type.SERVER)
     public static int shearConsumption = 100;
 
-    /**
-     * Make a new instance.
-     */
     public ItemEnergeticShearsConfig() {
         super(
                 EnergeticSheep._instance,
-                true,
                 "energetic_shears",
-                null,
-                ItemEnergeticShears.class
+                eConfig -> new ItemEnergeticShears(new Item.Properties()
+                        .maxDamage(0)
+                        .group(EnergeticSheep._instance.getDefaultItemGroup()))
         );
     }
     

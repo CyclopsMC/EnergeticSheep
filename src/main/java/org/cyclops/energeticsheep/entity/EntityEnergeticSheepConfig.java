@@ -1,158 +1,95 @@
 package org.cyclops.energeticsheep.entity;
 
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.EnumCreatureType;
-import net.minecraft.util.ResourceLocation;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.entity.EntityClassification;
+import net.minecraft.entity.EntityType;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.storage.loot.LootTableList;
-import net.minecraftforge.fml.common.registry.EntityRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.cyclops.cyclopscore.config.ConfigurableProperty;
-import org.cyclops.cyclopscore.config.ConfigurableTypeCategory;
-import org.cyclops.cyclopscore.config.IChangedCallback;
-import org.cyclops.cyclopscore.config.extendedconfig.MobConfig;
-import org.cyclops.cyclopscore.helper.Helpers;
+import org.cyclops.cyclopscore.config.extendedconfig.EntityConfig;
 import org.cyclops.energeticsheep.EnergeticSheep;
-import org.cyclops.energeticsheep.Reference;
 import org.cyclops.energeticsheep.client.render.entity.RenderEntityEnergeticSheep;
 
-import com.google.common.collect.Iterables;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Config for the {@link EntityEnergeticSheep}.
  * @author rubensworks
  *
  */
-public class EntityEnergeticSheepConfig extends MobConfig<EntityEnergeticSheep> {
+public class EntityEnergeticSheepConfig extends EntityConfig<EntityEnergeticSheep> {
 
-    public static final ResourceLocation LOOTTABLE_SHEEP_WHITE      = LootTableList.register(new ResourceLocation(Reference.MOD_ID, "entities/energetic_sheep/white"));
-    public static final ResourceLocation LOOTTABLE_SHEEP_ORANGE     = LootTableList.register(new ResourceLocation(Reference.MOD_ID, "entities/energetic_sheep/orange"));
-    public static final ResourceLocation LOOTTABLE_SHEEP_MAGENTA    = LootTableList.register(new ResourceLocation(Reference.MOD_ID, "entities/energetic_sheep/magenta"));
-    public static final ResourceLocation LOOTTABLE_SHEEP_LIGHT_BLUE = LootTableList.register(new ResourceLocation(Reference.MOD_ID, "entities/energetic_sheep/light_blue"));
-    public static final ResourceLocation LOOTTABLE_SHEEP_YELLOW     = LootTableList.register(new ResourceLocation(Reference.MOD_ID, "entities/energetic_sheep/yellow"));
-    public static final ResourceLocation LOOTTABLE_SHEEP_LIME       = LootTableList.register(new ResourceLocation(Reference.MOD_ID, "entities/energetic_sheep/lime"));
-    public static final ResourceLocation LOOTTABLE_SHEEP_PINK       = LootTableList.register(new ResourceLocation(Reference.MOD_ID, "entities/energetic_sheep/pink"));
-    public static final ResourceLocation LOOTTABLE_SHEEP_GRAY       = LootTableList.register(new ResourceLocation(Reference.MOD_ID, "entities/energetic_sheep/gray"));
-    public static final ResourceLocation LOOTTABLE_SHEEP_SILVER     = LootTableList.register(new ResourceLocation(Reference.MOD_ID, "entities/energetic_sheep/silver"));
-    public static final ResourceLocation LOOTTABLE_SHEEP_CYAN       = LootTableList.register(new ResourceLocation(Reference.MOD_ID, "entities/energetic_sheep/cyan"));
-    public static final ResourceLocation LOOTTABLE_SHEEP_PURPLE     = LootTableList.register(new ResourceLocation(Reference.MOD_ID, "entities/energetic_sheep/purple"));
-    public static final ResourceLocation LOOTTABLE_SHEEP_BLUE       = LootTableList.register(new ResourceLocation(Reference.MOD_ID, "entities/energetic_sheep/blue"));
-    public static final ResourceLocation LOOTTABLE_SHEEP_BROWN      = LootTableList.register(new ResourceLocation(Reference.MOD_ID, "entities/energetic_sheep/brown"));
-    public static final ResourceLocation LOOTTABLE_SHEEP_GREEN      = LootTableList.register(new ResourceLocation(Reference.MOD_ID, "entities/energetic_sheep/green"));
-    public static final ResourceLocation LOOTTABLE_SHEEP_RED        = LootTableList.register(new ResourceLocation(Reference.MOD_ID, "entities/energetic_sheep/red"));
-    public static final ResourceLocation LOOTTABLE_SHEEP_BLACK      = LootTableList.register(new ResourceLocation(Reference.MOD_ID, "entities/energetic_sheep/black"));
-
-    /**
-     * The unique instance.
-     */
-    public static EntityEnergeticSheepConfig _instance;
-
-    /**
-     * How much base energy the sheep can regenerate each time.
-     */
-    @ConfigurableProperty(category = ConfigurableTypeCategory.MOB, comment = "How much base energy the sheep can regenerate each time.")
+    @ConfigurableProperty(category = "mob", comment = "How much base energy the sheep can regenerate each time.", configLocation = ModConfig.Type.SERVER)
     public static int sheepBaseCapacity = 20000;
 
-    /**
-     * How much base energy energetic wool wool has.
-     */
-    @ConfigurableProperty(category = ConfigurableTypeCategory.MOB, comment = "How much base energy energetic wool wool has.")
+    @ConfigurableProperty(category = "mob", comment = "How much base energy energetic wool wool has.", configLocation = ModConfig.Type.SERVER)
     public static int woolBaseCapacity = 500;
 
-    /**
-     * This factor will be multiplied by the ordinal value of the color, and will be multiplied with the base sheepBaseCapacity of the sheep.
-     */
-    @ConfigurableProperty(category = ConfigurableTypeCategory.MOB, comment = "This factor will be multiplied by the ordinal value of the color, and will be multiplied with the base sheepBaseCapacity of the sheep.")
+    @ConfigurableProperty(category = "mob", comment = "This factor will be multiplied by the ordinal value of the color, and will be multiplied with the base sheepBaseCapacity of the sheep.", isCommandable = true)
     public static double additionalCapacityColorFactor = 0.075D;
 
-    /**
-     * The 1/X chance on having an energetic baby when breeding.
-     */
-    @ConfigurableProperty(category = ConfigurableTypeCategory.MOB, comment = "The 1/X chance on having an energetic baby when breeding.")
+    @ConfigurableProperty(category = "mob", comment = "The 1/X chance on having an energetic baby when breeding.", configLocation = ModConfig.Type.SERVER, isCommandable = true)
     public static int babyChance = 3;
 
-    /**
-     * The 1/X chance on having an energetic baby when breeding with a power-breeding item.
-     */
-    @ConfigurableProperty(category = ConfigurableTypeCategory.MOB, comment = "The 1/X chance on having an energetic baby when breeding with a power-breeding item.")
+    @ConfigurableProperty(category = "mob", comment = "The 1/X chance on having an energetic baby when breeding with a power-breeding item.", configLocation = ModConfig.Type.SERVER, isCommandable = true)
     public static int babyChancePowerBreeding = 1;
 
-    /**
-     * Spawn weight for energetic sheep. If this is is set to 0,
-     * energetic sheep will only be created by lightning strikes.
-     */
-    @ConfigurableProperty(category = ConfigurableTypeCategory.MOB, minimalValue = 0, comment = "Spawn weight for energetic sheep. If this is is set to 0, energetic sheep will only be created by lightning strikes.", changedCallback = SpawnWeightChangedCallback.class)
+    @ConfigurableProperty(category = "mob", minimalValue = 0, comment = "Spawn weight for energetic sheep. If this is is set to 0, energetic sheep will only be created by lightning strikes.", configLocation = ModConfig.Type.SERVER, requiresMcRestart = true)
     public static int spawnWeight = 3;
 
-    /**
-     * The items that can be used to power-breed sheep, by unique item name.
-     */
-    @ConfigurableProperty(category = ConfigurableTypeCategory.MOB,
-            comment = "The items that can be used to power-breed sheep, by unique item name.")
-    public static String[] powerBreedingItems = new String[]{
+    @ConfigurableProperty(category = "mob",
+            comment = "The items that can be used to power-breed sheep, by unique item name.", configLocation = ModConfig.Type.SERVER)
+    public static List<String> powerBreedingItems = Lists.newArrayList(
             "minecraft:rabbit_stew",
             "minecraft:chorus_fruit",
-            "integrateddynamics:menril_berries",
-    };
+            "integrateddynamics:menril_berries"
+    );
 
-    /**
-     * Make a new instance.
-     */
     public EntityEnergeticSheepConfig() {
         super(
                 EnergeticSheep._instance,
-                true,
                 "energetic_sheep",
-                null,
+                eConfig -> EntityType.Builder.create(EntityEnergeticSheep::new, EntityClassification.CREATURE)
+                        .size(0.9F, 1.3F)
+                        .immuneToFire()
+                        .build(eConfig.getNamedId()),
                 EntityEnergeticSheep.class
         );
-    }
-    
-    @Override
-    public boolean isEnabled() {
-        return true;
+        FMLJavaModLoadingContext.get().getModEventBus().register(this);
     }
 
-    @Override
-    public boolean hasSpawnEgg() {
-        return true;
-    }
-
-    @Override
-    public int getBackgroundEggColor() {
-        return Helpers.RGBToInt(0, 111, 108);
-    }
-
-    @Override
-    public int getForegroundEggColor() {
-        return Helpers.RGBToInt(14, 167, 163);
-    }
-
-    public static class SpawnWeightChangedCallback implements IChangedCallback {
-
-        @Override
-        public void onChanged(Object value) {
-            if(spawnWeight > 0) {
-                // addSpawn actually acts like "add or update spawn"
-                EntityRegistry.addSpawn(EntityEnergeticSheep.class, spawnWeight, 2, 4, EnumCreatureType.CREATURE, Iterables.toArray(Biome.REGISTRY, Biome.class));
-            } else {
-                // Calling removeSpawn when the spawn isn't there is just a no-op
-                EntityRegistry.removeSpawn(EntityEnergeticSheep.class, EnumCreatureType.CREATURE, Iterables.toArray(Biome.REGISTRY, Biome.class));
+    @SubscribeEvent
+    public void onConfigLoad(ModConfig.Loading configEvent) {
+        // Collect biomes in which sheep spawn
+        Set<Biome> biomes = Sets.newIdentityHashSet();
+        for (Biome biome : ForgeRegistries.BIOMES.getValues()) {
+            for (Biome.SpawnListEntry spawn : biome.getSpawns(EntityClassification.CREATURE)) {
+                if (spawn.entityType == EntityType.SHEEP) {
+                    biomes.add(biome);
+                }
             }
         }
 
-        @Override
-        public void onRegisteredPostInit(Object value) {
-            onChanged(value);
+        // Register energetic sheep spawns to collected biomes
+        for (Biome biome : biomes) {
+            biome.addSpawn(EntityClassification.CREATURE, new Biome.SpawnListEntry(getInstance(), spawnWeight, 2, 4));
         }
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
-    public Render getRender(RenderManager renderManager) {
-        return new RenderEntityEnergeticSheep(renderManager, this);
+    public EntityRenderer<? super EntityEnergeticSheep> getRender(EntityRendererManager entityRendererManager, ItemRenderer itemRenderer) {
+        return new RenderEntityEnergeticSheep(entityRendererManager, this);
     }
     
 }

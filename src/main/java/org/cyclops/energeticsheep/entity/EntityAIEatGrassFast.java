@@ -1,22 +1,18 @@
 package org.cyclops.energeticsheep.entity;
 
 import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
-import net.minecraft.block.BlockTallGrass;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.block.state.pattern.BlockStateMatcher;
-import net.minecraft.entity.ai.EntityAIEatGrass;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.ai.goal.EatGrassGoal;
 import net.minecraft.util.math.BlockPos;
 
 /**
- * A faster version of {@link EntityAIEatGrass}.
+ * A faster version of {@link EatGrassGoal}.
  * @author rubensworks
  */
-public class EntityAIEatGrassFast extends EntityAIEatGrass {
+public class EntityAIEatGrassFast extends EatGrassGoal {
 
-    private static final Predicate<IBlockState> IS_TALL_GRASS = BlockStateMatcher.forBlock(Blocks.TALLGRASS)
-            .where(BlockTallGrass.TYPE, Predicates.equalTo(BlockTallGrass.EnumType.GRASS));
+    private static final Predicate<BlockState> IS_TALL_GRASS = (blockState) -> blockState.getBlock() == Blocks.TALL_GRASS;
 
     private final EntityEnergeticSheep grassEaterEntity;
 

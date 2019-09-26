@@ -1,11 +1,12 @@
 package org.cyclops.energeticsheep.client.render.entity;
 
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.entity.RenderSheep;
-import net.minecraft.entity.passive.EntitySheep;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.client.renderer.entity.layers.LayerRenderer;
+import net.minecraft.client.renderer.entity.layers.SheepWoolLayer;
+import net.minecraft.client.renderer.entity.model.SheepModel;
 import net.minecraft.util.ResourceLocation;
 import org.cyclops.cyclopscore.config.extendedconfig.ExtendedConfig;
-import org.cyclops.cyclopscore.config.extendedconfig.MobConfig;
 import org.cyclops.energeticsheep.Reference;
 import org.cyclops.energeticsheep.entity.EntityEnergeticSheep;
 import org.cyclops.energeticsheep.entity.layers.LayerEnergeticSheepCharge;
@@ -16,7 +17,7 @@ import org.cyclops.energeticsheep.entity.layers.LayerEnergeticSheepCharge;
  * @author rubensworks
  *
  */
-public class RenderEntityEnergeticSheep extends RenderSheep {
+public class RenderEntityEnergeticSheep extends MobRenderer<EntityEnergeticSheep, SheepModel<EntityEnergeticSheep>> {
 
     private ResourceLocation texture;
 
@@ -25,14 +26,15 @@ public class RenderEntityEnergeticSheep extends RenderSheep {
      * @param renderManager The render manager.
      * @param config Then config.
      */
-    public RenderEntityEnergeticSheep(RenderManager renderManager, ExtendedConfig<MobConfig<EntityEnergeticSheep>> config) {
-        super(renderManager);
+    public RenderEntityEnergeticSheep(EntityRendererManager renderManager, ExtendedConfig<?, ?> config) {
+        super(renderManager, new SheepModel<>(), 0.7F);
+        this.addLayer((LayerRenderer) new SheepWoolLayer((MobRenderer) this));
         this.addLayer(new LayerEnergeticSheepCharge(this));
         texture = new ResourceLocation(Reference.MOD_ID, Reference.TEXTURE_PATH_ENTITIES + config.getNamedId() + ".png");
     }
     
     @Override
-    protected ResourceLocation getEntityTexture(EntitySheep entity) {
+    protected ResourceLocation getEntityTexture(EntityEnergeticSheep entity) {
         return texture;
     }
 

@@ -1,0 +1,36 @@
+{
+    "itemGroup.energeticsheep": "Energetic Sheep",
+    "general.energeticsheep.energy_unit": "RF",
+    "general.energeticsheep.description": "Får som genererar energi",
+
+    "_comment": "Items",
+    "item.items.energeticsheep.energetic_shears": "Energifylld sax",
+    "item.items.energeticsheep.energetic_shears.info": "Klipper energi ifrån alla entiteter. Fungerar också som vanliga saxar som går på energi.",
+
+    "_comment": "Blocks",
+    "block.blocks.energeticsheep.energetic_wool": "Energifylld ull",
+    "block.blocks.energeticsheep.energetic_wool.white": "Energifylld vit ull",
+    "block.blocks.energeticsheep.energetic_wool.orange": "Energifylld orange ull",
+    "block.blocks.energeticsheep.energetic_wool.magenta": "Energifylld ljuslila ull",
+    "block.blocks.energeticsheep.energetic_wool.lightBlue": "Energifylld ljusblå ull",
+    "block.blocks.energeticsheep.energetic_wool.yellow": "Energifylld gul ull",
+    "block.blocks.energeticsheep.energetic_wool.lime": "Energifylld limegrön ull",
+    "block.blocks.energeticsheep.energetic_wool.pink": "Energifylld rosa ull",
+    "block.blocks.energeticsheep.energetic_wool.gray": "Energifylld grå ull",
+    "block.blocks.energeticsheep.energetic_wool.silver": "Energifylld ljusgrå ull",
+    "block.blocks.energeticsheep.energetic_wool.cyan": "Energifylld turkos ull",
+    "block.blocks.energeticsheep.energetic_wool.purple": "Energifylld lila ull",
+    "block.blocks.energeticsheep.energetic_wool.blue": "Energifylld blå ull",
+    "block.blocks.energeticsheep.energetic_wool.brown": "Energifylld brun ull",
+    "block.blocks.energeticsheep.energetic_wool.green": "Energifylld grön ull",
+    "block.blocks.energeticsheep.energetic_wool.red": "Energifylld röd ull",
+    "block.blocks.energeticsheep.energetic_wool.black": "Energifylld svart ull",
+    "block.blocks.energeticsheep.energetic_wool.info": "Chockerande!",
+
+    "_comment": "Entities",
+    "entity.energeticsheep.energetic_sheep": "Energifyllt får",
+
+    "_comment": "Death messages",
+    "death.attack.energeticwool.shock": "%1$s chockades till döds",
+    "death.attack.energeticwool.shock.player": "%1$s chockades till döds i ett försök att fly från %2$s"
+}

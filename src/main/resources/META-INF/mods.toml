@@ -14,7 +14,7 @@ Sheep that generate energy
 [[dependencies.energeticsheep]]
     modId="cyclopscore"
     mandatory=true
-    versionRange="[1.5.2,)"
+    versionRange="[1.5.3,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.energeticsheep]]

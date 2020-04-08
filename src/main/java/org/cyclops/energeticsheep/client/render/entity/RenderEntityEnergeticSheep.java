@@ -34,7 +34,7 @@ public class RenderEntityEnergeticSheep extends MobRenderer<EntityEnergeticSheep
     }
     
     @Override
-    protected ResourceLocation getEntityTexture(EntityEnergeticSheep entity) {
+    public ResourceLocation getEntityTexture(EntityEnergeticSheep entity) {
         return texture;
     }
 

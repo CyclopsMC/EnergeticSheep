@@ -70,7 +70,7 @@ public class ItemEnergeticShears extends ShearsItem {
 
     public static ActionResultType transferEnergy(PlayerEntity player, BlockPos pos, Direction side, Hand hand) {
         World worldIn = player.world;
-        if (!player.isSneaking()) {
+        if (!player.isCrouching()) {
             return TileHelpers.getCapability(worldIn, pos, side, CapabilityEnergy.ENERGY)
                     .map(energyTarget -> {
                         ItemStack itemStack = player.getHeldItem(hand);
@@ -205,7 +205,7 @@ public class ItemEnergeticShears extends ShearsItem {
         }
         if (canShear(itemStack) && entity instanceof IShearable) {
             net.minecraftforge.common.IShearable target = (IShearable)entity;
-            BlockPos pos = new BlockPos(entity.posX, entity.posY, entity.posZ);
+            BlockPos pos = new BlockPos(entity.getPosX(), entity.getPosY(), entity.getPosZ());
             if (target.isShearable(itemStack, entity.world, pos)) {
                 List<ItemStack> drops = target.onSheared(itemStack, entity.world, pos,
                         EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, itemStack));

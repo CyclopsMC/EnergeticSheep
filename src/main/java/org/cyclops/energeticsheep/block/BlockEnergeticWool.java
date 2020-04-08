@@ -37,11 +37,6 @@ public class BlockEnergeticWool extends Block {
     }
 
     @Override
-    public boolean isSolid(BlockState state) {
-        return true;
-    }
-
-    @Override
     public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
         entityIn.attackEntityFrom(DAMAGE_SHOCK, 1.0F);
     }

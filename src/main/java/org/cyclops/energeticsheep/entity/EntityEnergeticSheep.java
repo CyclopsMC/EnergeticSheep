@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.IChargeableMob;
 import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.SpawnReason;
@@ -28,6 +29,8 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -51,7 +54,8 @@ import java.util.Random;
  *
  */
 @Mod.EventBusSubscriber
-public class EntityEnergeticSheep extends SheepEntity {
+@OnlyIn(value = Dist.CLIENT, _interface = IChargeableMob.class)
+public class EntityEnergeticSheep extends SheepEntity implements IChargeableMob {
 
     public static final ResourceLocation LOOTTABLE_SHEEP_WHITE      = new ResourceLocation(Reference.MOD_ID, "entities/energetic_sheep/white");
     public static final ResourceLocation LOOTTABLE_SHEEP_ORANGE     = new ResourceLocation(Reference.MOD_ID, "entities/energetic_sheep/orange");
@@ -148,7 +152,7 @@ public class EntityEnergeticSheep extends SheepEntity {
             energeticSheep.growingAge = sheep.getGrowingAge();
             energeticSheep.setSheared(sheep.getSheared());
             energeticSheep.setFleeceColorInternal(sheep.getFleeceColor());
-            energeticSheep.setPositionAndRotation(sheep.posX, sheep.posY, sheep.posZ,
+            energeticSheep.setPositionAndRotation(sheep.getPosX(), sheep.getPosY(), sheep.getPosZ(),
                     sheep.rotationYaw, sheep.rotationPitch);
 
             sheep.remove();
@@ -363,9 +367,14 @@ public class EntityEnergeticSheep extends SheepEntity {
             powerBreeding = true;
             if (!getEntityWorld().isRemote()) {
                 ((ServerWorld) getEntityWorld()).spawnParticle(ParticleTypes.INSTANT_EFFECT,
-                        this.posX, this.posY, this.posZ, 10, 0.5F, 0.5F, 0.5F, 2F);
+                        this.getPosX(), this.getPosY(), this.getPosZ(), 10, 0.5F, 0.5F, 0.5F, 2F);
             }
         }
         super.consumeItemFromStack(player, stack);
+    }
+
+    @Override
+    public boolean func_225509_J__() {
+        return this.getEnergyClient() > 0;
     }
 }

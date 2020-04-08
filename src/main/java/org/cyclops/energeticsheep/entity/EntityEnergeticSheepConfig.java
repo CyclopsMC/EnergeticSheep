@@ -62,8 +62,6 @@ public class EntityEnergeticSheepConfig extends EntityConfig<EntityEnergeticShee
                 eConfig -> EntityType.Builder.create(EntityEnergeticSheep::new, EntityClassification.CREATURE)
                         .size(0.9F, 1.3F)
                         .immuneToFire()
-                        .build(eConfig.getNamedId()),
-                EntityEnergeticSheep.class
         );
         FMLJavaModLoadingContext.get().getModEventBus().register(this);
     }

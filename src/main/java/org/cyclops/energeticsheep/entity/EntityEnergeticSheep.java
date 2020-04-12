@@ -82,10 +82,6 @@ public class EntityEnergeticSheep extends SheepEntity implements IChargeableMob 
     private IEnergyStorage energyStorage;
     private boolean powerBreeding = false;
 
-    /**
-     * Make a new instance.
-     * @param world The world.
-     */
     public EntityEnergeticSheep(EntityType<? extends EntityEnergeticSheep> type, World world) {
         super(type, world);
         this.experienceValue = 10;

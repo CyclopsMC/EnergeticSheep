@@ -6,8 +6,8 @@ import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.IChargeableMob;
 import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.passive.SheepEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.DyeColor;
@@ -18,6 +18,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.IItemProvider;
@@ -26,7 +27,7 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
@@ -175,7 +176,7 @@ public class EntityEnergeticSheep extends SheepEntity implements IChargeableMob 
     protected void updateEnergy(int energy) {
         this.dataManager.set(ENERGY, energy);
         float ratio = (float) energy / getCapacity();
-        this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.23D * (1 + ratio));
+        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.23D * (1 + ratio));
         if (energy == 0) {
             this.setSheared(true);
         } else if (this.getSheared()) {
@@ -200,7 +201,7 @@ public class EntityEnergeticSheep extends SheepEntity implements IChargeableMob 
     }
 
     @Override
-    public List<ItemStack> onSheared(ItemStack item, IWorld world, BlockPos pos, int fortune) {
+    public List<ItemStack> onSheared(@Nullable PlayerEntity player, ItemStack item, World world, BlockPos pos, int fortune) {
         this.setSheared(true);
         if (this.energyStorage != null) {
             this.energyStorage.extractEnergy(this.energyStorage.getMaxEnergyStored(), false);
@@ -242,8 +243,9 @@ public class EntityEnergeticSheep extends SheepEntity implements IChargeableMob 
         return super.getCapability(capability, facing);
     }
 
+    // MCP: createChild
     @Override
-    public SheepEntity createChild(AgeableEntity ageable) {
+    public SheepEntity func_241840_a(ServerWorld world, AgeableEntity ageable) {
         int chance = this.powerBreeding
                 ? EntityEnergeticSheepConfig.babyChancePowerBreeding : EntityEnergeticSheepConfig.babyChance;
         this.powerBreeding = false;
@@ -261,7 +263,7 @@ public class EntityEnergeticSheep extends SheepEntity implements IChargeableMob 
 
             return child;
         }
-        return super.createChild(ageable);
+        return super.func_241840_a(world, ageable);
     }
 
     @Override
@@ -315,18 +317,22 @@ public class EntityEnergeticSheep extends SheepEntity implements IChargeableMob 
         }
     }
 
-    @Nullable
-    public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
+    @Override
+    public ILivingEntityData onInitialSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
         ILivingEntityData livingdata = super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
         this.setFleeceColorInternal(getRandomColor(this.world.rand));
         this.energyStorage.receiveEnergy(this.energyStorage.getMaxEnergyStored(), false);
         return livingdata;
     }
 
+    // MCP: processInteract
     @Override
-    public boolean processInteract(PlayerEntity player, Hand hand) {
+    public ActionResultType func_230254_b_(PlayerEntity player, Hand hand) {
         // Stop dying action
-        return player.getHeldItem(hand).getItem() instanceof DyeItem || super.processInteract(player, hand);
+        if (player.getHeldItem(hand).getItem() instanceof DyeItem) {
+            return ActionResultType.CONSUME;
+        }
+        return super.func_230254_b_(player, hand);
     }
 
     @Override
@@ -370,7 +376,7 @@ public class EntityEnergeticSheep extends SheepEntity implements IChargeableMob 
     }
 
     @Override
-    public boolean func_225509_J__() {
+    public boolean isCharged() {
         return this.getEnergyClient() > 0;
     }
 }

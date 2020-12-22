@@ -7,9 +7,14 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ai.attributes.GlobalEntityTypeAttributes;
+import net.minecraft.entity.passive.SheepEntity;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -63,24 +68,17 @@ public class EntityEnergeticSheepConfig extends EntityConfig<EntityEnergeticShee
                         .size(0.9F, 1.3F)
                         .immuneToFire()
         );
-        FMLJavaModLoadingContext.get().getModEventBus().register(this);
+        MinecraftForge.EVENT_BUS.addListener(this::onBiomeLoadingEvent);
     }
 
-    @SubscribeEvent
-    public void onConfigLoad(ModConfig.Loading configEvent) {
-        // Collect biomes in which sheep spawn
-        Set<Biome> biomes = Sets.newIdentityHashSet();
-        for (Biome biome : ForgeRegistries.BIOMES.getValues()) {
-            for (Biome.SpawnListEntry spawn : biome.getSpawns(EntityClassification.CREATURE)) {
-                if (spawn.entityType == EntityType.SHEEP) {
-                    biomes.add(biome);
-                }
+    public void onBiomeLoadingEvent(BiomeLoadingEvent event) {
+        // Register energetic sheep spawns to biomes in which regular sheep spawn
+        List<MobSpawnInfo.Spawners> spawners = event.getSpawns().getSpawner(EntityClassification.CREATURE);
+        for (MobSpawnInfo.Spawners spawner : spawners) {
+            if (spawner.type == EntityType.SHEEP) {
+                spawners.add(new MobSpawnInfo.Spawners(getInstance(), spawnWeight, 2, 4));
+                break;
             }
-        }
-
-        // Register energetic sheep spawns to collected biomes
-        for (Biome biome : biomes) {
-            biome.addSpawn(EntityClassification.CREATURE, new Biome.SpawnListEntry(getInstance(), spawnWeight, 2, 4));
         }
     }
 
@@ -89,5 +87,11 @@ public class EntityEnergeticSheepConfig extends EntityConfig<EntityEnergeticShee
     public EntityRenderer<? super EntityEnergeticSheep> getRender(EntityRendererManager entityRendererManager, ItemRenderer itemRenderer) {
         return new RenderEntityEnergeticSheep(entityRendererManager, this);
     }
-    
+
+    @Override
+    public void onForgeRegistered() {
+        super.onForgeRegistered();
+        // MCP: registerAttributes
+        GlobalEntityTypeAttributes.put(getInstance(), SheepEntity.func_234225_eI_().create());
+    }
 }

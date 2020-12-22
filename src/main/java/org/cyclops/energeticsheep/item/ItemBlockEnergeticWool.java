@@ -43,7 +43,7 @@ public class ItemBlockEnergeticWool extends BlockItem {
             int amount = energyStorage.getEnergyStored();
             String line = String.format("%,d", amount) + " "
                     + L10NHelpers.localize("general.energeticsheep.energy_unit");
-            tooltip.add(new StringTextComponent(line).applyTextStyle(IInformationProvider.ITEM_PREFIX));
+            tooltip.add(new StringTextComponent(line).mergeStyle(IInformationProvider.ITEM_PREFIX));
         }
         L10NHelpers.addOptionalInfo(tooltip, "block.energeticsheep.energetic_wool");
     }

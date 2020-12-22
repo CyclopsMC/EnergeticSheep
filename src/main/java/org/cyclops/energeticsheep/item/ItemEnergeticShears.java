@@ -28,7 +28,7 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.IShearable;
+import net.minecraftforge.common.IForgeShearable;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -64,7 +64,7 @@ public class ItemEnergeticShears extends ShearsItem {
             int capacity = energyStorage.getMaxEnergyStored();
             String line = String.format("%,d", amount) + " / " + String.format("%,d", capacity)
                     + " " + L10NHelpers.localize("general.energeticsheep.energy_unit");
-            tooltip.add(new StringTextComponent(line).applyTextStyle(IInformationProvider.ITEM_PREFIX));
+            tooltip.add(new StringTextComponent(line).mergeStyle(IInformationProvider.ITEM_PREFIX));
         }
     }
 
@@ -130,10 +130,10 @@ public class ItemEnergeticShears extends ShearsItem {
             return false;
         }
         Block block = player.world.getBlockState(pos).getBlock();
-        if (block instanceof IShearable) {
-            IShearable target = (net.minecraftforge.common.IShearable)block;
+        if (block instanceof IForgeShearable) {
+            IForgeShearable target = (IForgeShearable) block;
             if (target.isShearable(itemStack, player.world, pos)) {
-                List<ItemStack> drops = target.onSheared(itemStack, player.world, pos,
+                List<ItemStack> drops = target.onSheared(player, itemStack, player.world, pos,
                         EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, itemStack));
                 Random rand = new java.util.Random();
 
@@ -183,9 +183,9 @@ public class ItemEnergeticShears extends ShearsItem {
     }
 
     @Override
-    public boolean itemInteractionForEntity(ItemStack itemStack, PlayerEntity player, LivingEntity entity, Hand hand) {
+    public ActionResultType itemInteractionForEntity(ItemStack itemStack, PlayerEntity player, LivingEntity entity, Hand hand) {
         if (entity.world.isRemote) {
-            return false;
+            return ActionResultType.PASS;
         }
 
         LazyOptional<IEnergyStorage> energyCapability = entity.getCapability(CapabilityEnergy.ENERGY);
@@ -201,13 +201,13 @@ public class ItemEnergeticShears extends ShearsItem {
                 player.setHeldItem(hand, itemStack);
                 entity.playSound(SoundEvents.ENTITY_SHEEP_SHEAR, 1.0F, 1.0F);
             }
-            return true;
+            return ActionResultType.SUCCESS;
         }
-        if (canShear(itemStack) && entity instanceof IShearable) {
-            net.minecraftforge.common.IShearable target = (IShearable)entity;
+        if (canShear(itemStack) && entity instanceof IForgeShearable) {
+            IForgeShearable target = (IForgeShearable)entity;
             BlockPos pos = new BlockPos(entity.getPosX(), entity.getPosY(), entity.getPosZ());
             if (target.isShearable(itemStack, entity.world, pos)) {
-                List<ItemStack> drops = target.onSheared(itemStack, entity.world, pos,
+                List<ItemStack> drops = target.onSheared(player, itemStack, entity.world, pos,
                         EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, itemStack));
 
                 Random rand = new Random();
@@ -222,9 +222,9 @@ public class ItemEnergeticShears extends ShearsItem {
                 consumeOnShear(itemStack);
                 player.setHeldItem(hand, itemStack);
             }
-            return true;
+            return ActionResultType.SUCCESS;
         }
-        return false;
+        return ActionResultType.PASS;
     }
 
     @Override

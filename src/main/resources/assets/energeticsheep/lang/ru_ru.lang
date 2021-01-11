@@ -1,0 +1,51 @@
+itemGroup.energeticsheep=Energetic Sheep
+general.energeticsheep.energy_unit.name=RF
+general.energeticsheep.description=Овцы, генерирующие энергию
+
+# Items
+item.items.energeticsheep.energetic_shears.name=Энергетические ножницы
+item.items.energeticsheep.energetic_shears.info=Срезают энергию от любого объекта. Также действует как обычные ножницы, работающие на энергии.
+
+# Blocks
+tile.blocks.energeticsheep.energetic_wool.name=Энергетическая шерсть
+tile.blocks.energeticsheep.energetic_wool.white.name=Энергетическая белая шерсть
+tile.blocks.energeticsheep.energetic_wool.orange.name=Энергетическая оранжевая шерсть
+tile.blocks.energeticsheep.energetic_wool.magenta.name=Энергетическая пурпурная шерсть
+tile.blocks.energeticsheep.energetic_wool.lightBlue.name=Энергетическая голубая шерсть
+tile.blocks.energeticsheep.energetic_wool.yellow.name=Энергетическая жёлтая шерсть
+tile.blocks.energeticsheep.energetic_wool.lime.name=Энергетическая лаймовая шерсть
+tile.blocks.energeticsheep.energetic_wool.pink.name=Энергетическая розовая шерсть
+tile.blocks.energeticsheep.energetic_wool.gray.name=Энергетическая серая шерсть
+tile.blocks.energeticsheep.energetic_wool.silver.name=Энергетическая светло-серая шерсть
+tile.blocks.energeticsheep.energetic_wool.cyan.name=Энергетическая бирюзовая шерсть
+tile.blocks.energeticsheep.energetic_wool.purple.name=Энергетическая фиолетовая шерсть
+tile.blocks.energeticsheep.energetic_wool.blue.name=Энергетическая синяя шерсть
+tile.blocks.energeticsheep.energetic_wool.brown.name=Энергетическая коричневая шерсть
+tile.blocks.energeticsheep.energetic_wool.green.name=Энергетическая зелёная шерсть
+tile.blocks.energeticsheep.energetic_wool.red.name=Энергетическая красная шерсть
+tile.blocks.energeticsheep.energetic_wool.black.name=Энергетическая чёрная шерсть
+tile.blocks.energeticsheep.energetic_wool.info=Бьёт током!
+
+# Entities
+entity.energeticsheep.energetic_sheep.name=Энергетическая овца
+
+# Death messages
+death.attack.energeticwool.shock=%1$s был ударен током до смерти
+death.attack.energeticwool.shock.player=%1$s был ударен током до смерти, пытаясь сбежать от %2$s
+
+# Configuration
+config.energeticsheep=Конфигурация %s
+
+## Config categories
+config.energeticsheep.general=Общие настройки
+config.energeticsheep.general.tooltip=Общие настройки
+config.energeticsheep.core=Настройки ядра
+config.energeticsheep.core.tooltip=Настройки ядра
+
+## Core settings
+config.energeticsheep.general.analytics=Отправлять анонимную аналитику
+config.energeticsheep.general.crashOnInvalidRecipe=Сбой из-за неверного рецепта
+config.energeticsheep.general.crashOnModCompatCrash=Сбой из-за проблемы совместимости
+config.energeticsheep.general.debug=Режим разработчика
+config.energeticsheep.general.version=Версия
+config.energeticsheep.general.versionChecker=Проверка версии

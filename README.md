@@ -9,7 +9,7 @@ Sheep that generate energy
 
 All stable releases (including deobfuscated builds) can be found on [CurseForge](http://minecraft.curseforge.com/mc-mods/280602/files).
 
-[Development builds](https://oss.jfrog.org/artifactory/simple/libs-release/org/cyclops/energeticsheep/EnergeticSheep/) are hosted by [JFrog Artifactory](https://www.jfrog.com/artifactory/).
+[Development builds](https://github.com/CyclopsMC/packages/packages/) are hosted as GitHub packages.
 
 ### Contributing
 * Before submitting a pull request containing a new feature, please discuss this first with one of the lead developers.

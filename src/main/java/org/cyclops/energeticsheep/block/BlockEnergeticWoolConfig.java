@@ -1,10 +1,10 @@
 package org.cyclops.energeticsheep.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
 import org.cyclops.cyclopscore.config.extendedconfig.BlockConfig;
 import org.cyclops.energeticsheep.EnergeticSheep;
 import org.cyclops.energeticsheep.item.ItemBlockEnergeticWool;

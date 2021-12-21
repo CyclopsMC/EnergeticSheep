@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[34,)"
+loaderVersion="[39,)"
 issueTrackerURL="https://github.com/CyclopsMC/EnergeticSheep/issues"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/energeticsheep"
 license="MIT"
@@ -16,18 +16,18 @@ Sheep that generate energy
 [[dependencies.energeticsheep]]
     modId="cyclopscore"
     mandatory=true
-    versionRange="[1.11.6,)"
+    versionRange="[1.12.1,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.energeticsheep]]
     modId="forge"
     mandatory=true
-    versionRange="[34,)"
+    versionRange="[39,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.energeticsheep]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.16.2,]"
+    versionRange="[1.18.1,]"
     ordering="NONE"
     side="BOTH"

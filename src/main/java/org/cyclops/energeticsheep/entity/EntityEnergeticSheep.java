@@ -2,34 +2,34 @@ package org.cyclops.energeticsheep.entity;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import net.minecraft.entity.AgeableEntity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.IChargeableMob;
-import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.passive.SheepEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.DyeItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.Util;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.PowerableMob;
+import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.animal.Sheep;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.DyeItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
@@ -55,8 +55,8 @@ import java.util.Random;
  *
  */
 @Mod.EventBusSubscriber
-@OnlyIn(value = Dist.CLIENT, _interface = IChargeableMob.class)
-public class EntityEnergeticSheep extends SheepEntity implements IChargeableMob {
+@OnlyIn(value = Dist.CLIENT, _interface = PowerableMob.class)
+public class EntityEnergeticSheep extends Sheep implements PowerableMob {
 
     public static final ResourceLocation LOOTTABLE_SHEEP_WHITE      = new ResourceLocation(Reference.MOD_ID, "entities/energetic_sheep/white");
     public static final ResourceLocation LOOTTABLE_SHEEP_ORANGE     = new ResourceLocation(Reference.MOD_ID, "entities/energetic_sheep/orange");
@@ -75,15 +75,15 @@ public class EntityEnergeticSheep extends SheepEntity implements IChargeableMob 
     public static final ResourceLocation LOOTTABLE_SHEEP_RED        = new ResourceLocation(Reference.MOD_ID, "entities/energetic_sheep/red");
     public static final ResourceLocation LOOTTABLE_SHEEP_BLACK      = new ResourceLocation(Reference.MOD_ID, "entities/energetic_sheep/black");
 
-    private final Map<DyeColor, IItemProvider> woolByColor;
+    private final Map<DyeColor, ItemLike> woolByColor;
 
-    private static final DataParameter<Integer> ENERGY = EntityDataManager.<Integer>defineId(EntityEnergeticSheep.class, DataSerializers.INT);
+    private static final EntityDataAccessor<Integer> ENERGY = SynchedEntityData.<Integer>defineId(EntityEnergeticSheep.class, EntityDataSerializers.INT);
 
     @Nullable
     private IEnergyStorage energyStorage;
     private boolean powerBreeding = false;
 
-    public EntityEnergeticSheep(EntityType<? extends EntityEnergeticSheep> type, World world) {
+    public EntityEnergeticSheep(EntityType<? extends EntityEnergeticSheep> type, Level world) {
         super(type, world);
         this.xpReward = 10;
         this.woolByColor = Util.make(Maps.newEnumMap(DyeColor.class), (p_203402_0_) -> {
@@ -139,8 +139,8 @@ public class EntityEnergeticSheep extends SheepEntity implements IChargeableMob 
 
     @SubscribeEvent
     public static void onLightning(EntityStruckByLightningEvent event) {
-        if (event.getEntity().getClass() == SheepEntity.class) {
-            SheepEntity sheep = (SheepEntity) event.getEntity();
+        if (event.getEntity().getClass() == Sheep.class) {
+            Sheep sheep = (Sheep) event.getEntity();
             EntityEnergeticSheep energeticSheep = RegistryEntries.ENTITY_TYPE_ENERGETIC_SHEEP.create(sheep.level);
 
             if (sheep.hasCustomName()) {
@@ -150,12 +150,12 @@ public class EntityEnergeticSheep extends SheepEntity implements IChargeableMob 
             energeticSheep.setSheared(sheep.isSheared());
             energeticSheep.setFleeceColorInternal(sheep.getColor());
             energeticSheep.absMoveTo(sheep.getX(), sheep.getY(), sheep.getZ(),
-                    sheep.yRot, sheep.xRot);
+                    sheep.yRotO, sheep.xRotO);
 
-            sheep.remove();
+            sheep.remove(RemovalReason.DISCARDED);
             sheep.level.addFreshEntity(energeticSheep);
 
-            event.getLightning().remove();
+            event.getLightning().remove(RemovalReason.KILLED);
         }
     }
 
@@ -201,7 +201,7 @@ public class EntityEnergeticSheep extends SheepEntity implements IChargeableMob 
     }
 
     @Override
-    public List<ItemStack> onSheared(@Nullable PlayerEntity player, ItemStack item, World world, BlockPos pos, int fortune) {
+    public List<ItemStack> onSheared(@Nullable Player player, ItemStack item, Level world, BlockPos pos, int fortune) {
         this.setSheared(true);
         if (this.energyStorage != null) {
             this.energyStorage.extractEnergy(this.energyStorage.getMaxEnergyStored(), false);
@@ -218,7 +218,7 @@ public class EntityEnergeticSheep extends SheepEntity implements IChargeableMob 
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundNBT compound) {
+    public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         if (this.energyStorage != null) {
             compound.putInt("energy", this.energyStorage.getEnergyStored());
@@ -227,7 +227,7 @@ public class EntityEnergeticSheep extends SheepEntity implements IChargeableMob 
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundNBT compound) {
+    public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setFleeceColorInternal(DyeColor.byId(compound.getByte("Color")));
         this.energyStorage.receiveEnergy(compound.getInt("energy"), false);
@@ -245,7 +245,7 @@ public class EntityEnergeticSheep extends SheepEntity implements IChargeableMob 
 
     // MCP: createChild
     @Override
-    public SheepEntity getBreedOffspring(ServerWorld world, AgeableEntity ageable) {
+    public Sheep getBreedOffspring(ServerLevel world, AgeableMob ageable) {
         int chance = this.powerBreeding
                 ? EntityEnergeticSheepConfig.babyChancePowerBreeding : EntityEnergeticSheepConfig.babyChance;
         this.powerBreeding = false;
@@ -267,7 +267,7 @@ public class EntityEnergeticSheep extends SheepEntity implements IChargeableMob 
     }
 
     @Override
-    protected float getVoicePitch() {
+    public float getVoicePitch() {
         return this.isBaby()
                 ? (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 2.0F
                 : (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.5F;
@@ -318,8 +318,8 @@ public class EntityEnergeticSheep extends SheepEntity implements IChargeableMob 
     }
 
     @Override
-    public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
-        ILivingEntityData livingdata = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
+        SpawnGroupData livingdata = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
         this.setFleeceColorInternal(getRandomColor(this.level.random));
         this.energyStorage.receiveEnergy(this.energyStorage.getMaxEnergyStored(), false);
         return livingdata;
@@ -327,10 +327,10 @@ public class EntityEnergeticSheep extends SheepEntity implements IChargeableMob 
 
     // MCP: processInteract
     @Override
-    public ActionResultType mobInteract(PlayerEntity player, Hand hand) {
+    public InteractionResult mobInteract(Player player, InteractionHand hand) {
         // Stop dying action
         if (player.getItemInHand(hand).getItem() instanceof DyeItem) {
-            return ActionResultType.CONSUME;
+            return InteractionResult.CONSUME;
         }
         return super.mobInteract(player, hand);
     }
@@ -364,15 +364,15 @@ public class EntityEnergeticSheep extends SheepEntity implements IChargeableMob 
     }
 
     @Override
-    protected void usePlayerItem(PlayerEntity player, ItemStack stack) {
+    protected void usePlayerItem(Player player, InteractionHand hand, ItemStack stack) {
         if (isPowerBreedingItem(stack)) {
             powerBreeding = true;
             if (!getCommandSenderWorld().isClientSide()) {
-                ((ServerWorld) getCommandSenderWorld()).sendParticles(ParticleTypes.INSTANT_EFFECT,
+                ((ServerLevel) getCommandSenderWorld()).sendParticles(ParticleTypes.INSTANT_EFFECT,
                         this.getX(), this.getY(), this.getZ(), 10, 0.5F, 0.5F, 0.5F, 2F);
             }
         }
-        super.usePlayerItem(player, stack);
+        super.usePlayerItem(player, hand, stack);
     }
 
     @Override

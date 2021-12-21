@@ -1,8 +1,8 @@
 package org.cyclops.energeticsheep.item;
 
 
-import net.minecraft.item.Item;
-import net.minecraft.item.SpawnEggItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.SpawnEggItem;
 import org.cyclops.cyclopscore.config.extendedconfig.ItemConfig;
 import org.cyclops.cyclopscore.helper.Helpers;
 import org.cyclops.energeticsheep.EnergeticSheep;

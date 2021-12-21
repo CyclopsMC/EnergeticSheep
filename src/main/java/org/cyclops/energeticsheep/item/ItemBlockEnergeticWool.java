@@ -1,15 +1,15 @@
 package org.cyclops.energeticsheep.item;
 
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -36,21 +36,21 @@ public class ItemBlockEnergeticWool extends BlockItem {
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void appendHoverText(ItemStack itemStack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack itemStack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         super.appendHoverText(itemStack, worldIn, tooltip, flagIn);
         if (CapabilityEnergy.ENERGY != null) { // Can be null during item registration, when caps are not registered yet
             IEnergyStorage energyStorage = itemStack.getCapability(CapabilityEnergy.ENERGY).orElse(null);
             int amount = energyStorage.getEnergyStored();
             String line = String.format("%,d", amount) + " "
                     + L10NHelpers.localize("general.energeticsheep.energy_unit");
-            tooltip.add(new StringTextComponent(line).withStyle(IInformationProvider.ITEM_PREFIX));
+            tooltip.add(new TextComponent(line).withStyle(IInformationProvider.ITEM_PREFIX));
         }
         L10NHelpers.addOptionalInfo(tooltip, "block.energeticsheep.energetic_wool");
     }
 
     @Override
-    public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
-        ActionResultType result = ItemEnergeticShears.transferEnergy(context.getPlayer(), context.getClickedPos(), context.getClickedFace(), context.getHand());
+    public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context) {
+        InteractionResult result = ItemEnergeticShears.transferEnergy(context.getPlayer(), context.getClickedPos(), context.getClickedFace(), context.getHand());
         if (result == null) {
             return super.onItemUseFirst(stack, context);
         }
@@ -58,7 +58,7 @@ public class ItemBlockEnergeticWool extends BlockItem {
     }
 
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, CompoundNBT nbt) {
+    public ICapabilityProvider initCapabilities(ItemStack stack, CompoundTag nbt) {
         return new DefaultCapabilityProvider<>(() -> CapabilityEnergy.ENERGY, new EnergyStorage(
                 EntityEnergeticSheep.getCapacity(((BlockEnergeticWool) this.getBlock()).getColor(), EntityEnergeticSheepConfig.woolBaseCapacity), stack));
     }

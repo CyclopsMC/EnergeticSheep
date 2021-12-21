@@ -1,31 +1,28 @@
 package org.cyclops.energeticsheep.entity;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.entity.EntityClassification;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ai.attributes.GlobalEntityTypeAttributes;
-import net.minecraft.entity.passive.SheepEntity;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.MobSpawnInfo;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.animal.Sheep;
+import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.cyclops.cyclopscore.config.ConfigurableProperty;
 import org.cyclops.cyclopscore.config.extendedconfig.EntityConfig;
 import org.cyclops.energeticsheep.EnergeticSheep;
 import org.cyclops.energeticsheep.client.render.entity.RenderEntityEnergeticSheep;
+import org.cyclops.energeticsheep.entity.layers.LayerEnergeticSheepCharge;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * Config for the {@link EntityEnergeticSheep}.
@@ -64,19 +61,21 @@ public class EntityEnergeticSheepConfig extends EntityConfig<EntityEnergeticShee
         super(
                 EnergeticSheep._instance,
                 "energetic_sheep",
-                eConfig -> EntityType.Builder.of(EntityEnergeticSheep::new, EntityClassification.CREATURE)
+                eConfig -> EntityType.Builder.of(EntityEnergeticSheep::new, MobCategory.CREATURE)
                         .sized(0.9F, 1.3F)
                         .fireImmune()
         );
         MinecraftForge.EVENT_BUS.addListener(this::onBiomeLoadingEvent);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onEntityAttributesModification);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(LayerEnergeticSheepCharge::loadLayerDefinitions);
     }
 
     public void onBiomeLoadingEvent(BiomeLoadingEvent event) {
         // Register energetic sheep spawns to biomes in which regular sheep spawn
-        List<MobSpawnInfo.Spawners> spawners = event.getSpawns().getSpawner(EntityClassification.CREATURE);
-        for (MobSpawnInfo.Spawners spawner : spawners) {
+        List<MobSpawnSettings.SpawnerData> spawners = event.getSpawns().getSpawner(MobCategory.CREATURE);
+        for (MobSpawnSettings.SpawnerData spawner : spawners) {
             if (spawner.type == EntityType.SHEEP) {
-                spawners.add(new MobSpawnInfo.Spawners(getInstance(), spawnWeight, 2, 4));
+                spawners.add(new MobSpawnSettings.SpawnerData(getInstance(), spawnWeight, 2, 4));
                 break;
             }
         }
@@ -84,14 +83,23 @@ public class EntityEnergeticSheepConfig extends EntityConfig<EntityEnergeticShee
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public EntityRenderer<? super EntityEnergeticSheep> getRender(EntityRendererManager entityRendererManager, ItemRenderer itemRenderer) {
-        return new RenderEntityEnergeticSheep(entityRendererManager, this);
+    public EntityRenderer<? super EntityEnergeticSheep> getRender(EntityRendererProvider.Context renderContext, ItemRenderer itemRenderer) {
+        return new RenderEntityEnergeticSheep(renderContext, this);
     }
 
-    @Override
-    public void onForgeRegistered() {
-        super.onForgeRegistered();
-        // MCP: registerAttributes
-        GlobalEntityTypeAttributes.put(getInstance(), SheepEntity.createAttributes().build());
+    public void onEntityAttributesModification(EntityAttributeModificationEvent event) {
+        // Same as Sheep.createAttributes()
+        event.add(getInstance(), Attributes.MAX_HEALTH);
+        event.add(getInstance(), Attributes.KNOCKBACK_RESISTANCE);
+        event.add(getInstance(), Attributes.MOVEMENT_SPEED);
+        event.add(getInstance(), Attributes.ARMOR);
+        event.add(getInstance(), Attributes.ARMOR_TOUGHNESS);
+        event.add(getInstance(), net.minecraftforge.common.ForgeMod.SWIM_SPEED.get());
+        event.add(getInstance(), net.minecraftforge.common.ForgeMod.NAMETAG_DISTANCE.get());
+        event.add(getInstance(), net.minecraftforge.common.ForgeMod.ENTITY_GRAVITY.get());
+        event.add(getInstance(), Attributes.FOLLOW_RANGE, 16.0D);
+        event.add(getInstance(), Attributes.ATTACK_KNOCKBACK);
+        event.add(getInstance(), Attributes.MAX_HEALTH, 8.0D);
+        event.add(getInstance(), Attributes.MOVEMENT_SPEED, 0.23F);
     }
 }

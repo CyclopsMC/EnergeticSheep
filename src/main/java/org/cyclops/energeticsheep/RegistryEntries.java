@@ -1,7 +1,7 @@
 package org.cyclops.energeticsheep;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.Item;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.ObjectHolder;
 import org.cyclops.energeticsheep.entity.EntityEnergeticSheep;
 

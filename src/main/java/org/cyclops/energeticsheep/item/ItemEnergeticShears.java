@@ -1,31 +1,31 @@
 package org.cyclops.energeticsheep.item;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.item.Items;
-import net.minecraft.item.ShearsItem;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.ShearsItem;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.IForgeShearable;
@@ -33,8 +33,8 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
+import org.cyclops.cyclopscore.helper.BlockEntityHelpers;
 import org.cyclops.cyclopscore.helper.L10NHelpers;
-import org.cyclops.cyclopscore.helper.TileHelpers;
 import org.cyclops.cyclopscore.item.IInformationProvider;
 import org.cyclops.cyclopscore.modcompat.capabilities.DefaultCapabilityProvider;
 import org.cyclops.energeticsheep.capability.energystorage.EnergyStorageItem;
@@ -56,7 +56,7 @@ public class ItemEnergeticShears extends ShearsItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack itemStack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack itemStack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         super.appendHoverText(itemStack, worldIn, tooltip, flagIn);
         IEnergyStorage energyStorage = getEnergyStorage(itemStack);
         if (energyStorage != null) {
@@ -64,14 +64,14 @@ public class ItemEnergeticShears extends ShearsItem {
             int capacity = energyStorage.getMaxEnergyStored();
             String line = String.format("%,d", amount) + " / " + String.format("%,d", capacity)
                     + " " + L10NHelpers.localize("general.energeticsheep.energy_unit");
-            tooltip.add(new StringTextComponent(line).withStyle(IInformationProvider.ITEM_PREFIX));
+            tooltip.add(new TextComponent(line).withStyle(IInformationProvider.ITEM_PREFIX));
         }
     }
 
-    public static ActionResultType transferEnergy(PlayerEntity player, BlockPos pos, Direction side, Hand hand) {
-        World worldIn = player.level;
+    public static InteractionResult transferEnergy(Player player, BlockPos pos, Direction side, InteractionHand hand) {
+        Level worldIn = player.level;
         if (!player.isCrouching()) {
-            return TileHelpers.getCapability(worldIn, pos, side, CapabilityEnergy.ENERGY)
+            return BlockEntityHelpers.getCapability(worldIn, pos, side, CapabilityEnergy.ENERGY)
                     .map(energyTarget -> {
                         ItemStack itemStack = player.getItemInHand(hand);
                         return itemStack.getCapability(CapabilityEnergy.ENERGY)
@@ -81,7 +81,7 @@ public class ItemEnergeticShears extends ShearsItem {
                                                         energyItem.extractEnergy(ItemEnergeticShearsConfig.usageTransferAmount, true),
                                                         true),
                                                 worldIn.isClientSide),
-                                        worldIn.isClientSide) > 0 ? ActionResultType.SUCCESS : ActionResultType.FAIL)
+                                        worldIn.isClientSide) > 0 ? InteractionResult.SUCCESS : InteractionResult.FAIL)
                                 .orElse(null);
                     })
                     .orElse(null);
@@ -90,8 +90,8 @@ public class ItemEnergeticShears extends ShearsItem {
     }
 
     @Override
-    public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
-        ActionResultType result = ItemEnergeticShears.transferEnergy(context.getPlayer(), context.getClickedPos(), context.getClickedFace(), context.getHand());
+    public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context) {
+        InteractionResult result = ItemEnergeticShears.transferEnergy(context.getPlayer(), context.getClickedPos(), context.getClickedFace(), context.getHand());
         if (result == null) {
             return super.onItemUseFirst(stack, context);
         }
@@ -125,7 +125,7 @@ public class ItemEnergeticShears extends ShearsItem {
     }
 
     @Override
-    public boolean onBlockStartBreak(ItemStack itemStack, BlockPos pos, PlayerEntity player) {
+    public boolean onBlockStartBreak(ItemStack itemStack, BlockPos pos, Player player) {
         if (player.level.isClientSide || player.isCreative() || !canShear(itemStack)) {
             return false;
         }
@@ -168,13 +168,13 @@ public class ItemEnergeticShears extends ShearsItem {
     }
 
     @Override
-    public boolean mineBlock(ItemStack itemStack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
+    public boolean mineBlock(ItemStack itemStack, Level worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
         if (!worldIn.isClientSide) {
             consumeOnShear(itemStack);
         }
 
         Block block = state.getBlock();
-        return !state.is(BlockTags.LEAVES) && block != Blocks.COBWEB && block != Blocks.GRASS && block != Blocks.FERN && block != Blocks.DEAD_BUSH && block != Blocks.VINE && block != Blocks.TRIPWIRE && !block.is(BlockTags.WOOL) ? super.mineBlock(itemStack, worldIn, state, pos, entityLiving) : true;
+        return !state.is(BlockTags.LEAVES) && block != Blocks.COBWEB && block != Blocks.GRASS && block != Blocks.FERN && block != Blocks.DEAD_BUSH && block != Blocks.VINE && block != Blocks.TRIPWIRE && !state.is(BlockTags.WOOL) ? super.mineBlock(itemStack, worldIn, state, pos, entityLiving) : true;
     }
 
     @Override
@@ -183,9 +183,9 @@ public class ItemEnergeticShears extends ShearsItem {
     }
 
     @Override
-    public ActionResultType interactLivingEntity(ItemStack itemStack, PlayerEntity player, LivingEntity entity, Hand hand) {
+    public InteractionResult interactLivingEntity(ItemStack itemStack, Player player, LivingEntity entity, InteractionHand hand) {
         if (entity.level.isClientSide) {
-            return ActionResultType.PASS;
+            return InteractionResult.PASS;
         }
 
         LazyOptional<IEnergyStorage> energyCapability = entity.getCapability(CapabilityEnergy.ENERGY);
@@ -201,7 +201,7 @@ public class ItemEnergeticShears extends ShearsItem {
                 player.setItemInHand(hand, itemStack);
                 entity.playSound(SoundEvents.SHEEP_SHEAR, 1.0F, 1.0F);
             }
-            return ActionResultType.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
         if (canShear(itemStack) && entity instanceof IForgeShearable) {
             IForgeShearable target = (IForgeShearable)entity;
@@ -222,31 +222,31 @@ public class ItemEnergeticShears extends ShearsItem {
                 consumeOnShear(itemStack);
                 player.setItemInHand(hand, itemStack);
             }
-            return ActionResultType.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
-        return ActionResultType.PASS;
+        return InteractionResult.PASS;
     }
 
     @Override
-    public boolean showDurabilityBar(ItemStack stack) {
+    public boolean isBarVisible(ItemStack stack) {
         return true;
     }
 
     @Override
-    public double getDurabilityForDisplay(ItemStack itemStack) {
+    public int getBarWidth(ItemStack itemStack) {
         IEnergyStorage energyStorage = getEnergyStorage(itemStack);
         double amount = energyStorage.getEnergyStored();
         double capacity = energyStorage.getMaxEnergyStored();
-        return (capacity - amount) / capacity;
+        return Math.round((float)amount * 13.0F / (float)capacity);
     }
 
     @Override
-    public int getRGBDurabilityForDisplay(ItemStack stack) {
-        return MathHelper.hsvToRgb(Math.max(0.0F, 1 - (float) getDurabilityForDisplay(stack)) / 3.0F, 1.0F, 1.0F);
+    public int getBarColor(ItemStack stack) {
+        return Mth.hsvToRgb(Math.max(0.0F, ((float) getBarWidth(stack)) / 13) / 3.0F, 1.0F, 1.0F);
     }
 
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, CompoundNBT nbt) {
+    public ICapabilityProvider initCapabilities(ItemStack stack, CompoundTag nbt) {
         return new DefaultCapabilityProvider<>(() -> CapabilityEnergy.ENERGY,
                 new EnergyStorageItem(ItemEnergeticShearsConfig.capacity, stack));
     }

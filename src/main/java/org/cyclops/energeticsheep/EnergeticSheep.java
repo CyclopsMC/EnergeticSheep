@@ -1,7 +1,7 @@
 package org.cyclops.energeticsheep;
 
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.ItemGroup;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.DyeColor;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.common.Mod;
@@ -48,7 +48,7 @@ public class EnergeticSheep extends ModBaseVersionable<EnergeticSheep> {
     }
 
     @Override
-    protected ItemGroup constructDefaultItemGroup() {
+    protected CreativeModeTab constructDefaultCreativeModeTab() {
         return new ItemGroupMod(this, () -> RegistryEntries.ITEM_ENERGETIC_SHEARS);
     }
 

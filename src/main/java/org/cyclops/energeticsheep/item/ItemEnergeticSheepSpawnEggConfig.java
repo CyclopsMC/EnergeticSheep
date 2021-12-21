@@ -25,5 +25,5 @@ public class ItemEnergeticSheepSpawnEggConfig extends ItemConfig {
                         new Item.Properties().tab(EnergeticSheep._instance.getDefaultItemGroup()))
         );
     }
-    
+
 }

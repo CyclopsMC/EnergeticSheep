@@ -25,7 +25,7 @@ import org.cyclops.energeticsheep.proxy.CommonProxy;
  */
 @Mod(Reference.MOD_ID)
 public class EnergeticSheep extends ModBaseVersionable<EnergeticSheep> {
-    
+
     /**
      * The unique instance of this mod.
      */
@@ -76,7 +76,7 @@ public class EnergeticSheep extends ModBaseVersionable<EnergeticSheep> {
     public static void clog(String message) {
         clog(Level.INFO, message);
     }
-    
+
     /**
      * Log a new message of the given level for this mod.
      * @param level The level in which the message must be shown.
@@ -85,5 +85,5 @@ public class EnergeticSheep extends ModBaseVersionable<EnergeticSheep> {
     public static void clog(Level level, String message) {
         EnergeticSheep._instance.getLoggerHelper().log(level, message);
     }
-    
+
 }

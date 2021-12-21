@@ -7,7 +7,7 @@ import net.minecraft.world.entity.ai.goal.EatBlockGoal;
 import net.minecraft.core.BlockPos;
 
 /**
- * A faster version of {@link EatGrassGoal}.
+ * A faster version of {@link EatBlockGoal}.
  * @author rubensworks
  */
 public class EntityAIEatGrassFast extends EatBlockGoal {

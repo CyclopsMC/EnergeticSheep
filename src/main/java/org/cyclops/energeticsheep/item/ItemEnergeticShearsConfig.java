@@ -32,5 +32,5 @@ public class ItemEnergeticShearsConfig extends ItemConfig {
                         .tab(EnergeticSheep._instance.getDefaultItemGroup()))
         );
     }
-    
+
 }

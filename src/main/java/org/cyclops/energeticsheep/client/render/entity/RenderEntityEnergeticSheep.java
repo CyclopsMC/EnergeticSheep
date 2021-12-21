@@ -14,7 +14,7 @@ import org.cyclops.energeticsheep.entity.layers.LayerEnergeticSheepCharge;
 
 /**
  * Renderer for {@link EntityEnergeticSheep}.
- * 
+ *
  * @author rubensworks
  *
  */
@@ -33,7 +33,7 @@ public class RenderEntityEnergeticSheep extends MobRenderer<EntityEnergeticSheep
         this.addLayer(new LayerEnergeticSheepCharge(this, renderContext.getModelSet()));
         texture = new ResourceLocation(Reference.MOD_ID, Reference.TEXTURE_PATH_ENTITIES + config.getNamedId() + ".png");
     }
-    
+
     @Override
     public ResourceLocation getTextureLocation(EntityEnergeticSheep entity) {
         return texture;

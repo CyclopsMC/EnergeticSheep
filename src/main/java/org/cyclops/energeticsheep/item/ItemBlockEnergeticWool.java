@@ -36,21 +36,21 @@ public class ItemBlockEnergeticWool extends BlockItem {
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void addInformation(ItemStack itemStack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        super.addInformation(itemStack, worldIn, tooltip, flagIn);
+    public void appendHoverText(ItemStack itemStack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        super.appendHoverText(itemStack, worldIn, tooltip, flagIn);
         if (CapabilityEnergy.ENERGY != null) { // Can be null during item registration, when caps are not registered yet
             IEnergyStorage energyStorage = itemStack.getCapability(CapabilityEnergy.ENERGY).orElse(null);
             int amount = energyStorage.getEnergyStored();
             String line = String.format("%,d", amount) + " "
                     + L10NHelpers.localize("general.energeticsheep.energy_unit");
-            tooltip.add(new StringTextComponent(line).mergeStyle(IInformationProvider.ITEM_PREFIX));
+            tooltip.add(new StringTextComponent(line).withStyle(IInformationProvider.ITEM_PREFIX));
         }
         L10NHelpers.addOptionalInfo(tooltip, "block.energeticsheep.energetic_wool");
     }
 
     @Override
     public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
-        ActionResultType result = ItemEnergeticShears.transferEnergy(context.getPlayer(), context.getPos(), context.getFace(), context.getHand());
+        ActionResultType result = ItemEnergeticShears.transferEnergy(context.getPlayer(), context.getClickedPos(), context.getClickedFace(), context.getHand());
         if (result == null) {
             return super.onItemUseFirst(stack, context);
         }

@@ -77,7 +77,7 @@ public class EntityEnergeticSheep extends SheepEntity implements IChargeableMob 
 
     private final Map<DyeColor, IItemProvider> woolByColor;
 
-    private static final DataParameter<Integer> ENERGY = EntityDataManager.<Integer>createKey(EntityEnergeticSheep.class, DataSerializers.VARINT);
+    private static final DataParameter<Integer> ENERGY = EntityDataManager.<Integer>defineId(EntityEnergeticSheep.class, DataSerializers.INT);
 
     @Nullable
     private IEnergyStorage energyStorage;
@@ -85,7 +85,7 @@ public class EntityEnergeticSheep extends SheepEntity implements IChargeableMob 
 
     public EntityEnergeticSheep(EntityType<? extends EntityEnergeticSheep> type, World world) {
         super(type, world);
-        this.experienceValue = 10;
+        this.xpReward = 10;
         this.woolByColor = Util.make(Maps.newEnumMap(DyeColor.class), (p_203402_0_) -> {
             p_203402_0_.put(DyeColor.WHITE, RegistryEntries.ITEM_ENERGETIC_WOOL_WHITE);
             p_203402_0_.put(DyeColor.ORANGE, RegistryEntries.ITEM_ENERGETIC_WOOL_ORANGE);
@@ -141,19 +141,19 @@ public class EntityEnergeticSheep extends SheepEntity implements IChargeableMob 
     public static void onLightning(EntityStruckByLightningEvent event) {
         if (event.getEntity().getClass() == SheepEntity.class) {
             SheepEntity sheep = (SheepEntity) event.getEntity();
-            EntityEnergeticSheep energeticSheep = RegistryEntries.ENTITY_TYPE_ENERGETIC_SHEEP.create(sheep.world);
+            EntityEnergeticSheep energeticSheep = RegistryEntries.ENTITY_TYPE_ENERGETIC_SHEEP.create(sheep.level);
 
             if (sheep.hasCustomName()) {
                 energeticSheep.setCustomName(sheep.getCustomName());
             }
-            energeticSheep.growingAge = sheep.getGrowingAge();
-            energeticSheep.setSheared(sheep.getSheared());
-            energeticSheep.setFleeceColorInternal(sheep.getFleeceColor());
-            energeticSheep.setPositionAndRotation(sheep.getPosX(), sheep.getPosY(), sheep.getPosZ(),
-                    sheep.rotationYaw, sheep.rotationPitch);
+            energeticSheep.age = sheep.getAge();
+            energeticSheep.setSheared(sheep.isSheared());
+            energeticSheep.setFleeceColorInternal(sheep.getColor());
+            energeticSheep.absMoveTo(sheep.getX(), sheep.getY(), sheep.getZ(),
+                    sheep.yRot, sheep.xRot);
 
             sheep.remove();
-            sheep.world.addEntity(energeticSheep);
+            sheep.level.addFreshEntity(energeticSheep);
 
             event.getLightning().remove();
         }
@@ -162,30 +162,30 @@ public class EntityEnergeticSheep extends SheepEntity implements IChargeableMob 
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.targetSelector.removeGoal(this.eatGrassGoal);
-        this.eatGrassGoal = new EntityAIEatGrassFast(this);
-        this.targetSelector.addGoal(5, this.eatGrassGoal);
+        this.targetSelector.removeGoal(this.eatBlockGoal);
+        this.eatBlockGoal = new EntityAIEatGrassFast(this);
+        this.targetSelector.addGoal(5, this.eatBlockGoal);
     }
 
     @Override
-    protected void registerData() {
-        super.registerData();
-        this.dataManager.register(ENERGY, 0);
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(ENERGY, 0);
     }
 
     protected void updateEnergy(int energy) {
-        this.dataManager.set(ENERGY, energy);
+        this.entityData.set(ENERGY, energy);
         float ratio = (float) energy / getCapacity();
         this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.23D * (1 + ratio));
         if (energy == 0) {
             this.setSheared(true);
-        } else if (this.getSheared()) {
+        } else if (this.isSheared()) {
             this.setSheared(false);
         }
     }
 
     public int getEnergyClient() {
-        return this.dataManager.get(ENERGY);
+        return this.entityData.get(ENERGY);
     }
 
     public int getCapacity() {
@@ -193,8 +193,8 @@ public class EntityEnergeticSheep extends SheepEntity implements IChargeableMob 
     }
 
     @Override
-    public void eatGrassBonus() {
-        super.eatGrassBonus();
+    public void ate() {
+        super.ate();
         if (this.energyStorage != null) {
             this.energyStorage.receiveEnergy(this.energyStorage.getMaxEnergyStored(), false);
         }
@@ -206,20 +206,20 @@ public class EntityEnergeticSheep extends SheepEntity implements IChargeableMob 
         if (this.energyStorage != null) {
             this.energyStorage.extractEnergy(this.energyStorage.getMaxEnergyStored(), false);
         }
-        int i = 1 + this.rand.nextInt(3);
+        int i = 1 + this.random.nextInt(3);
 
         List<ItemStack> ret = Lists.newArrayList();
         for (int j = 0; j < i; ++j) {
-            ret.add(new ItemStack(woolByColor.get(this.getFleeceColor())));
+            ret.add(new ItemStack(woolByColor.get(this.getColor())));
         }
 
-        this.playSound(SoundEvents.ENTITY_SHEEP_SHEAR, 1.0F, 1.0F);
+        this.playSound(SoundEvents.SHEEP_SHEAR, 1.0F, 1.0F);
         return ret;
     }
 
     @Override
-    public void writeAdditional(CompoundNBT compound) {
-        super.writeAdditional(compound);
+    public void addAdditionalSaveData(CompoundNBT compound) {
+        super.addAdditionalSaveData(compound);
         if (this.energyStorage != null) {
             compound.putInt("energy", this.energyStorage.getEnergyStored());
             compound.putBoolean("powerBreeding", powerBreeding);
@@ -227,8 +227,8 @@ public class EntityEnergeticSheep extends SheepEntity implements IChargeableMob 
     }
 
     @Override
-    public void readAdditional(CompoundNBT compound) {
-        super.readAdditional(compound);
+    public void readAdditionalSaveData(CompoundNBT compound) {
+        super.readAdditionalSaveData(compound);
         this.setFleeceColorInternal(DyeColor.byId(compound.getByte("Color")));
         this.energyStorage.receiveEnergy(compound.getInt("energy"), false);
         this.powerBreeding = compound.getBoolean("powerBreeding");
@@ -245,41 +245,41 @@ public class EntityEnergeticSheep extends SheepEntity implements IChargeableMob 
 
     // MCP: createChild
     @Override
-    public SheepEntity func_241840_a(ServerWorld world, AgeableEntity ageable) {
+    public SheepEntity getBreedOffspring(ServerWorld world, AgeableEntity ageable) {
         int chance = this.powerBreeding
                 ? EntityEnergeticSheepConfig.babyChancePowerBreeding : EntityEnergeticSheepConfig.babyChance;
         this.powerBreeding = false;
-        if (chance > 0 && this.rand.nextInt(chance) == 0) {
-            EntityEnergeticSheep child = RegistryEntries.ENTITY_TYPE_ENERGETIC_SHEEP.create(getEntityWorld());
+        if (chance > 0 && this.random.nextInt(chance) == 0) {
+            EntityEnergeticSheep child = RegistryEntries.ENTITY_TYPE_ENERGETIC_SHEEP.create(getCommandSenderWorld());
 
             // If parents have equal color, child has same color, otherwise random.
             DyeColor color;
-            if (this.getFleeceColor() == ((EntityEnergeticSheep) ageable).getFleeceColor()) {
-                color = this.getFleeceColor();
+            if (this.getColor() == ((EntityEnergeticSheep) ageable).getColor()) {
+                color = this.getColor();
             } else {
-                color = getRandomColor(this.world.rand);
+                color = getRandomColor(this.level.random);
             }
             child.setFleeceColorInternal(color);
 
             return child;
         }
-        return super.func_241840_a(world, ageable);
+        return super.getBreedOffspring(world, ageable);
     }
 
     @Override
-    protected float getSoundPitch() {
-        return this.isChild()
-                ? (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 2.0F
-                : (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.5F;
+    protected float getVoicePitch() {
+        return this.isBaby()
+                ? (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 2.0F
+                : (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.5F;
     }
 
     @Nullable
     @Override
-    public ResourceLocation getLootTable() {
-        if (this.getSheared()) {
-            return EntityType.SHEEP.getLootTable();
+    public ResourceLocation getDefaultLootTable() {
+        if (this.isSheared()) {
+            return EntityType.SHEEP.getDefaultLootTable();
         } else {
-            switch (this.getFleeceColor()) {
+            switch (this.getColor()) {
                 case WHITE:
                 default:
                     return LOOTTABLE_SHEEP_WHITE;
@@ -318,30 +318,30 @@ public class EntityEnergeticSheep extends SheepEntity implements IChargeableMob 
     }
 
     @Override
-    public ILivingEntityData onInitialSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
-        ILivingEntityData livingdata = super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
-        this.setFleeceColorInternal(getRandomColor(this.world.rand));
+    public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
+        ILivingEntityData livingdata = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+        this.setFleeceColorInternal(getRandomColor(this.level.random));
         this.energyStorage.receiveEnergy(this.energyStorage.getMaxEnergyStored(), false);
         return livingdata;
     }
 
     // MCP: processInteract
     @Override
-    public ActionResultType func_230254_b_(PlayerEntity player, Hand hand) {
+    public ActionResultType mobInteract(PlayerEntity player, Hand hand) {
         // Stop dying action
-        if (player.getHeldItem(hand).getItem() instanceof DyeItem) {
+        if (player.getItemInHand(hand).getItem() instanceof DyeItem) {
             return ActionResultType.CONSUME;
         }
-        return super.func_230254_b_(player, hand);
+        return super.mobInteract(player, hand);
     }
 
     @Override
-    public void setFleeceColor(DyeColor color) {
+    public void setColor(DyeColor color) {
         // Do nothing, we don't allow custom color setting
     }
 
     protected void setFleeceColorInternal(DyeColor color) {
-        super.setFleeceColor(color);
+        super.setColor(color);
         this.setEnergyStorage(color);
     }
 
@@ -359,24 +359,24 @@ public class EntityEnergeticSheep extends SheepEntity implements IChargeableMob 
     }
 
     @Override
-    public boolean isBreedingItem(ItemStack stack) {
-        return super.isBreedingItem(stack) || isPowerBreedingItem(stack);
+    public boolean isFood(ItemStack stack) {
+        return super.isFood(stack) || isPowerBreedingItem(stack);
     }
 
     @Override
-    protected void consumeItemFromStack(PlayerEntity player, ItemStack stack) {
+    protected void usePlayerItem(PlayerEntity player, ItemStack stack) {
         if (isPowerBreedingItem(stack)) {
             powerBreeding = true;
-            if (!getEntityWorld().isRemote()) {
-                ((ServerWorld) getEntityWorld()).spawnParticle(ParticleTypes.INSTANT_EFFECT,
-                        this.getPosX(), this.getPosY(), this.getPosZ(), 10, 0.5F, 0.5F, 0.5F, 2F);
+            if (!getCommandSenderWorld().isClientSide()) {
+                ((ServerWorld) getCommandSenderWorld()).sendParticles(ParticleTypes.INSTANT_EFFECT,
+                        this.getX(), this.getY(), this.getZ(), 10, 0.5F, 0.5F, 0.5F, 2F);
             }
         }
-        super.consumeItemFromStack(player, stack);
+        super.usePlayerItem(player, stack);
     }
 
     @Override
-    public boolean isCharged() {
+    public boolean isPowered() {
         return this.getEnergyClient() > 0;
     }
 }

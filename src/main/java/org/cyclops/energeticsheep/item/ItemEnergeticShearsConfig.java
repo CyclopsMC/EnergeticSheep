@@ -28,8 +28,8 @@ public class ItemEnergeticShearsConfig extends ItemConfig {
                 EnergeticSheep._instance,
                 "energetic_shears",
                 eConfig -> new ItemEnergeticShears(new Item.Properties()
-                        .maxDamage(0)
-                        .group(EnergeticSheep._instance.getDefaultItemGroup()))
+                        .durability(0)
+                        .tab(EnergeticSheep._instance.getDefaultItemGroup()))
         );
     }
     

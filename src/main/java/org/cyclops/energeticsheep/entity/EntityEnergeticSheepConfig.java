@@ -64,9 +64,9 @@ public class EntityEnergeticSheepConfig extends EntityConfig<EntityEnergeticShee
         super(
                 EnergeticSheep._instance,
                 "energetic_sheep",
-                eConfig -> EntityType.Builder.create(EntityEnergeticSheep::new, EntityClassification.CREATURE)
-                        .size(0.9F, 1.3F)
-                        .immuneToFire()
+                eConfig -> EntityType.Builder.of(EntityEnergeticSheep::new, EntityClassification.CREATURE)
+                        .sized(0.9F, 1.3F)
+                        .fireImmune()
         );
         MinecraftForge.EVENT_BUS.addListener(this::onBiomeLoadingEvent);
     }
@@ -92,6 +92,6 @@ public class EntityEnergeticSheepConfig extends EntityConfig<EntityEnergeticShee
     public void onForgeRegistered() {
         super.onForgeRegistered();
         // MCP: registerAttributes
-        GlobalEntityTypeAttributes.put(getInstance(), SheepEntity.func_234225_eI_().create());
+        GlobalEntityTypeAttributes.put(getInstance(), SheepEntity.createAttributes().build());
     }
 }

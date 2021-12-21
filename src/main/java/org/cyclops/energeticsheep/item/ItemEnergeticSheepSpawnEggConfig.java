@@ -22,7 +22,7 @@ public class ItemEnergeticSheepSpawnEggConfig extends ItemConfig {
                 eConfig -> new SpawnEggItem(entityEnergeticSheepConfig.getInstance(),
                         Helpers.RGBToInt(0, 111, 108),
                         Helpers.RGBToInt(14, 167, 163),
-                        new Item.Properties().group(EnergeticSheep._instance.getDefaultItemGroup()))
+                        new Item.Properties().tab(EnergeticSheep._instance.getDefaultItemGroup()))
         );
     }
     

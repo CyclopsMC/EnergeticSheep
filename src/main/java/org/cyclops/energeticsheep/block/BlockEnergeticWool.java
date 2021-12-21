@@ -18,7 +18,7 @@ import net.minecraft.world.World;
 public class BlockEnergeticWool extends Block {
 
     public static final DamageSource DAMAGE_SHOCK = new DamageSource("energeticwool.shock");
-    protected static final VoxelShape COLLISION_SHAPE = Block.makeCuboidShape(1.0D, 0.0D, 1.0D, 15.0D, 15.0D, 15.0D);
+    protected static final VoxelShape COLLISION_SHAPE = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 15.0D, 15.0D);
 
     private final DyeColor color;
 
@@ -37,8 +37,8 @@ public class BlockEnergeticWool extends Block {
     }
 
     @Override
-    public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
-        entityIn.attackEntityFrom(DAMAGE_SHOCK, 1.0F);
+    public void entityInside(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
+        entityIn.hurt(DAMAGE_SHOCK, 1.0F);
     }
 
 }

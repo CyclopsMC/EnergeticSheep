@@ -56,32 +56,32 @@ public class ItemEnergeticShears extends ShearsItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack itemStack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        super.addInformation(itemStack, worldIn, tooltip, flagIn);
+    public void appendHoverText(ItemStack itemStack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        super.appendHoverText(itemStack, worldIn, tooltip, flagIn);
         IEnergyStorage energyStorage = getEnergyStorage(itemStack);
         if (energyStorage != null) {
             int amount = energyStorage.getEnergyStored();
             int capacity = energyStorage.getMaxEnergyStored();
             String line = String.format("%,d", amount) + " / " + String.format("%,d", capacity)
                     + " " + L10NHelpers.localize("general.energeticsheep.energy_unit");
-            tooltip.add(new StringTextComponent(line).mergeStyle(IInformationProvider.ITEM_PREFIX));
+            tooltip.add(new StringTextComponent(line).withStyle(IInformationProvider.ITEM_PREFIX));
         }
     }
 
     public static ActionResultType transferEnergy(PlayerEntity player, BlockPos pos, Direction side, Hand hand) {
-        World worldIn = player.world;
+        World worldIn = player.level;
         if (!player.isCrouching()) {
             return TileHelpers.getCapability(worldIn, pos, side, CapabilityEnergy.ENERGY)
                     .map(energyTarget -> {
-                        ItemStack itemStack = player.getHeldItem(hand);
+                        ItemStack itemStack = player.getItemInHand(hand);
                         return itemStack.getCapability(CapabilityEnergy.ENERGY)
                                 .map(energyItem -> energyTarget.receiveEnergy(
                                         energyItem.extractEnergy(
                                                 energyTarget.receiveEnergy(
                                                         energyItem.extractEnergy(ItemEnergeticShearsConfig.usageTransferAmount, true),
                                                         true),
-                                                worldIn.isRemote),
-                                        worldIn.isRemote) > 0 ? ActionResultType.SUCCESS : ActionResultType.FAIL)
+                                                worldIn.isClientSide),
+                                        worldIn.isClientSide) > 0 ? ActionResultType.SUCCESS : ActionResultType.FAIL)
                                 .orElse(null);
                     })
                     .orElse(null);
@@ -91,7 +91,7 @@ public class ItemEnergeticShears extends ShearsItem {
 
     @Override
     public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
-        ActionResultType result = ItemEnergeticShears.transferEnergy(context.getPlayer(), context.getPos(), context.getFace(), context.getHand());
+        ActionResultType result = ItemEnergeticShears.transferEnergy(context.getPlayer(), context.getClickedPos(), context.getClickedFace(), context.getHand());
         if (result == null) {
             return super.onItemUseFirst(stack, context);
         }
@@ -126,15 +126,15 @@ public class ItemEnergeticShears extends ShearsItem {
 
     @Override
     public boolean onBlockStartBreak(ItemStack itemStack, BlockPos pos, PlayerEntity player) {
-        if (player.world.isRemote || player.isCreative() || !canShear(itemStack)) {
+        if (player.level.isClientSide || player.isCreative() || !canShear(itemStack)) {
             return false;
         }
-        Block block = player.world.getBlockState(pos).getBlock();
+        Block block = player.level.getBlockState(pos).getBlock();
         if (block instanceof IForgeShearable) {
             IForgeShearable target = (IForgeShearable) block;
-            if (target.isShearable(itemStack, player.world, pos)) {
-                List<ItemStack> drops = target.onSheared(player, itemStack, player.world, pos,
-                        EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, itemStack));
+            if (target.isShearable(itemStack, player.level, pos)) {
+                List<ItemStack> drops = target.onSheared(player, itemStack, player.level, pos,
+                        EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, itemStack));
                 Random rand = new java.util.Random();
 
                 for (ItemStack stack : drops) {
@@ -142,15 +142,15 @@ public class ItemEnergeticShears extends ShearsItem {
                     double d  = (double)(rand.nextFloat() * f) + (double)(1.0F - f) * 0.5D;
                     double d1 = (double)(rand.nextFloat() * f) + (double)(1.0F - f) * 0.5D;
                     double d2 = (double)(rand.nextFloat() * f) + (double)(1.0F - f) * 0.5D;
-                    ItemEntity entityitem = new ItemEntity(player.world, (double)pos.getX() + d, (double)pos.getY() + d1, (double)pos.getZ() + d2, stack);
-                    entityitem.setDefaultPickupDelay();
-                    player.world.addEntity(entityitem);
+                    ItemEntity entityitem = new ItemEntity(player.level, (double)pos.getX() + d, (double)pos.getY() + d1, (double)pos.getZ() + d2, stack);
+                    entityitem.setDefaultPickUpDelay();
+                    player.level.addFreshEntity(entityitem);
                 }
 
                 consumeOnShear(itemStack);
-                player.setHeldItem(player.getActiveHand(), itemStack);
-                player.addStat(Stats.BLOCK_MINED.get(block));
-                player.world.setBlockState(pos, Blocks.AIR.getDefaultState(), 11);
+                player.setItemInHand(player.getUsedItemHand(), itemStack);
+                player.awardStat(Stats.BLOCK_MINED.get(block));
+                player.level.setBlock(pos, Blocks.AIR.defaultBlockState(), 11);
                 return true;
             }
         }
@@ -168,23 +168,23 @@ public class ItemEnergeticShears extends ShearsItem {
     }
 
     @Override
-    public boolean onBlockDestroyed(ItemStack itemStack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
-        if (!worldIn.isRemote) {
+    public boolean mineBlock(ItemStack itemStack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
+        if (!worldIn.isClientSide) {
             consumeOnShear(itemStack);
         }
 
         Block block = state.getBlock();
-        return !state.isIn(BlockTags.LEAVES) && block != Blocks.COBWEB && block != Blocks.GRASS && block != Blocks.FERN && block != Blocks.DEAD_BUSH && block != Blocks.VINE && block != Blocks.TRIPWIRE && !block.isIn(BlockTags.WOOL) ? super.onBlockDestroyed(itemStack, worldIn, state, pos, entityLiving) : true;
+        return !state.is(BlockTags.LEAVES) && block != Blocks.COBWEB && block != Blocks.GRASS && block != Blocks.FERN && block != Blocks.DEAD_BUSH && block != Blocks.VINE && block != Blocks.TRIPWIRE && !block.is(BlockTags.WOOL) ? super.mineBlock(itemStack, worldIn, state, pos, entityLiving) : true;
     }
 
     @Override
-    public boolean canHarvestBlock(BlockState blockIn) {
-        return Items.SHEARS.canHarvestBlock(blockIn);
+    public boolean isCorrectToolForDrops(BlockState blockIn) {
+        return Items.SHEARS.isCorrectToolForDrops(blockIn);
     }
 
     @Override
-    public ActionResultType itemInteractionForEntity(ItemStack itemStack, PlayerEntity player, LivingEntity entity, Hand hand) {
-        if (entity.world.isRemote) {
+    public ActionResultType interactLivingEntity(ItemStack itemStack, PlayerEntity player, LivingEntity entity, Hand hand) {
+        if (entity.level.isClientSide) {
             return ActionResultType.PASS;
         }
 
@@ -198,29 +198,29 @@ public class ItemEnergeticShears extends ShearsItem {
                             false),
                     false);
             if (moved > 0) {
-                player.setHeldItem(hand, itemStack);
-                entity.playSound(SoundEvents.ENTITY_SHEEP_SHEAR, 1.0F, 1.0F);
+                player.setItemInHand(hand, itemStack);
+                entity.playSound(SoundEvents.SHEEP_SHEAR, 1.0F, 1.0F);
             }
             return ActionResultType.SUCCESS;
         }
         if (canShear(itemStack) && entity instanceof IForgeShearable) {
             IForgeShearable target = (IForgeShearable)entity;
-            BlockPos pos = new BlockPos(entity.getPosX(), entity.getPosY(), entity.getPosZ());
-            if (target.isShearable(itemStack, entity.world, pos)) {
-                List<ItemStack> drops = target.onSheared(player, itemStack, entity.world, pos,
-                        EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, itemStack));
+            BlockPos pos = new BlockPos(entity.getX(), entity.getY(), entity.getZ());
+            if (target.isShearable(itemStack, entity.level, pos)) {
+                List<ItemStack> drops = target.onSheared(player, itemStack, entity.level, pos,
+                        EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, itemStack));
 
                 Random rand = new Random();
                 for(ItemStack stack : drops) {
-                    ItemEntity ent = entity.entityDropItem(stack, 1.0F);
-                    ent.setMotion(ent.getMotion().add(
+                    ItemEntity ent = entity.spawnAtLocation(stack, 1.0F);
+                    ent.setDeltaMovement(ent.getDeltaMovement().add(
                             (rand.nextFloat() - rand.nextFloat()) * 0.1F,
                             rand.nextFloat() * 0.05F,
                             (rand.nextFloat() - rand.nextFloat()) * 0.1F)
                     );
                 }
                 consumeOnShear(itemStack);
-                player.setHeldItem(hand, itemStack);
+                player.setItemInHand(hand, itemStack);
             }
             return ActionResultType.SUCCESS;
         }
@@ -242,7 +242,7 @@ public class ItemEnergeticShears extends ShearsItem {
 
     @Override
     public int getRGBDurabilityForDisplay(ItemStack stack) {
-        return MathHelper.hsvToRGB(Math.max(0.0F, 1 - (float) getDurabilityForDisplay(stack)) / 3.0F, 1.0F, 1.0F);
+        return MathHelper.hsvToRgb(Math.max(0.0F, 1 - (float) getDurabilityForDisplay(stack)) / 3.0F, 1.0F, 1.0F);
     }
 
     @Override

@@ -18,13 +18,13 @@ public class BlockEnergeticWoolConfig extends BlockConfig {
     public BlockEnergeticWoolConfig(DyeColor color) {
         super(
             EnergeticSheep._instance,
-                color.getTranslationKey() + "_energetic_wool",
-                eConfig -> new BlockEnergeticWool(Block.Properties.create(Material.WOOL, color.getMapColor())
-                        .hardnessAndResistance(0.8F)
-                        .sound(SoundType.CLOTH),
+                color.getName() + "_energetic_wool",
+                eConfig -> new BlockEnergeticWool(Block.Properties.of(Material.WOOL, color.getMaterialColor())
+                        .strength(0.8F)
+                        .sound(SoundType.WOOL),
                         color),
                 (eConfig, block) -> new ItemBlockEnergeticWool((BlockEnergeticWool) block, new Item.Properties()
-                        .group(EnergeticSheep._instance.getDefaultItemGroup()))
+                        .tab(EnergeticSheep._instance.getDefaultItemGroup()))
         );
     }
 

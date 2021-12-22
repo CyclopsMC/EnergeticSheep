@@ -13,6 +13,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.cyclops.cyclopscore.config.ConfigurableProperty;
@@ -66,13 +67,17 @@ public class EntityEnergeticSheepConfig extends EntityConfig<EntityEnergeticShee
         );
         MinecraftForge.EVENT_BUS.addListener(this::onBiomeLoadingEvent);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onEntityAttributesModification);
+        DistExecutor.callWhenOn(Dist.CLIENT, () -> () -> {
+            FMLJavaModLoadingContext.get().getModEventBus().addListener(LayerEnergeticSheepCharge::loadLayerDefinitions);
+            return null;
+        });
     }
 
     @OnlyIn(Dist.CLIENT)
     @Override
     public void onRegistered() {
         super.onRegistered();
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(LayerEnergeticSheepCharge::loadLayerDefinitions);
+
     }
 
     public void onBiomeLoadingEvent(BiomeLoadingEvent event) {

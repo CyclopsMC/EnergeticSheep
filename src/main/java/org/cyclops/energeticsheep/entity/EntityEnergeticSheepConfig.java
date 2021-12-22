@@ -66,6 +66,12 @@ public class EntityEnergeticSheepConfig extends EntityConfig<EntityEnergeticShee
         );
         MinecraftForge.EVENT_BUS.addListener(this::onBiomeLoadingEvent);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onEntityAttributesModification);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    @Override
+    public void onRegistered() {
+        super.onRegistered();
         FMLJavaModLoadingContext.get().getModEventBus().addListener(LayerEnergeticSheepCharge::loadLayerDefinitions);
     }
 

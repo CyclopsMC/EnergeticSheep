@@ -4,7 +4,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.BlockTags;
@@ -64,7 +63,7 @@ public class ItemEnergeticShears extends ShearsItem {
             int capacity = energyStorage.getMaxEnergyStored();
             String line = String.format("%,d", amount) + " / " + String.format("%,d", capacity)
                     + " " + L10NHelpers.localize("general.energeticsheep.energy_unit");
-            tooltip.add(new TextComponent(line).withStyle(IInformationProvider.ITEM_PREFIX));
+            tooltip.add(Component.literal(line).withStyle(IInformationProvider.ITEM_PREFIX));
         }
     }
 

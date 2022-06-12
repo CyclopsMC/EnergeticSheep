@@ -1,14 +1,13 @@
 package org.cyclops.energeticsheep.item;
 
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -43,7 +42,7 @@ public class ItemBlockEnergeticWool extends BlockItem {
             int amount = energyStorage.getEnergyStored();
             String line = String.format("%,d", amount) + " "
                     + L10NHelpers.localize("general.energeticsheep.energy_unit");
-            tooltip.add(new TextComponent(line).withStyle(IInformationProvider.ITEM_PREFIX));
+            tooltip.add(Component.literal(line).withStyle(IInformationProvider.ITEM_PREFIX));
         }
         L10NHelpers.addOptionalInfo(tooltip, "block.energeticsheep.energetic_wool");
     }

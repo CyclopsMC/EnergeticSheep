@@ -13,6 +13,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -47,7 +48,6 @@ import org.cyclops.energeticsheep.RegistryEntries;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 /**
  * A sheep that produces energy.
@@ -345,7 +345,7 @@ public class EntityEnergeticSheep extends Sheep implements PowerableMob {
         this.setEnergyStorage(color);
     }
 
-    protected static DyeColor getRandomColor(Random random) {
+    protected static DyeColor getRandomColor(RandomSource random) {
         return DyeColor.values()[random.nextInt(DyeColor.values().length)];
     }
 

@@ -7,12 +7,9 @@ import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
-import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -46,9 +43,6 @@ public class EntityEnergeticSheepConfig extends EntityConfig<EntityEnergeticShee
     @ConfigurableProperty(category = "mob", comment = "The 1/X chance on having an energetic baby when breeding with a power-breeding item.", configLocation = ModConfig.Type.SERVER, isCommandable = true)
     public static int babyChancePowerBreeding = 1;
 
-    @ConfigurableProperty(category = "mob", minimalValue = 0, comment = "Spawn weight for energetic sheep. If this is is set to 0, energetic sheep will only be created by lightning strikes.", configLocation = ModConfig.Type.SERVER, requiresMcRestart = true)
-    public static int spawnWeight = 3;
-
     @ConfigurableProperty(category = "mob",
             comment = "The items that can be used to power-breed sheep, by unique item name.", configLocation = ModConfig.Type.SERVER)
     public static List<String> powerBreedingItems = Lists.newArrayList(
@@ -65,7 +59,6 @@ public class EntityEnergeticSheepConfig extends EntityConfig<EntityEnergeticShee
                         .sized(0.9F, 1.3F)
                         .fireImmune()
         );
-        MinecraftForge.EVENT_BUS.addListener(this::onBiomeLoadingEvent);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onEntityAttributesModification);
         DistExecutor.callWhenOn(Dist.CLIENT, () -> () -> {
             FMLJavaModLoadingContext.get().getModEventBus().addListener(LayerEnergeticSheepCharge::loadLayerDefinitions);
@@ -78,17 +71,6 @@ public class EntityEnergeticSheepConfig extends EntityConfig<EntityEnergeticShee
     public void onRegistered() {
         super.onRegistered();
 
-    }
-
-    public void onBiomeLoadingEvent(BiomeLoadingEvent event) {
-        // Register energetic sheep spawns to biomes in which regular sheep spawn
-        List<MobSpawnSettings.SpawnerData> spawners = event.getSpawns().getSpawner(MobCategory.CREATURE);
-        for (MobSpawnSettings.SpawnerData spawner : spawners) {
-            if (spawner.type == EntityType.SHEEP) {
-                spawners.add(new MobSpawnSettings.SpawnerData(getInstance(), spawnWeight, 2, 4));
-                break;
-            }
-        }
     }
 
     @OnlyIn(Dist.CLIENT)

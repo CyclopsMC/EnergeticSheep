@@ -11,6 +11,7 @@ import org.cyclops.cyclopscore.init.ItemGroupMod;
 import org.cyclops.cyclopscore.init.ModBaseVersionable;
 import org.cyclops.cyclopscore.proxy.IClientProxy;
 import org.cyclops.cyclopscore.proxy.ICommonProxy;
+import org.cyclops.energeticsheep.biome.modifier.BiomeModifierSpawnEnergeticSheepConfig;
 import org.cyclops.energeticsheep.block.BlockEnergeticWoolConfig;
 import org.cyclops.energeticsheep.entity.EntityEnergeticSheepConfig;
 import org.cyclops.energeticsheep.item.ItemEnergeticShearsConfig;
@@ -67,6 +68,8 @@ public class EnergeticSheep extends ModBaseVersionable<EnergeticSheep> {
         for (DyeColor color : DyeColor.values()) {
             configHandler.addConfigurable(new BlockEnergeticWoolConfig(color));
         }
+
+        configHandler.addConfigurable(new BiomeModifierSpawnEnergeticSheepConfig());
     }
 
     /**

@@ -10,10 +10,10 @@ import net.minecraftforge.common.world.BiomeModifier;
 import net.minecraftforge.common.world.ModifiableBiomeInfo;
 import org.cyclops.energeticsheep.RegistryEntries;
 
-public record BiomeModifierSpawnEnergeticSheep(HolderSet<Biome> biomes, int spawnWeight, int minCount, int maxCount) implements BiomeModifier {
+public record BiomeModifierSpawnEnergeticSheep(HolderSet<Biome> biomes, HolderSet<Biome> biomesBlacklist, int spawnWeight, int minCount, int maxCount) implements BiomeModifier {
     @Override
     public void modify(Holder<Biome> biome, Phase phase, ModifiableBiomeInfo.BiomeInfo.Builder builder) {
-        if (phase == Phase.ADD && biomes.contains(biome)) {
+        if (phase == Phase.ADD && biomes.contains(biome) && !biomesBlacklist.contains(biome)) {
             builder.getMobSpawnSettings().addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(RegistryEntries.ENTITY_TYPE_ENERGETIC_SHEEP, spawnWeight, minCount, maxCount));
         }
     }

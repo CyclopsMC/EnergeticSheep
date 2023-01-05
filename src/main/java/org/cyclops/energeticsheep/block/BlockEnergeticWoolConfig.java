@@ -1,10 +1,10 @@
 package org.cyclops.energeticsheep.block;
 
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.material.Material;
-import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.Item;
 import org.cyclops.cyclopscore.config.extendedconfig.BlockConfig;
 import org.cyclops.energeticsheep.EnergeticSheep;
 import org.cyclops.energeticsheep.item.ItemBlockEnergeticWool;
@@ -23,8 +23,7 @@ public class BlockEnergeticWoolConfig extends BlockConfig {
                         .strength(0.8F)
                         .sound(SoundType.WOOL),
                         color),
-                (eConfig, block) -> new ItemBlockEnergeticWool((BlockEnergeticWool) block, new Item.Properties()
-                        .tab(EnergeticSheep._instance.getDefaultItemGroup()))
+                (eConfig, block) -> new ItemBlockEnergeticWool((BlockEnergeticWool) block, new Item.Properties())
         );
     }
 

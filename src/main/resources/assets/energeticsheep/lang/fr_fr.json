@@ -1,0 +1,37 @@
+{
+    "itemGroup.energeticsheep": "Moutons énergétiques (Energetic Sheep)",
+    "general.energeticsheep.energy_unit": "RF",
+    "general.energeticsheep.description": "Des moutons qui génèrent de l'énergie",
+
+    "_comment": "Items",
+    "item.energeticsheep.energetic_shears": "Cisailles énergétiques",
+    "item.energeticsheep.energetic_shears.info": "Tondre l'énergie de n'importe quelle entité. Agit également comme des cisailles ordinaires qui fonctionnent à l'énergie.",
+    "item.energeticsheep.energetic_sheep_spawn_egg": "Oeuf d'apparition de Mouton Énergétique",
+
+    "_comment": "Blocks",
+    "block.energeticsheep.energetic_wool": "Laine énergétique",
+    "block.energeticsheep.energetic_wool.info": "Électrocutant !",
+    "block.energeticsheep.white_energetic_wool": "Laine énergétique blanche",
+    "block.energeticsheep.orange_energetic_wool": "Laine énergétique orange",
+    "block.energeticsheep.magenta_energetic_wool": "Laine énergétique magenta",
+    "block.energeticsheep.light_blue_energetic_wool": "Laine énergétique bleu clair",
+    "block.energeticsheep.yellow_energetic_wool": "Laine énergétique jaune",
+    "block.energeticsheep.lime_energetic_wool": "Laine énergétique vert clair",
+    "block.energeticsheep.pink_energetic_wool": "Laine énergétique rose",
+    "block.energeticsheep.gray_energetic_wool": "Laine énergétique grise",
+    "block.energeticsheep.light_gray_energetic_wool": "Laine énergétique gris clair",
+    "block.energeticsheep.cyan_energetic_wool": "Laine énergétique cyan",
+    "block.energeticsheep.purple_energetic_wool": "Laine énergétique violette",
+    "block.energeticsheep.blue_energetic_wool": "Laine énergétique bleu",
+    "block.energeticsheep.brown_energetic_wool": "Laine énergétique marron",
+    "block.energeticsheep.green_energetic_wool": "Laine énergétique verte",
+    "block.energeticsheep.red_energetic_wool": "Laine énergétique rouge",
+    "block.energeticsheep.black_energetic_wool": "Laine énergétique noire",
+
+    "_comment": "Entities",
+    "entity.energeticsheep.energetic_sheep": "Mouton Énergétique",
+
+    "_comment": "Death messages",
+    "death.attack.energeticwool.shock": "%1$s a été électrocuté à mort",
+    "death.attack.energeticwool.shock.player": "%1$s a été électrocuté à mort alors qu'il tentait d'échapper à %2$s"
+}

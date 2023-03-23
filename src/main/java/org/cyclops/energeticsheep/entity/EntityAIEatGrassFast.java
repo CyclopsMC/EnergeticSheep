@@ -27,7 +27,7 @@ public class EntityAIEatGrassFast extends EatBlockGoal {
                 || this.grassEaterEntity.getRandom().nextInt(this.grassEaterEntity.isBaby() ? 10 : 200) != 0) {
             return false;
         } else {
-            BlockPos blockpos = new BlockPos(this.grassEaterEntity.getX(), this.grassEaterEntity.getY(), this.grassEaterEntity.getZ());
+            BlockPos blockpos = this.grassEaterEntity.getOnPos();
             if (IS_TALL_GRASS.apply(this.grassEaterEntity.level.getBlockState(blockpos))) {
                 return true;
             } else  {

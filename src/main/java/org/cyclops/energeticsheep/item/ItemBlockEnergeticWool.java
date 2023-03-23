@@ -11,8 +11,8 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import org.cyclops.cyclopscore.helper.L10NHelpers;
 import org.cyclops.cyclopscore.item.IInformationProvider;
@@ -37,8 +37,8 @@ public class ItemBlockEnergeticWool extends BlockItem {
     @Override
     public void appendHoverText(ItemStack itemStack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         super.appendHoverText(itemStack, worldIn, tooltip, flagIn);
-        if (CapabilityEnergy.ENERGY != null) { // Can be null during item registration, when caps are not registered yet
-            IEnergyStorage energyStorage = itemStack.getCapability(CapabilityEnergy.ENERGY).orElse(null);
+        if (ForgeCapabilities.ENERGY != null) { // Can be null during item registration, when caps are not registered yet
+            IEnergyStorage energyStorage = itemStack.getCapability(ForgeCapabilities.ENERGY).orElse(null);
             int amount = energyStorage.getEnergyStored();
             String line = String.format("%,d", amount) + " "
                     + L10NHelpers.localize("general.energeticsheep.energy_unit");
@@ -58,7 +58,7 @@ public class ItemBlockEnergeticWool extends BlockItem {
 
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, CompoundTag nbt) {
-        return new DefaultCapabilityProvider<>(() -> CapabilityEnergy.ENERGY, new EnergyStorage(
+        return new DefaultCapabilityProvider<>(() -> ForgeCapabilities.ENERGY, new EnergyStorage(
                 EntityEnergeticSheep.getCapacity(((BlockEnergeticWool) this.getBlock()).getColor(), EntityEnergeticSheepConfig.woolBaseCapacity), stack));
     }
 

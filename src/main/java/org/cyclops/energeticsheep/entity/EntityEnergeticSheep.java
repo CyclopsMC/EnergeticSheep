@@ -34,8 +34,8 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.event.entity.EntityStruckByLightningEvent;
@@ -237,7 +237,7 @@ public class EntityEnergeticSheep extends Sheep implements PowerableMob {
     @Nullable
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
-        if (capability == CapabilityEnergy.ENERGY && this.energyStorage != null) {
+        if (capability == ForgeCapabilities.ENERGY && this.energyStorage != null) {
             return LazyOptional.of(() -> this.energyStorage).cast();
         }
         return super.getCapability(capability, facing);

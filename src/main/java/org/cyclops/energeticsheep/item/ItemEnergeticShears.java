@@ -28,9 +28,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.IForgeShearable;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import org.cyclops.cyclopscore.helper.BlockEntityHelpers;
 import org.cyclops.cyclopscore.helper.L10NHelpers;
@@ -70,10 +70,10 @@ public class ItemEnergeticShears extends ShearsItem {
     public static InteractionResult transferEnergy(Player player, BlockPos pos, Direction side, InteractionHand hand) {
         Level worldIn = player.level;
         if (!player.isCrouching()) {
-            return BlockEntityHelpers.getCapability(worldIn, pos, side, CapabilityEnergy.ENERGY)
+            return BlockEntityHelpers.getCapability(worldIn, pos, side, ForgeCapabilities.ENERGY)
                     .map(energyTarget -> {
                         ItemStack itemStack = player.getItemInHand(hand);
-                        return itemStack.getCapability(CapabilityEnergy.ENERGY)
+                        return itemStack.getCapability(ForgeCapabilities.ENERGY)
                                 .map(energyItem -> energyTarget.receiveEnergy(
                                         energyItem.extractEnergy(
                                                 energyTarget.receiveEnergy(
@@ -104,11 +104,11 @@ public class ItemEnergeticShears extends ShearsItem {
 
     @Nullable
     protected IEnergyStorage getEnergyStorage(ItemStack itemStack) {
-        if (CapabilityEnergy.ENERGY == null) { // Can be null during item registration, when caps are not registered yet
+        if (ForgeCapabilities.ENERGY == null) { // Can be null during item registration, when caps are not registered yet
             return null;
         }
 
-        return itemStack.getCapability(CapabilityEnergy.ENERGY).orElse(null);
+        return itemStack.getCapability(ForgeCapabilities.ENERGY).orElse(null);
     }
 
     protected boolean canShear(ItemStack itemStack) {
@@ -187,7 +187,7 @@ public class ItemEnergeticShears extends ShearsItem {
             return InteractionResult.PASS;
         }
 
-        LazyOptional<IEnergyStorage> energyCapability = entity.getCapability(CapabilityEnergy.ENERGY);
+        LazyOptional<IEnergyStorage> energyCapability = entity.getCapability(ForgeCapabilities.ENERGY);
         if (energyCapability.isPresent()) {
             IEnergyStorage entityEnergy = energyCapability.orElse(null);
             IEnergyStorage itemEnergy = getEnergyStorage(itemStack);
@@ -204,7 +204,7 @@ public class ItemEnergeticShears extends ShearsItem {
         }
         if (canShear(itemStack) && entity instanceof IForgeShearable) {
             IForgeShearable target = (IForgeShearable)entity;
-            BlockPos pos = new BlockPos(entity.getX(), entity.getY(), entity.getZ());
+            BlockPos pos = entity.getOnPos();
             if (target.isShearable(itemStack, entity.level, pos)) {
                 List<ItemStack> drops = target.onSheared(player, itemStack, entity.level, pos,
                         EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, itemStack));
@@ -246,7 +246,7 @@ public class ItemEnergeticShears extends ShearsItem {
 
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, CompoundTag nbt) {
-        return new DefaultCapabilityProvider<>(() -> CapabilityEnergy.ENERGY,
+        return new DefaultCapabilityProvider<>(() -> ForgeCapabilities.ENERGY,
                 new EnergyStorageItem(ItemEnergeticShearsConfig.capacity, stack));
     }
 }

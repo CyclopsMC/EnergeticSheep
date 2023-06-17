@@ -141,7 +141,7 @@ public class EntityEnergeticSheep extends Sheep implements PowerableMob {
     public static void onLightning(EntityStruckByLightningEvent event) {
         if (event.getEntity().getClass() == Sheep.class) {
             Sheep sheep = (Sheep) event.getEntity();
-            EntityEnergeticSheep energeticSheep = RegistryEntries.ENTITY_TYPE_ENERGETIC_SHEEP.create(sheep.level);
+            EntityEnergeticSheep energeticSheep = RegistryEntries.ENTITY_TYPE_ENERGETIC_SHEEP.create(sheep.level());
 
             if (sheep.hasCustomName()) {
                 energeticSheep.setCustomName(sheep.getCustomName());
@@ -153,7 +153,7 @@ public class EntityEnergeticSheep extends Sheep implements PowerableMob {
                     sheep.yRotO, sheep.xRotO);
 
             sheep.remove(RemovalReason.DISCARDED);
-            sheep.level.addFreshEntity(energeticSheep);
+            sheep.level().addFreshEntity(energeticSheep);
 
             event.getLightning().remove(RemovalReason.KILLED);
         }
@@ -257,7 +257,7 @@ public class EntityEnergeticSheep extends Sheep implements PowerableMob {
             if (this.getColor() == ((EntityEnergeticSheep) ageable).getColor()) {
                 color = this.getColor();
             } else {
-                color = getRandomColor(this.level.random);
+                color = getRandomColor(this.level().random);
             }
             child.setFleeceColorInternal(color);
 
@@ -320,7 +320,7 @@ public class EntityEnergeticSheep extends Sheep implements PowerableMob {
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
         SpawnGroupData livingdata = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
-        this.setFleeceColorInternal(getRandomColor(this.level.random));
+        this.setFleeceColorInternal(getRandomColor(this.level().random));
         this.energyStorage.receiveEnergy(this.energyStorage.getMaxEnergyStored(), false);
         return livingdata;
     }

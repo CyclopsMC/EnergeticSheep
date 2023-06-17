@@ -4,7 +4,6 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.material.Material;
 import org.cyclops.cyclopscore.config.extendedconfig.BlockConfig;
 import org.cyclops.energeticsheep.EnergeticSheep;
 import org.cyclops.energeticsheep.item.ItemBlockEnergeticWool;
@@ -19,7 +18,8 @@ public class BlockEnergeticWoolConfig extends BlockConfig {
         super(
             EnergeticSheep._instance,
                 color.getName() + "_energetic_wool",
-                eConfig -> new BlockEnergeticWool(Block.Properties.of(Material.WOOL, color.getMaterialColor())
+                eConfig -> new BlockEnergeticWool(Block.Properties.of()
+                        .mapColor(color)
                         .strength(0.8F)
                         .sound(SoundType.WOOL),
                         color),

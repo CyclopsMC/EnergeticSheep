@@ -68,7 +68,7 @@ public class ItemEnergeticShears extends ShearsItem {
     }
 
     public static InteractionResult transferEnergy(Player player, BlockPos pos, Direction side, InteractionHand hand) {
-        Level worldIn = player.level;
+        Level worldIn = player.level();
         if (!player.isCrouching()) {
             return BlockEntityHelpers.getCapability(worldIn, pos, side, ForgeCapabilities.ENERGY)
                     .map(energyTarget -> {
@@ -125,14 +125,14 @@ public class ItemEnergeticShears extends ShearsItem {
 
     @Override
     public boolean onBlockStartBreak(ItemStack itemStack, BlockPos pos, Player player) {
-        if (player.level.isClientSide || player.isCreative() || !canShear(itemStack)) {
+        if (player.level().isClientSide || player.isCreative() || !canShear(itemStack)) {
             return false;
         }
-        Block block = player.level.getBlockState(pos).getBlock();
+        Block block = player.level().getBlockState(pos).getBlock();
         if (block instanceof IForgeShearable) {
             IForgeShearable target = (IForgeShearable) block;
-            if (target.isShearable(itemStack, player.level, pos)) {
-                List<ItemStack> drops = target.onSheared(player, itemStack, player.level, pos,
+            if (target.isShearable(itemStack, player.level(), pos)) {
+                List<ItemStack> drops = target.onSheared(player, itemStack, player.level(), pos,
                         EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, itemStack));
                 Random rand = new java.util.Random();
 
@@ -141,15 +141,15 @@ public class ItemEnergeticShears extends ShearsItem {
                     double d  = (double)(rand.nextFloat() * f) + (double)(1.0F - f) * 0.5D;
                     double d1 = (double)(rand.nextFloat() * f) + (double)(1.0F - f) * 0.5D;
                     double d2 = (double)(rand.nextFloat() * f) + (double)(1.0F - f) * 0.5D;
-                    ItemEntity entityitem = new ItemEntity(player.level, (double)pos.getX() + d, (double)pos.getY() + d1, (double)pos.getZ() + d2, stack);
+                    ItemEntity entityitem = new ItemEntity(player.level(), (double)pos.getX() + d, (double)pos.getY() + d1, (double)pos.getZ() + d2, stack);
                     entityitem.setDefaultPickUpDelay();
-                    player.level.addFreshEntity(entityitem);
+                    player.level().addFreshEntity(entityitem);
                 }
 
                 consumeOnShear(itemStack);
                 player.setItemInHand(player.getUsedItemHand(), itemStack);
                 player.awardStat(Stats.BLOCK_MINED.get(block));
-                player.level.setBlock(pos, Blocks.AIR.defaultBlockState(), 11);
+                player.level().setBlock(pos, Blocks.AIR.defaultBlockState(), 11);
                 return true;
             }
         }
@@ -183,7 +183,7 @@ public class ItemEnergeticShears extends ShearsItem {
 
     @Override
     public InteractionResult interactLivingEntity(ItemStack itemStack, Player player, LivingEntity entity, InteractionHand hand) {
-        if (entity.level.isClientSide) {
+        if (entity.level().isClientSide) {
             return InteractionResult.PASS;
         }
 
@@ -205,8 +205,8 @@ public class ItemEnergeticShears extends ShearsItem {
         if (canShear(itemStack) && entity instanceof IForgeShearable) {
             IForgeShearable target = (IForgeShearable)entity;
             BlockPos pos = entity.getOnPos();
-            if (target.isShearable(itemStack, entity.level, pos)) {
-                List<ItemStack> drops = target.onSheared(player, itemStack, entity.level, pos,
+            if (target.isShearable(itemStack, entity.level(), pos)) {
+                List<ItemStack> drops = target.onSheared(player, itemStack, entity.level(), pos,
                         EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, itemStack));
 
                 Random rand = new Random();

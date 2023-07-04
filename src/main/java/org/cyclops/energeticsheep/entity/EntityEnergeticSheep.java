@@ -257,7 +257,7 @@ public class EntityEnergeticSheep extends Sheep implements PowerableMob {
             if (this.getColor() == ((EntityEnergeticSheep) ageable).getColor()) {
                 color = this.getColor();
             } else {
-                color = getRandomColor(this.level.random);
+                color = getRandomColor(this.random);
             }
             child.setFleeceColorInternal(color);
 
@@ -320,7 +320,7 @@ public class EntityEnergeticSheep extends Sheep implements PowerableMob {
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
         SpawnGroupData livingdata = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
-        this.setFleeceColorInternal(getRandomColor(this.level.random));
+        this.setFleeceColorInternal(getRandomColor(this.random));
         this.energyStorage.receiveEnergy(this.energyStorage.getMaxEnergyStored(), false);
         return livingdata;
     }

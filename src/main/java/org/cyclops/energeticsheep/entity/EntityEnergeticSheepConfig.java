@@ -6,10 +6,10 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.animal.Sheep;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
+import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -59,7 +59,7 @@ public class EntityEnergeticSheepConfig extends EntityConfig<EntityEnergeticShee
                         .sized(0.9F, 1.3F)
                         .fireImmune()
         );
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onEntityAttributesModification);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onEntityAttributesCreation);
         DistExecutor.callWhenOn(Dist.CLIENT, () -> () -> {
             FMLJavaModLoadingContext.get().getModEventBus().addListener(LayerEnergeticSheepCharge::loadLayerDefinitions);
             return null;
@@ -79,19 +79,7 @@ public class EntityEnergeticSheepConfig extends EntityConfig<EntityEnergeticShee
         return new RenderEntityEnergeticSheep(renderContext, this);
     }
 
-    public void onEntityAttributesModification(EntityAttributeModificationEvent event) {
-        // Same as Sheep.createAttributes()
-        event.add(getInstance(), Attributes.MAX_HEALTH);
-        event.add(getInstance(), Attributes.KNOCKBACK_RESISTANCE);
-        event.add(getInstance(), Attributes.MOVEMENT_SPEED);
-        event.add(getInstance(), Attributes.ARMOR);
-        event.add(getInstance(), Attributes.ARMOR_TOUGHNESS);
-        event.add(getInstance(), net.minecraftforge.common.ForgeMod.SWIM_SPEED.get());
-        event.add(getInstance(), net.minecraftforge.common.ForgeMod.NAMETAG_DISTANCE.get());
-        event.add(getInstance(), net.minecraftforge.common.ForgeMod.ENTITY_GRAVITY.get());
-        event.add(getInstance(), Attributes.FOLLOW_RANGE, 16.0D);
-        event.add(getInstance(), Attributes.ATTACK_KNOCKBACK);
-        event.add(getInstance(), Attributes.MAX_HEALTH, 8.0D);
-        event.add(getInstance(), Attributes.MOVEMENT_SPEED, 0.23F);
+    public void onEntityAttributesCreation(EntityAttributeCreationEvent event) {
+        event.put(getInstance(), Sheep.createAttributes().build());
     }
 }

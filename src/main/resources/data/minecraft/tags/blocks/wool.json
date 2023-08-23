@@ -1,0 +1,21 @@
+{
+  "replace": false,
+  "values": [
+    "energeticsheep:white_energetic_wool",
+    "energeticsheep:orange_energetic_wool",
+    "energeticsheep:magenta_energetic_wool",
+    "energeticsheep:light_blue_energetic_wool",
+    "energeticsheep:yellow_energetic_wool",
+    "energeticsheep:lime_energetic_wool",
+    "energeticsheep:pink_energetic_wool",
+    "energeticsheep:gray_energetic_wool",
+    "energeticsheep:light_gray_energetic_wool",
+    "energeticsheep:cyan_energetic_wool",
+    "energeticsheep:purple_energetic_wool",
+    "energeticsheep:blue_energetic_wool",
+    "energeticsheep:brown_energetic_wool",
+    "energeticsheep:green_energetic_wool",
+    "energeticsheep:red_energetic_wool",
+    "energeticsheep:black_energetic_wool"
+  ]
+}

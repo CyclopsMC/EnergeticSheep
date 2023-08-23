@@ -21,7 +21,8 @@ public class BlockEnergeticWoolConfig extends BlockConfig {
                 eConfig -> new BlockEnergeticWool(Block.Properties.of()
                         .mapColor(color)
                         .strength(0.8F)
-                        .sound(SoundType.WOOL),
+                        .sound(SoundType.WOOL)
+                        .ignitedByLava(),
                         color),
                 (eConfig, block) -> new ItemBlockEnergeticWool((BlockEnergeticWool) block, new Item.Properties())
         );

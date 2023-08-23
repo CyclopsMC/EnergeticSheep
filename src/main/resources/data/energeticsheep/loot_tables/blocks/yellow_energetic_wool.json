@@ -1,0 +1,21 @@
+{
+    "type": "minecraft:block",
+    "pools": [
+        {
+            "bonus_rolls": 0.0,
+            "conditions": [
+                {
+                    "condition": "minecraft:survives_explosion"
+                }
+            ],
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "energeticsheep:yellow_energetic_wool"
+                }
+            ],
+            "rolls": 1.0
+        }
+    ],
+    "random_sequence": "energeticsheep:blocks/yellow_energetic_wool"
+}

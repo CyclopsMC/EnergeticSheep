@@ -1,5 +1,4 @@
 org.cyclops.energeticsheep
-org.cyclops.energeticsheep.biome.modifier
 org.cyclops.energeticsheep.block
 org.cyclops.energeticsheep.capability.energystorage
 org.cyclops.energeticsheep.client.render.entity

@@ -13,6 +13,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -23,6 +24,7 @@ import net.minecraft.world.entity.PowerableMob;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.Sheep;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeItem;
@@ -215,6 +217,19 @@ public class EntityEnergeticSheep extends Sheep implements PowerableMob {
 
         this.playSound(SoundEvents.SHEEP_SHEAR, 1.0F, 1.0F);
         return ret;
+    }
+
+    @Override
+    public void shear(SoundSource soundSource) {
+        // We need to override this in case other mods are calling mobInteract with shears explicitly
+//        super.shear(p_29819_);
+
+        for (ItemStack item : this.onSheared(null, null, null, null, 0)) {
+            ItemEntity itementity = this.spawnAtLocation(item);
+            if (itementity != null) {
+                itementity.setDeltaMovement(itementity.getDeltaMovement().add((double)((this.random.nextFloat() - this.random.nextFloat()) * 0.1F), (double)(this.random.nextFloat() * 0.05F), (double)((this.random.nextFloat() - this.random.nextFloat()) * 0.1F)));
+            }
+        }
     }
 
     @Override

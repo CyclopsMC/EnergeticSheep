@@ -7,12 +7,13 @@ import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.animal.Sheep;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.fml.DistExecutor;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import org.cyclops.cyclopscore.config.ConfigurableProperty;
 import org.cyclops.cyclopscore.config.extendedconfig.EntityConfig;
 import org.cyclops.energeticsheep.EnergeticSheep;
@@ -59,18 +60,12 @@ public class EntityEnergeticSheepConfig extends EntityConfig<EntityEnergeticShee
                         .sized(0.9F, 1.3F)
                         .fireImmune()
         );
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onEntityAttributesCreation);
+        EnergeticSheep._instance.getModEventBus().addListener(this::onEntityAttributesCreation);
         DistExecutor.callWhenOn(Dist.CLIENT, () -> () -> {
-            FMLJavaModLoadingContext.get().getModEventBus().addListener(LayerEnergeticSheepCharge::loadLayerDefinitions);
+            EnergeticSheep._instance.getModEventBus().addListener(LayerEnergeticSheepCharge::loadLayerDefinitions);
             return null;
         });
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    @Override
-    public void onRegistered() {
-        super.onRegistered();
-
+        EnergeticSheep._instance.getModEventBus().addListener(this::registerCapabilities);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -81,5 +76,13 @@ public class EntityEnergeticSheepConfig extends EntityConfig<EntityEnergeticShee
 
     public void onEntityAttributesCreation(EntityAttributeCreationEvent event) {
         event.put(getInstance(), Sheep.createAttributes().build());
+    }
+
+    public void registerCapabilities(RegisterCapabilitiesEvent event) {
+        event.registerEntity(
+                Capabilities.EnergyStorage.ENTITY,
+                getInstance(),
+                (entity, context) -> entity.getEnergyStorage()
+        );
     }
 }

@@ -31,7 +31,7 @@ public class EntityAIEatGrassFast extends EatBlockGoal {
             if (IS_TALL_GRASS.apply(this.grassEaterEntity.level().getBlockState(blockpos))) {
                 return true;
             } else  {
-                return this.grassEaterEntity.level().getBlockState(blockpos.below()).getBlock() == Blocks.GRASS;
+                return this.grassEaterEntity.level().getBlockState(blockpos.below()).getBlock() == Blocks.GRASS_BLOCK;
             }
         }
     }

@@ -13,7 +13,7 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.entity.layers.EnergySwirlLayer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import org.cyclops.energeticsheep.Reference;
 import org.cyclops.energeticsheep.client.render.entity.RenderEntityEnergeticSheep;
 import org.cyclops.energeticsheep.entity.EntityEnergeticSheep;

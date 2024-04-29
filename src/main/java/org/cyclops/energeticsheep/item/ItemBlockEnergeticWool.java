@@ -1,6 +1,5 @@
 package org.cyclops.energeticsheep.item;
 
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.BlockItem;
@@ -9,17 +8,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.energy.IEnergyStorage;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.energy.IEnergyStorage;
 import org.cyclops.cyclopscore.helper.L10NHelpers;
 import org.cyclops.cyclopscore.item.IInformationProvider;
-import org.cyclops.cyclopscore.modcompat.capabilities.DefaultCapabilityProvider;
 import org.cyclops.energeticsheep.block.BlockEnergeticWool;
-import org.cyclops.energeticsheep.entity.EntityEnergeticSheep;
-import org.cyclops.energeticsheep.entity.EntityEnergeticSheepConfig;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -37,13 +32,11 @@ public class ItemBlockEnergeticWool extends BlockItem {
     @Override
     public void appendHoverText(ItemStack itemStack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         super.appendHoverText(itemStack, worldIn, tooltip, flagIn);
-        if (ForgeCapabilities.ENERGY != null) { // Can be null during item registration, when caps are not registered yet
-            IEnergyStorage energyStorage = itemStack.getCapability(ForgeCapabilities.ENERGY).orElse(null);
-            int amount = energyStorage.getEnergyStored();
-            String line = String.format("%,d", amount) + " "
-                    + L10NHelpers.localize("general.energeticsheep.energy_unit");
-            tooltip.add(Component.literal(line).withStyle(IInformationProvider.ITEM_PREFIX));
-        }
+        IEnergyStorage energyStorage = itemStack.getCapability(Capabilities.EnergyStorage.ITEM);
+        int amount = energyStorage.getEnergyStored();
+        String line = String.format("%,d", amount) + " "
+                + L10NHelpers.localize("general.energeticsheep.energy_unit");
+        tooltip.add(Component.literal(line).withStyle(IInformationProvider.ITEM_PREFIX));
         L10NHelpers.addOptionalInfo(tooltip, "block.energeticsheep.energetic_wool");
     }
 
@@ -54,12 +47,6 @@ public class ItemBlockEnergeticWool extends BlockItem {
             return super.onItemUseFirst(stack, context);
         }
         return result;
-    }
-
-    @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, CompoundTag nbt) {
-        return new DefaultCapabilityProvider<>(() -> ForgeCapabilities.ENERGY, new EnergyStorage(
-                EntityEnergeticSheep.getCapacity(((BlockEnergeticWool) this.getBlock()).getColor(), EntityEnergeticSheepConfig.woolBaseCapacity), stack));
     }
 
     public static class EnergyStorage implements IEnergyStorage {

@@ -3,9 +3,10 @@ package org.cyclops.energeticsheep;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.common.Mod;
 import org.apache.logging.log4j.Level;
 import org.cyclops.cyclopscore.config.ConfigHandler;
 import org.cyclops.cyclopscore.init.ModBaseVersionable;
@@ -32,8 +33,8 @@ public class EnergeticSheep extends ModBaseVersionable<EnergeticSheep> {
      */
     public static EnergeticSheep _instance;
 
-    public EnergeticSheep() {
-        super(Reference.MOD_ID, (instance) -> _instance = instance);
+    public EnergeticSheep(IEventBus modEventBus) {
+        super(Reference.MOD_ID, (instance) -> _instance = instance, modEventBus);
     }
 
     @Override

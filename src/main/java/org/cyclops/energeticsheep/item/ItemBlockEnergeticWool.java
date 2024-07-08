@@ -7,7 +7,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.capabilities.Capabilities;
@@ -16,7 +15,6 @@ import org.cyclops.cyclopscore.helper.L10NHelpers;
 import org.cyclops.cyclopscore.item.IInformationProvider;
 import org.cyclops.energeticsheep.block.BlockEnergeticWool;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -30,8 +28,8 @@ public class ItemBlockEnergeticWool extends BlockItem {
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void appendHoverText(ItemStack itemStack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
-        super.appendHoverText(itemStack, worldIn, tooltip, flagIn);
+    public void appendHoverText(ItemStack itemStack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flagIn) {
+        super.appendHoverText(itemStack, context, tooltip, flagIn);
         IEnergyStorage energyStorage = itemStack.getCapability(Capabilities.EnergyStorage.ITEM);
         int amount = energyStorage.getEnergyStored();
         String line = String.format("%,d", amount) + " "

@@ -18,8 +18,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ShearsItem;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -51,8 +49,8 @@ public class ItemEnergeticShears extends ShearsItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack itemStack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
-        super.appendHoverText(itemStack, worldIn, tooltip, flagIn);
+    public void appendHoverText(ItemStack itemStack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flagIn) {
+        super.appendHoverText(itemStack, context, tooltip, flagIn);
         IEnergyStorage energyStorage = getEnergyStorage(itemStack);
         if (energyStorage != null) {
             int amount = energyStorage.getEnergyStored();
@@ -116,16 +114,18 @@ public class ItemEnergeticShears extends ShearsItem {
     }
 
     @Override
-    public boolean onBlockStartBreak(ItemStack itemStack, BlockPos pos, Player player) {
+    public InteractionResult useOn(UseOnContext context) {
+        Player player = context.getPlayer();
+        ItemStack itemStack = context.getItemInHand();
+        BlockPos pos = context.getClickedPos();
         if (player.level().isClientSide || player.isCreative() || !canShear(itemStack)) {
-            return false;
+            return super.useOn(context);
         }
         Block block = player.level().getBlockState(pos).getBlock();
         if (block instanceof IShearable) {
             IShearable target = (IShearable) block;
-            if (target.isShearable(itemStack, player.level(), pos)) {
-                List<ItemStack> drops = target.onSheared(player, itemStack, player.level(), pos,
-                        EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, itemStack));
+            if (target.isShearable(player, itemStack, player.level(), pos)) {
+                List<ItemStack> drops = target.onSheared(player, itemStack, player.level(), pos);
                 Random rand = new java.util.Random();
 
                 for (ItemStack stack : drops) {
@@ -142,11 +142,12 @@ public class ItemEnergeticShears extends ShearsItem {
                 player.setItemInHand(player.getUsedItemHand(), itemStack);
                 player.awardStat(Stats.BLOCK_MINED.get(block));
                 player.level().setBlock(pos, Blocks.AIR.defaultBlockState(), 11);
-                return true;
+                return InteractionResult.SUCCESS;
             }
         }
-        return false;
+        return super.useOn(context);
     }
+
 
     @Override
     public float getDestroySpeed(ItemStack itemStack, BlockState state) {
@@ -169,8 +170,8 @@ public class ItemEnergeticShears extends ShearsItem {
     }
 
     @Override
-    public boolean isCorrectToolForDrops(BlockState blockIn) {
-        return Items.SHEARS.isCorrectToolForDrops(blockIn);
+    public boolean isCorrectToolForDrops(ItemStack itemStack, BlockState blockIn) {
+        return Items.SHEARS.isCorrectToolForDrops(itemStack, blockIn);
     }
 
     @Override
@@ -197,9 +198,8 @@ public class ItemEnergeticShears extends ShearsItem {
         if (canShear(itemStack) && entity instanceof IShearable) {
             IShearable target = (IShearable)entity;
             BlockPos pos = entity.getOnPos();
-            if (target.isShearable(itemStack, entity.level(), pos)) {
-                List<ItemStack> drops = target.onSheared(player, itemStack, entity.level(), pos,
-                        EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, itemStack));
+            if (target.isShearable(player, itemStack, entity.level(), pos)) {
+                List<ItemStack> drops = target.onSheared(player, itemStack, entity.level(), pos);
 
                 Random rand = new Random();
                 for(ItemStack stack : drops) {

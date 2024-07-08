@@ -1,0 +1,27 @@
+{
+    "type": "minecraft:entity",
+    "pools": [
+        {
+            "name": "energeticsheep:wool",
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "energeticsheep:black_energetic_wool",
+                    "weight": 1
+                }
+            ]
+        },
+        {
+            "name": "energeticsheep:flesh",
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "minecraft:loot_table",
+                    "name": "minecraft:entities/sheep",
+                    "weight": 1
+                }
+            ]
+        }
+    ]
+}

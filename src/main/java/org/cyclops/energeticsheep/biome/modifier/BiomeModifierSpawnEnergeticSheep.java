@@ -1,6 +1,6 @@
 package org.cyclops.energeticsheep.biome.modifier;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.world.entity.MobCategory;
@@ -19,7 +19,7 @@ public record BiomeModifierSpawnEnergeticSheep(HolderSet<Biome> biomes, HolderSe
     }
 
     @Override
-    public Codec<? extends BiomeModifier> codec() {
+    public MapCodec<? extends BiomeModifier> codec() {
         return RegistryEntries.BIOME_MODIFIER_SPAWN_ENERGETIC_SHEEP.get();
     }
 }

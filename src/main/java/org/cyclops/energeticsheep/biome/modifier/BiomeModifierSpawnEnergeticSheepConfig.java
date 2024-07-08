@@ -15,7 +15,7 @@ public class BiomeModifierSpawnEnergeticSheepConfig extends BiomeModifierConfig<
         super(
                 EnergeticSheep._instance,
                 "spawn_energetic_sheep",
-                eConfig -> RecordCodecBuilder.create(builder -> builder.group(
+                eConfig -> RecordCodecBuilder.mapCodec(builder -> builder.group(
                         Biome.LIST_CODEC.fieldOf("biomes").forGetter(BiomeModifierSpawnEnergeticSheep::biomes),
                         Biome.LIST_CODEC.fieldOf("biomesBlacklist").forGetter(BiomeModifierSpawnEnergeticSheep::biomes),
                         Codec.INT.fieldOf("spawnWeight").forGetter(BiomeModifierSpawnEnergeticSheep::spawnWeight),

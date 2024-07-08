@@ -9,13 +9,13 @@ import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.animal.Sheep;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.fml.DistExecutor;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import org.cyclops.cyclopscore.config.ConfigurableProperty;
 import org.cyclops.cyclopscore.config.extendedconfig.EntityConfig;
+import org.cyclops.cyclopscore.helper.MinecraftHelpers;
 import org.cyclops.energeticsheep.EnergeticSheep;
 import org.cyclops.energeticsheep.client.render.entity.RenderEntityEnergeticSheep;
 import org.cyclops.energeticsheep.entity.layers.LayerEnergeticSheepCharge;
@@ -61,10 +61,9 @@ public class EntityEnergeticSheepConfig extends EntityConfig<EntityEnergeticShee
                         .fireImmune()
         );
         EnergeticSheep._instance.getModEventBus().addListener(this::onEntityAttributesCreation);
-        DistExecutor.callWhenOn(Dist.CLIENT, () -> () -> {
+        if (MinecraftHelpers.isClientSide()) {
             EnergeticSheep._instance.getModEventBus().addListener(LayerEnergeticSheepCharge::loadLayerDefinitions);
-            return null;
-        });
+        }
         EnergeticSheep._instance.getModEventBus().addListener(this::registerCapabilities);
     }
 

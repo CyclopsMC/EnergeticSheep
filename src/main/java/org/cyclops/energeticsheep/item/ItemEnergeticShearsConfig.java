@@ -5,10 +5,11 @@ import net.minecraft.world.item.Item;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.energy.ComponentEnergyStorage;
+import org.cyclops.cyclopscore.RegistryEntries;
 import org.cyclops.cyclopscore.config.ConfigurableProperty;
 import org.cyclops.cyclopscore.config.extendedconfig.ItemConfig;
 import org.cyclops.energeticsheep.EnergeticSheep;
-import org.cyclops.energeticsheep.capability.energystorage.EnergyStorageItem;
 
 /**
  * Config for the {@link ItemEnergeticShears}.
@@ -31,6 +32,7 @@ public class ItemEnergeticShearsConfig extends ItemConfig {
                 EnergeticSheep._instance,
                 "energetic_shears",
                 eConfig -> new ItemEnergeticShears(new Item.Properties()
+                        .component(RegistryEntries.COMPONENT_ENERGY_STORAGE, 0)
                         .durability(0))
         );
         EnergeticSheep._instance.getModEventBus().addListener(this::registerCapabilities);
@@ -39,7 +41,7 @@ public class ItemEnergeticShearsConfig extends ItemConfig {
     public void registerCapabilities(RegisterCapabilitiesEvent event) {
         event.registerItem(
                 Capabilities.EnergyStorage.ITEM,
-                (stack, context) -> new EnergyStorageItem(ItemEnergeticShearsConfig.capacity, stack),
+                (stack, context) -> new ComponentEnergyStorage(stack, RegistryEntries.COMPONENT_ENERGY_STORAGE.get(), ItemEnergeticShearsConfig.capacity, Integer.MAX_VALUE, Integer.MAX_VALUE),
                 getInstance()
         );
     }

@@ -31,7 +31,7 @@ public class RenderEntityEnergeticSheep extends MobRenderer<EntityEnergeticSheep
         super(renderContext, new SheepModel<>(renderContext.bakeLayer(ModelLayers.SHEEP)), 0.7F);
         this.addLayer((RenderLayer) new SheepFurLayer((MobRenderer) this, renderContext.getModelSet()));
         this.addLayer(new LayerEnergeticSheepCharge(this, renderContext.getModelSet()));
-        texture = new ResourceLocation(Reference.MOD_ID, Reference.TEXTURE_PATH_ENTITIES + config.getNamedId() + ".png");
+        texture = ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, Reference.TEXTURE_PATH_ENTITIES + config.getNamedId() + ".png");
     }
 
     @Override

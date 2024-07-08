@@ -22,7 +22,7 @@ import org.cyclops.energeticsheep.Reference;
  */
 public class BlockEnergeticWool extends Block {
 
-    public static final ResourceKey<DamageType> DAMAGE_TYPE_SHOCK = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Reference.MOD_ID, "energeticwool_shock"));
+    public static final ResourceKey<DamageType> DAMAGE_TYPE_SHOCK = ResourceKey.create(Registries.DAMAGE_TYPE, ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "energeticwool_shock"));
 
     protected static final VoxelShape COLLISION_SHAPE = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 15.0D, 15.0D);
 

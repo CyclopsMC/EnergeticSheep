@@ -1,0 +1,35 @@
+modLoader="javafml"
+loaderVersion="[2,)"
+issueTrackerURL="https://github.com/CyclopsMC/EnergeticSheep/issues"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/energeticsheep"
+license="MIT"
+logoFile="logo.png"
+authors="rubensworks (aka kroeser)"
+[[mods]]
+modId="energeticsheep"
+version="${file.jarVersion}"
+displayName="EnergeticSheep"
+updateJSONURL="https://raw.githubusercontent.com/CyclopsMC/Versions/master/forge_update/energeticsheep.json"
+description='''
+Sheep that generate energy
+'''
+[[accessTransformers]]
+    file="META-INF/accesstransformer.cfg"
+[[dependencies.energeticsheep]]
+    modId="cyclopscore"
+    type="required"
+    versionRange="[1.19.1,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.energeticsheep]]
+    modId="neoforge"
+    type="required"
+    versionRange="[21.0.43-beta,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.energeticsheep]]
+    modId="minecraft"
+    type="required"
+    versionRange="[1.21,]"
+    ordering="NONE"
+    side="BOTH"

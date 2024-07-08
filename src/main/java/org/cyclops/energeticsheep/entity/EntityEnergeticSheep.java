@@ -6,10 +6,12 @@ import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -33,10 +35,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.energy.EnergyStorage;
 import net.neoforged.neoforge.energy.IEnergyStorage;
 import net.neoforged.neoforge.event.entity.EntityStruckByLightningEvent;
@@ -52,26 +55,26 @@ import java.util.Map;
  * @author rubensworks
  *
  */
-@Mod.EventBusSubscriber
+@EventBusSubscriber
 @OnlyIn(value = Dist.CLIENT, _interface = PowerableMob.class)
 public class EntityEnergeticSheep extends Sheep implements PowerableMob {
 
-    public static final ResourceLocation LOOTTABLE_SHEEP_WHITE      = new ResourceLocation(Reference.MOD_ID, "entities/energetic_sheep/white");
-    public static final ResourceLocation LOOTTABLE_SHEEP_ORANGE     = new ResourceLocation(Reference.MOD_ID, "entities/energetic_sheep/orange");
-    public static final ResourceLocation LOOTTABLE_SHEEP_MAGENTA    = new ResourceLocation(Reference.MOD_ID, "entities/energetic_sheep/magenta");
-    public static final ResourceLocation LOOTTABLE_SHEEP_LIGHT_BLUE = new ResourceLocation(Reference.MOD_ID, "entities/energetic_sheep/light_blue");
-    public static final ResourceLocation LOOTTABLE_SHEEP_YELLOW     = new ResourceLocation(Reference.MOD_ID, "entities/energetic_sheep/yellow");
-    public static final ResourceLocation LOOTTABLE_SHEEP_LIME       = new ResourceLocation(Reference.MOD_ID, "entities/energetic_sheep/lime");
-    public static final ResourceLocation LOOTTABLE_SHEEP_PINK       = new ResourceLocation(Reference.MOD_ID, "entities/energetic_sheep/pink");
-    public static final ResourceLocation LOOTTABLE_SHEEP_GRAY       = new ResourceLocation(Reference.MOD_ID, "entities/energetic_sheep/gray");
-    public static final ResourceLocation LOOTTABLE_SHEEP_LIGHT_GRAY = new ResourceLocation(Reference.MOD_ID, "entities/energetic_sheep/light_gray");
-    public static final ResourceLocation LOOTTABLE_SHEEP_CYAN       = new ResourceLocation(Reference.MOD_ID, "entities/energetic_sheep/cyan");
-    public static final ResourceLocation LOOTTABLE_SHEEP_PURPLE     = new ResourceLocation(Reference.MOD_ID, "entities/energetic_sheep/purple");
-    public static final ResourceLocation LOOTTABLE_SHEEP_BLUE       = new ResourceLocation(Reference.MOD_ID, "entities/energetic_sheep/blue");
-    public static final ResourceLocation LOOTTABLE_SHEEP_BROWN      = new ResourceLocation(Reference.MOD_ID, "entities/energetic_sheep/brown");
-    public static final ResourceLocation LOOTTABLE_SHEEP_GREEN      = new ResourceLocation(Reference.MOD_ID, "entities/energetic_sheep/green");
-    public static final ResourceLocation LOOTTABLE_SHEEP_RED        = new ResourceLocation(Reference.MOD_ID, "entities/energetic_sheep/red");
-    public static final ResourceLocation LOOTTABLE_SHEEP_BLACK      = new ResourceLocation(Reference.MOD_ID, "entities/energetic_sheep/black");
+    public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_WHITE      = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/white"));
+    public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_ORANGE     = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/orange"));
+    public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_MAGENTA    = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/magenta"));
+    public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_LIGHT_BLUE = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/light_blue"));
+    public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_YELLOW     = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/yellow"));
+    public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_LIME       = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/lime"));
+    public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_PINK       = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/pink"));
+    public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_GRAY       = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/gray"));
+    public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_LIGHT_GRAY = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/light_gray"));
+    public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_CYAN       = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/cyan"));
+    public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_PURPLE     = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/purple"));
+    public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_BLUE       = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/blue"));
+    public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_BROWN      = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/brown"));
+    public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_GREEN      = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/green"));
+    public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_RED        = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/red"));
+    public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_BLACK      = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/black"));
 
     private final Map<DyeColor, ItemLike> woolByColor;
 
@@ -171,9 +174,9 @@ public class EntityEnergeticSheep extends Sheep implements PowerableMob {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(ENERGY, 0);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(ENERGY, 0);
     }
 
     protected void updateEnergy(int energy) {
@@ -204,7 +207,7 @@ public class EntityEnergeticSheep extends Sheep implements PowerableMob {
     }
 
     @Override
-    public List<ItemStack> onSheared(@Nullable Player player, ItemStack item, Level world, BlockPos pos, int fortune) {
+    public List<ItemStack> onSheared(@Nullable Player player, ItemStack item, Level world, BlockPos pos) {
         this.setSheared(true);
         if (this.energyStorage != null) {
             this.energyStorage.extractEnergy(this.energyStorage.getMaxEnergyStored(), false);
@@ -225,7 +228,7 @@ public class EntityEnergeticSheep extends Sheep implements PowerableMob {
         // We need to override this in case other mods are calling mobInteract with shears explicitly
 //        super.shear(p_29819_);
 
-        for (ItemStack item : this.onSheared(null, null, null, null, 0)) {
+        for (ItemStack item : this.onSheared(null, null, null, null)) {
             ItemEntity itementity = this.spawnAtLocation(item);
             if (itementity != null) {
                 itementity.setDeltaMovement(itementity.getDeltaMovement().add((double)((this.random.nextFloat() - this.random.nextFloat()) * 0.1F), (double)(this.random.nextFloat() * 0.05F), (double)((this.random.nextFloat() - this.random.nextFloat()) * 0.1F)));
@@ -282,7 +285,7 @@ public class EntityEnergeticSheep extends Sheep implements PowerableMob {
 
     @Nullable
     @Override
-    public ResourceLocation getDefaultLootTable() {
+    public ResourceKey<LootTable> getDefaultLootTable() {
         if (this.isSheared()) {
             return EntityType.SHEEP.getDefaultLootTable();
         } else {
@@ -325,8 +328,8 @@ public class EntityEnergeticSheep extends Sheep implements PowerableMob {
     }
 
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
-        SpawnGroupData livingdata = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
+        SpawnGroupData livingdata = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn);
         this.setFleeceColorInternal(getRandomColor(this.random));
         this.energyStorage.receiveEnergy(this.energyStorage.getMaxEnergyStored(), false);
         return livingdata;

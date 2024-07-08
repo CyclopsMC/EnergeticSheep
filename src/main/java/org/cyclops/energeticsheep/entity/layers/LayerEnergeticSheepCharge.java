@@ -24,10 +24,10 @@ import org.cyclops.energeticsheep.entity.EntityEnergeticSheep;
  */
 public class LayerEnergeticSheepCharge extends EnergySwirlLayer<EntityEnergeticSheep, SheepModel<EntityEnergeticSheep>> {
 
-    public static ModelLayerLocation MODEL_LAYER_FUR_SCALED = new ModelLayerLocation(new ResourceLocation(Reference.MOD_ID, "sheep"), "fur");
+    public static ModelLayerLocation MODEL_LAYER_FUR_SCALED = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "sheep"), "fur");
 
     private static final ResourceLocation CHARGE_TEXTURE =
-            new ResourceLocation("textures/entity/creeper/creeper_armor.png");
+            ResourceLocation.withDefaultNamespace("textures/entity/creeper/creeper_armor.png");
 
     private final SheepFurModel sheepModel;
 

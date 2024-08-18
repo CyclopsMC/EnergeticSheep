@@ -9,7 +9,7 @@ authors="rubensworks (aka kroeser)"
 modId="energeticsheep"
 version="${file.jarVersion}"
 displayName="EnergeticSheep"
-updateJSONURL="https://raw.githubusercontent.com/CyclopsMC/Versions/master/forge_update/energeticsheep.json"
+updateJSONURL="https://raw.githubusercontent.com/CyclopsMC/Versions/master/neoforge_update/energeticsheep.json"
 description='''
 Sheep that generate energy
 '''

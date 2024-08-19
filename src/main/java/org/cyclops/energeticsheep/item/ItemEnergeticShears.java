@@ -5,7 +5,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -35,6 +34,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.function.Consumer;
 
 /**
  * Can shear energy off energetic shears.
@@ -45,6 +45,17 @@ public class ItemEnergeticShears extends ShearsItem {
 
     public ItemEnergeticShears(Item.Properties builder) {
         super(builder);
+    }
+
+    @Override
+    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @Nullable T entity, Consumer<Item> onBroken) {
+        // Consume energy instead of damaging the item
+        amount = super.damageItem(stack, amount, entity, onBroken);
+        IEnergyStorage itemEnergy = getEnergyStorage(stack);
+        if (itemEnergy != null) {
+            itemEnergy.extractEnergy(amount * ItemEnergeticShearsConfig.shearConsumption, false);
+        }
+        return 0;
     }
 
     @Override
@@ -157,16 +168,6 @@ public class ItemEnergeticShears extends ShearsItem {
             return superSpeed * factor;
         }
         return superSpeed;
-    }
-
-    @Override
-    public boolean mineBlock(ItemStack itemStack, Level worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
-        if (!worldIn.isClientSide) {
-            consumeOnShear(itemStack);
-        }
-
-        Block block = state.getBlock();
-        return !state.is(BlockTags.LEAVES) && block != Blocks.COBWEB && block != Blocks.GRASS_BLOCK && block != Blocks.FERN && block != Blocks.DEAD_BUSH && block != Blocks.VINE && block != Blocks.TRIPWIRE && !state.is(BlockTags.WOOL) ? super.mineBlock(itemStack, worldIn, state, pos, entityLiving) : true;
     }
 
     @Override

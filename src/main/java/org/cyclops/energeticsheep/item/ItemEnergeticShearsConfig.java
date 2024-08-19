@@ -33,7 +33,7 @@ public class ItemEnergeticShearsConfig extends ItemConfig {
                 "energetic_shears",
                 eConfig -> new ItemEnergeticShears(new Item.Properties()
                         .component(RegistryEntries.COMPONENT_ENERGY_STORAGE, 0)
-                        .durability(0))
+                        .durability(1))
         );
         EnergeticSheep._instance.getModEventBus().addListener(this::registerCapabilities);
     }

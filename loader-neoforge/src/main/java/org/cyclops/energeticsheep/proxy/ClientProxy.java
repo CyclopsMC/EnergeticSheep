@@ -12,13 +12,13 @@ import org.cyclops.energeticsheep.EnergeticSheep;
  */
 public class ClientProxy extends ClientProxyComponent {
 
-	public ClientProxy() {
-		super(new CommonProxy());
-	}
+    public ClientProxy() {
+        super(new CommonProxy());
+    }
 
-	@Override
-	public ModBase getMod() {
-		return EnergeticSheep._instance;
-	}
+    @Override
+    public ModBase getMod() {
+        return EnergeticSheep._instance;
+    }
 
 }

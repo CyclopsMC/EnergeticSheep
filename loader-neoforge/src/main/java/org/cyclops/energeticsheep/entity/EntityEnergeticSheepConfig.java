@@ -20,7 +20,7 @@ import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 import org.cyclops.cyclopscore.config.ConfigurableProperty;
 import org.cyclops.cyclopscore.config.extendedconfig.EntityConfig;
 import org.cyclops.cyclopscore.helper.MinecraftHelpers;
-import org.cyclops.energeticsheep.EnergeticSheep;
+import org.cyclops.energeticsheep.EnergeticSheepNeoForge;
 import org.cyclops.energeticsheep.client.render.entity.RenderEntityEnergeticSheep;
 import org.cyclops.energeticsheep.entity.layers.LayerEnergeticSheepCharge;
 
@@ -58,18 +58,18 @@ public class EntityEnergeticSheepConfig extends EntityConfig<EntityEnergeticShee
 
     public EntityEnergeticSheepConfig() {
         super(
-                EnergeticSheep._instance,
+                EnergeticSheepNeoForge._instance,
                 "energetic_sheep",
                 eConfig -> EntityType.Builder.of(EntityEnergeticSheep::new, MobCategory.CREATURE)
                         .sized(0.9F, 1.3F)
                         .fireImmune()
         );
-        EnergeticSheep._instance.getModEventBus().addListener(this::onEntityAttributesCreation);
+        EnergeticSheepNeoForge._instance.getModEventBus().addListener(this::onEntityAttributesCreation);
         if (MinecraftHelpers.isClientSide()) {
-            EnergeticSheep._instance.getModEventBus().addListener(LayerEnergeticSheepCharge::loadLayerDefinitions);
+            EnergeticSheepNeoForge._instance.getModEventBus().addListener(LayerEnergeticSheepCharge::loadLayerDefinitions);
         }
-        EnergeticSheep._instance.getModEventBus().addListener(this::registerCapabilities);
-        EnergeticSheep._instance.getModEventBus().addListener(this::registerSpawnPlacements);
+        EnergeticSheepNeoForge._instance.getModEventBus().addListener(this::registerCapabilities);
+        EnergeticSheepNeoForge._instance.getModEventBus().addListener(this::registerSpawnPlacements);
     }
 
     @OnlyIn(Dist.CLIENT)

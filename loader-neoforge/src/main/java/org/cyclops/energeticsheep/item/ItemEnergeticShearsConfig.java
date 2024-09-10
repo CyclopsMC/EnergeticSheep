@@ -9,7 +9,7 @@ import net.neoforged.neoforge.energy.ComponentEnergyStorage;
 import org.cyclops.cyclopscore.RegistryEntries;
 import org.cyclops.cyclopscore.config.ConfigurableProperty;
 import org.cyclops.cyclopscore.config.extendedconfig.ItemConfig;
-import org.cyclops.energeticsheep.EnergeticSheep;
+import org.cyclops.energeticsheep.EnergeticSheepNeoForge;
 
 /**
  * Config for the {@link ItemEnergeticShears}.
@@ -29,13 +29,13 @@ public class ItemEnergeticShearsConfig extends ItemConfig {
 
     public ItemEnergeticShearsConfig() {
         super(
-                EnergeticSheep._instance,
+                EnergeticSheepNeoForge._instance,
                 "energetic_shears",
                 eConfig -> new ItemEnergeticShears(new Item.Properties()
                         .component(RegistryEntries.COMPONENT_ENERGY_STORAGE, 0)
                         .durability(1))
         );
-        EnergeticSheep._instance.getModEventBus().addListener(this::registerCapabilities);
+        EnergeticSheepNeoForge._instance.getModEventBus().addListener(this::registerCapabilities);
     }
 
     public void registerCapabilities(RegisterCapabilitiesEvent event) {

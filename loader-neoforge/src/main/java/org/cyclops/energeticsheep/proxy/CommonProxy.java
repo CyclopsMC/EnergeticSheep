@@ -2,7 +2,7 @@ package org.cyclops.energeticsheep.proxy;
 
 import org.cyclops.cyclopscore.init.ModBase;
 import org.cyclops.cyclopscore.proxy.CommonProxyComponent;
-import org.cyclops.energeticsheep.EnergeticSheep;
+import org.cyclops.energeticsheep.EnergeticSheepNeoForge;
 
 /**
  * Proxy for server and client side.
@@ -13,7 +13,7 @@ public class CommonProxy extends CommonProxyComponent {
 
     @Override
     public ModBase getMod() {
-        return EnergeticSheep._instance;
+        return EnergeticSheepNeoForge._instance;
     }
 
 }

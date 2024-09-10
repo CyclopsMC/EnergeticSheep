@@ -2,7 +2,7 @@ package org.cyclops.energeticsheep.proxy;
 
 import org.cyclops.cyclopscore.init.ModBase;
 import org.cyclops.cyclopscore.proxy.ClientProxyComponent;
-import org.cyclops.energeticsheep.EnergeticSheep;
+import org.cyclops.energeticsheep.EnergeticSheepNeoForge;
 
 /**
  * Proxy for the client side.
@@ -18,7 +18,7 @@ public class ClientProxy extends ClientProxyComponent {
 
     @Override
     public ModBase getMod() {
-        return EnergeticSheep._instance;
+        return EnergeticSheepNeoForge._instance;
     }
 
 }

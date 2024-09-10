@@ -26,14 +26,14 @@ import org.cyclops.energeticsheep.proxy.CommonProxy;
  *
  */
 @Mod(Reference.MOD_ID)
-public class EnergeticSheep extends ModBaseVersionable<EnergeticSheep> {
+public class EnergeticSheepNeoForge extends ModBaseVersionable<EnergeticSheepNeoForge> {
 
     /**
      * The unique instance of this mod.
      */
-    public static EnergeticSheep _instance;
+    public static EnergeticSheepNeoForge _instance;
 
-    public EnergeticSheep(IEventBus modEventBus) {
+    public EnergeticSheepNeoForge(IEventBus modEventBus) {
         super(Reference.MOD_ID, (instance) -> _instance = instance, modEventBus);
     }
 
@@ -88,7 +88,7 @@ public class EnergeticSheep extends ModBaseVersionable<EnergeticSheep> {
      * @param message The message to show.
      */
     public static void clog(Level level, String message) {
-        EnergeticSheep._instance.getLoggerHelper().log(level, message);
+        EnergeticSheepNeoForge._instance.getLoggerHelper().log(level, message);
     }
 
 }

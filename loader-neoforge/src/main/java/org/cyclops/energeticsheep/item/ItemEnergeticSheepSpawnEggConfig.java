@@ -5,7 +5,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SpawnEggItem;
 import org.cyclops.cyclopscore.config.extendedconfig.ItemConfig;
 import org.cyclops.cyclopscore.helper.Helpers;
-import org.cyclops.energeticsheep.EnergeticSheep;
+import org.cyclops.energeticsheep.EnergeticSheepNeoForge;
 import org.cyclops.energeticsheep.entity.EntityEnergeticSheepConfig;
 
 /**
@@ -17,7 +17,7 @@ public class ItemEnergeticSheepSpawnEggConfig extends ItemConfig {
 
     public ItemEnergeticSheepSpawnEggConfig(EntityEnergeticSheepConfig entityEnergeticSheepConfig) {
         super(
-                EnergeticSheep._instance,
+                EnergeticSheepNeoForge._instance,
                 "energetic_sheep_spawn_egg",
                 eConfig -> new SpawnEggItem(entityEnergeticSheepConfig.getInstance(),
                         Helpers.RGBToInt(0, 111, 108),

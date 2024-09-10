@@ -45,6 +45,7 @@ import net.neoforged.neoforge.energy.IEnergyStorage;
 import net.neoforged.neoforge.event.entity.EntityStruckByLightningEvent;
 import org.cyclops.energeticsheep.Reference;
 import org.cyclops.energeticsheep.RegistryEntries;
+import org.cyclops.energeticsheep.RegistryEntriesCommon;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -88,22 +89,22 @@ public class EntityEnergeticSheep extends Sheep implements PowerableMob {
         super(type, world);
         this.xpReward = 10;
         this.woolByColor = Util.make(Maps.newEnumMap(DyeColor.class), (p_203402_0_) -> {
-            p_203402_0_.put(DyeColor.WHITE, RegistryEntries.ITEM_ENERGETIC_WOOL_WHITE.value());
-            p_203402_0_.put(DyeColor.ORANGE, RegistryEntries.ITEM_ENERGETIC_WOOL_ORANGE.value());
-            p_203402_0_.put(DyeColor.MAGENTA, RegistryEntries.ITEM_ENERGETIC_WOOL_MAGENTA.value());
-            p_203402_0_.put(DyeColor.LIGHT_BLUE, RegistryEntries.ITEM_ENERGETIC_WOOL_LIGHT_BLUE.value());
-            p_203402_0_.put(DyeColor.YELLOW, RegistryEntries.ITEM_ENERGETIC_WOOL_YELLOW.value());
-            p_203402_0_.put(DyeColor.LIME, RegistryEntries.ITEM_ENERGETIC_WOOL_LIME.value());
-            p_203402_0_.put(DyeColor.PINK, RegistryEntries.ITEM_ENERGETIC_WOOL_PINK.value());
-            p_203402_0_.put(DyeColor.GRAY, RegistryEntries.ITEM_ENERGETIC_WOOL_GRAY.value());
-            p_203402_0_.put(DyeColor.LIGHT_GRAY, RegistryEntries.ITEM_ENERGETIC_WOOL_LIGHT_GRAY.value());
-            p_203402_0_.put(DyeColor.CYAN, RegistryEntries.ITEM_ENERGETIC_WOOL_CYAN.value());
-            p_203402_0_.put(DyeColor.PURPLE, RegistryEntries.ITEM_ENERGETIC_WOOL_PURPLE.value());
-            p_203402_0_.put(DyeColor.BLUE, RegistryEntries.ITEM_ENERGETIC_WOOL_BLUE.value());
-            p_203402_0_.put(DyeColor.BROWN, RegistryEntries.ITEM_ENERGETIC_WOOL_BROWN.value());
-            p_203402_0_.put(DyeColor.GREEN, RegistryEntries.ITEM_ENERGETIC_WOOL_GREEN.value());
-            p_203402_0_.put(DyeColor.RED, RegistryEntries.ITEM_ENERGETIC_WOOL_RED.value());
-            p_203402_0_.put(DyeColor.BLACK, RegistryEntries.ITEM_ENERGETIC_WOOL_BLACK.value());
+            p_203402_0_.put(DyeColor.WHITE, RegistryEntriesCommon.ITEM_ENERGETIC_WOOL_WHITE.value());
+            p_203402_0_.put(DyeColor.ORANGE, RegistryEntriesCommon.ITEM_ENERGETIC_WOOL_ORANGE.value());
+            p_203402_0_.put(DyeColor.MAGENTA, RegistryEntriesCommon.ITEM_ENERGETIC_WOOL_MAGENTA.value());
+            p_203402_0_.put(DyeColor.LIGHT_BLUE, RegistryEntriesCommon.ITEM_ENERGETIC_WOOL_LIGHT_BLUE.value());
+            p_203402_0_.put(DyeColor.YELLOW, RegistryEntriesCommon.ITEM_ENERGETIC_WOOL_YELLOW.value());
+            p_203402_0_.put(DyeColor.LIME, RegistryEntriesCommon.ITEM_ENERGETIC_WOOL_LIME.value());
+            p_203402_0_.put(DyeColor.PINK, RegistryEntriesCommon.ITEM_ENERGETIC_WOOL_PINK.value());
+            p_203402_0_.put(DyeColor.GRAY, RegistryEntriesCommon.ITEM_ENERGETIC_WOOL_GRAY.value());
+            p_203402_0_.put(DyeColor.LIGHT_GRAY, RegistryEntriesCommon.ITEM_ENERGETIC_WOOL_LIGHT_GRAY.value());
+            p_203402_0_.put(DyeColor.CYAN, RegistryEntriesCommon.ITEM_ENERGETIC_WOOL_CYAN.value());
+            p_203402_0_.put(DyeColor.PURPLE, RegistryEntriesCommon.ITEM_ENERGETIC_WOOL_PURPLE.value());
+            p_203402_0_.put(DyeColor.BLUE, RegistryEntriesCommon.ITEM_ENERGETIC_WOOL_BLUE.value());
+            p_203402_0_.put(DyeColor.BROWN, RegistryEntriesCommon.ITEM_ENERGETIC_WOOL_BROWN.value());
+            p_203402_0_.put(DyeColor.GREEN, RegistryEntriesCommon.ITEM_ENERGETIC_WOOL_GREEN.value());
+            p_203402_0_.put(DyeColor.RED, RegistryEntriesCommon.ITEM_ENERGETIC_WOOL_RED.value());
+            p_203402_0_.put(DyeColor.BLACK, RegistryEntriesCommon.ITEM_ENERGETIC_WOOL_BLACK.value());
         });
     }
 

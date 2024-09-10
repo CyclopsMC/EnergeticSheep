@@ -52,14 +52,14 @@ public class EnergeticSheep extends ModBaseVersionable<EnergeticSheep> {
     @Override
     protected CreativeModeTab.Builder constructDefaultCreativeModeTab(CreativeModeTab.Builder builder) {
         return super.constructDefaultCreativeModeTab(builder)
-                .icon(() -> new ItemStack(RegistryEntries.ITEM_ENERGETIC_SHEARS));
+                .icon(() -> new ItemStack(RegistryEntriesCommon.ITEM_ENERGETIC_SHEARS));
     }
 
     @Override
     protected void onConfigsRegister(ConfigHandler configHandler) {
         super.onConfigsRegister(configHandler);
 
-        configHandler.addConfigurable(new GeneralConfig());
+        configHandler.addConfigurable(new GeneralConfig(this));
 
         EntityEnergeticSheepConfig entityEnergeticSheepConfig = new EntityEnergeticSheepConfig();
         configHandler.addConfigurable(entityEnergeticSheepConfig);

@@ -13,16 +13,15 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.entity.layers.EnergySwirlLayer;
 import net.minecraft.resources.ResourceLocation;
-import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import org.cyclops.energeticsheep.Reference;
 import org.cyclops.energeticsheep.client.render.entity.RenderEntityEnergeticSheep;
-import org.cyclops.energeticsheep.entity.EntityEnergeticSheep;
+import org.cyclops.energeticsheep.entity.EntityEnergeticSheepCommon;
 
 /**
  * Layer renderer for the energy charge.
  * @author rubensworks
  */
-public class LayerEnergeticSheepCharge extends EnergySwirlLayer<EntityEnergeticSheep, SheepModel<EntityEnergeticSheep>> {
+public class LayerEnergeticSheepCharge extends EnergySwirlLayer<EntityEnergeticSheepCommon, SheepModel<EntityEnergeticSheepCommon>> {
 
     public static ModelLayerLocation MODEL_LAYER_FUR_SCALED = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "sheep"), "fur");
 
@@ -33,11 +32,7 @@ public class LayerEnergeticSheepCharge extends EnergySwirlLayer<EntityEnergeticS
 
     public LayerEnergeticSheepCharge(RenderEntityEnergeticSheep renderer, EntityModelSet entityModelSet) {
         super(renderer);
-        sheepModel = new SheepFurModel<EntityEnergeticSheep>(entityModelSet.bakeLayer(MODEL_LAYER_FUR_SCALED));
-    }
-
-    public static void loadLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
-        event.registerLayerDefinition(MODEL_LAYER_FUR_SCALED, () -> LayerEnergeticSheepCharge.createFurLayer(1.05F));
+        sheepModel = new SheepFurModel<EntityEnergeticSheepCommon>(entityModelSet.bakeLayer(MODEL_LAYER_FUR_SCALED));
     }
 
     public static LayerDefinition createFurLayer(float scale) {
@@ -73,7 +68,7 @@ public class LayerEnergeticSheepCharge extends EnergySwirlLayer<EntityEnergeticS
     }
 
     @Override
-    protected EntityModel<EntityEnergeticSheep> model() {
+    protected EntityModel<EntityEnergeticSheepCommon> model() {
         return this.sheepModel;
     }
 }

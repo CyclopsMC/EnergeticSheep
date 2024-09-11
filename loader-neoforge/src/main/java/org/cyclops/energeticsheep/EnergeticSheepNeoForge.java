@@ -16,7 +16,6 @@ import org.cyclops.energeticsheep.biome.modifier.BiomeModifierSpawnEnergeticShee
 import org.cyclops.energeticsheep.block.BlockEnergeticWoolConfig;
 import org.cyclops.energeticsheep.entity.EntityEnergeticSheepConfig;
 import org.cyclops.energeticsheep.item.ItemEnergeticShearsConfig;
-import org.cyclops.energeticsheep.item.ItemEnergeticSheepSpawnEggConfig;
 import org.cyclops.energeticsheep.proxy.ClientProxy;
 import org.cyclops.energeticsheep.proxy.CommonProxy;
 
@@ -52,7 +51,7 @@ public class EnergeticSheepNeoForge extends ModBaseVersionable<EnergeticSheepNeo
     @Override
     protected CreativeModeTab.Builder constructDefaultCreativeModeTab(CreativeModeTab.Builder builder) {
         return super.constructDefaultCreativeModeTab(builder)
-                .icon(() -> new ItemStack(RegistryEntriesCommon.ITEM_ENERGETIC_SHEARS));
+                .icon(() -> new ItemStack(RegistryEntries.ITEM_ENERGETIC_SHEARS));
     }
 
     @Override
@@ -61,11 +60,9 @@ public class EnergeticSheepNeoForge extends ModBaseVersionable<EnergeticSheepNeo
 
         configHandler.addConfigurable(new GeneralConfig(this));
 
-        EntityEnergeticSheepConfig entityEnergeticSheepConfig = new EntityEnergeticSheepConfig();
-        configHandler.addConfigurable(entityEnergeticSheepConfig);
+        configHandler.addConfigurable(new EntityEnergeticSheepConfig());
 
         configHandler.addConfigurable(new ItemEnergeticShearsConfig());
-        configHandler.addConfigurable(new ItemEnergeticSheepSpawnEggConfig(entityEnergeticSheepConfig));
 
         for (DyeColor color : DyeColor.values()) {
             configHandler.addConfigurable(new BlockEnergeticWoolConfig(color));

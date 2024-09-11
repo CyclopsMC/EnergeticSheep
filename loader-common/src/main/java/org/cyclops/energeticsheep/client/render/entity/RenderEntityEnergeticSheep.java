@@ -7,18 +7,18 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.entity.layers.SheepFurLayer;
 import net.minecraft.resources.ResourceLocation;
-import org.cyclops.cyclopscore.config.extendedconfig.ExtendedConfig;
+import org.cyclops.cyclopscore.config.extendedconfig.ExtendedConfigCommon;
 import org.cyclops.energeticsheep.Reference;
-import org.cyclops.energeticsheep.entity.EntityEnergeticSheep;
+import org.cyclops.energeticsheep.entity.EntityEnergeticSheepCommon;
 import org.cyclops.energeticsheep.entity.layers.LayerEnergeticSheepCharge;
 
 /**
- * Renderer for {@link EntityEnergeticSheep}.
+ * Renderer for {@link EntityEnergeticSheepCommon}.
  *
  * @author rubensworks
  *
  */
-public class RenderEntityEnergeticSheep extends MobRenderer<EntityEnergeticSheep, SheepModel<EntityEnergeticSheep>> {
+public class RenderEntityEnergeticSheep extends MobRenderer<EntityEnergeticSheepCommon, SheepModel<EntityEnergeticSheepCommon>> {
 
     private ResourceLocation texture;
 
@@ -27,7 +27,7 @@ public class RenderEntityEnergeticSheep extends MobRenderer<EntityEnergeticSheep
      * @param renderContext The render context.
      * @param config Then config.
      */
-    public RenderEntityEnergeticSheep(EntityRendererProvider.Context renderContext, ExtendedConfig<?, ?> config) {
+    public RenderEntityEnergeticSheep(EntityRendererProvider.Context renderContext, ExtendedConfigCommon<?, ?, ?> config) {
         super(renderContext, new SheepModel<>(renderContext.bakeLayer(ModelLayers.SHEEP)), 0.7F);
         this.addLayer((RenderLayer) new SheepFurLayer((MobRenderer) this, renderContext.getModelSet()));
         this.addLayer(new LayerEnergeticSheepCharge(this, renderContext.getModelSet()));
@@ -35,7 +35,7 @@ public class RenderEntityEnergeticSheep extends MobRenderer<EntityEnergeticSheep
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityEnergeticSheep entity) {
+    public ResourceLocation getTextureLocation(EntityEnergeticSheepCommon entity) {
         return texture;
     }
 

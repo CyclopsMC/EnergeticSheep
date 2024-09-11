@@ -36,16 +36,8 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.storage.loot.LootTable;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.energy.EnergyStorage;
-import net.neoforged.neoforge.energy.IEnergyStorage;
-import net.neoforged.neoforge.event.entity.EntityStruckByLightningEvent;
 import org.cyclops.energeticsheep.Reference;
 import org.cyclops.energeticsheep.RegistryEntries;
-import org.cyclops.energeticsheep.RegistryEntriesCommon;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -56,9 +48,7 @@ import java.util.Map;
  * @author rubensworks
  *
  */
-@EventBusSubscriber
-@OnlyIn(value = Dist.CLIENT, _interface = PowerableMob.class)
-public class EntityEnergeticSheep extends Sheep implements PowerableMob {
+public abstract class EntityEnergeticSheepCommon extends Sheep implements PowerableMob {
 
     public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_WHITE      = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/white"));
     public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_ORANGE     = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/orange"));
@@ -77,93 +67,58 @@ public class EntityEnergeticSheep extends Sheep implements PowerableMob {
     public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_RED        = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/red"));
     public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_BLACK      = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/black"));
 
-    private final Map<DyeColor, ItemLike> woolByColor;
+    protected final Map<DyeColor, ItemLike> woolByColor;
 
-    private static final EntityDataAccessor<Integer> ENERGY = SynchedEntityData.<Integer>defineId(EntityEnergeticSheep.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> ENERGY = SynchedEntityData.<Integer>defineId(EntityEnergeticSheepCommon.class, EntityDataSerializers.INT);
 
-    @Nullable
-    private IEnergyStorage energyStorage;
     private boolean powerBreeding = false;
 
-    public EntityEnergeticSheep(EntityType<? extends EntityEnergeticSheep> type, Level world) {
+    public EntityEnergeticSheepCommon(EntityType<? extends EntityEnergeticSheepCommon> type, Level world) {
         super(type, world);
         this.xpReward = 10;
         this.woolByColor = Util.make(Maps.newEnumMap(DyeColor.class), (p_203402_0_) -> {
-            p_203402_0_.put(DyeColor.WHITE, RegistryEntriesCommon.ITEM_ENERGETIC_WOOL_WHITE.value());
-            p_203402_0_.put(DyeColor.ORANGE, RegistryEntriesCommon.ITEM_ENERGETIC_WOOL_ORANGE.value());
-            p_203402_0_.put(DyeColor.MAGENTA, RegistryEntriesCommon.ITEM_ENERGETIC_WOOL_MAGENTA.value());
-            p_203402_0_.put(DyeColor.LIGHT_BLUE, RegistryEntriesCommon.ITEM_ENERGETIC_WOOL_LIGHT_BLUE.value());
-            p_203402_0_.put(DyeColor.YELLOW, RegistryEntriesCommon.ITEM_ENERGETIC_WOOL_YELLOW.value());
-            p_203402_0_.put(DyeColor.LIME, RegistryEntriesCommon.ITEM_ENERGETIC_WOOL_LIME.value());
-            p_203402_0_.put(DyeColor.PINK, RegistryEntriesCommon.ITEM_ENERGETIC_WOOL_PINK.value());
-            p_203402_0_.put(DyeColor.GRAY, RegistryEntriesCommon.ITEM_ENERGETIC_WOOL_GRAY.value());
-            p_203402_0_.put(DyeColor.LIGHT_GRAY, RegistryEntriesCommon.ITEM_ENERGETIC_WOOL_LIGHT_GRAY.value());
-            p_203402_0_.put(DyeColor.CYAN, RegistryEntriesCommon.ITEM_ENERGETIC_WOOL_CYAN.value());
-            p_203402_0_.put(DyeColor.PURPLE, RegistryEntriesCommon.ITEM_ENERGETIC_WOOL_PURPLE.value());
-            p_203402_0_.put(DyeColor.BLUE, RegistryEntriesCommon.ITEM_ENERGETIC_WOOL_BLUE.value());
-            p_203402_0_.put(DyeColor.BROWN, RegistryEntriesCommon.ITEM_ENERGETIC_WOOL_BROWN.value());
-            p_203402_0_.put(DyeColor.GREEN, RegistryEntriesCommon.ITEM_ENERGETIC_WOOL_GREEN.value());
-            p_203402_0_.put(DyeColor.RED, RegistryEntriesCommon.ITEM_ENERGETIC_WOOL_RED.value());
-            p_203402_0_.put(DyeColor.BLACK, RegistryEntriesCommon.ITEM_ENERGETIC_WOOL_BLACK.value());
+            p_203402_0_.put(DyeColor.WHITE, RegistryEntries.ITEM_ENERGETIC_WOOL_WHITE.value());
+            p_203402_0_.put(DyeColor.ORANGE, RegistryEntries.ITEM_ENERGETIC_WOOL_ORANGE.value());
+            p_203402_0_.put(DyeColor.MAGENTA, RegistryEntries.ITEM_ENERGETIC_WOOL_MAGENTA.value());
+            p_203402_0_.put(DyeColor.LIGHT_BLUE, RegistryEntries.ITEM_ENERGETIC_WOOL_LIGHT_BLUE.value());
+            p_203402_0_.put(DyeColor.YELLOW, RegistryEntries.ITEM_ENERGETIC_WOOL_YELLOW.value());
+            p_203402_0_.put(DyeColor.LIME, RegistryEntries.ITEM_ENERGETIC_WOOL_LIME.value());
+            p_203402_0_.put(DyeColor.PINK, RegistryEntries.ITEM_ENERGETIC_WOOL_PINK.value());
+            p_203402_0_.put(DyeColor.GRAY, RegistryEntries.ITEM_ENERGETIC_WOOL_GRAY.value());
+            p_203402_0_.put(DyeColor.LIGHT_GRAY, RegistryEntries.ITEM_ENERGETIC_WOOL_LIGHT_GRAY.value());
+            p_203402_0_.put(DyeColor.CYAN, RegistryEntries.ITEM_ENERGETIC_WOOL_CYAN.value());
+            p_203402_0_.put(DyeColor.PURPLE, RegistryEntries.ITEM_ENERGETIC_WOOL_PURPLE.value());
+            p_203402_0_.put(DyeColor.BLUE, RegistryEntries.ITEM_ENERGETIC_WOOL_BLUE.value());
+            p_203402_0_.put(DyeColor.BROWN, RegistryEntries.ITEM_ENERGETIC_WOOL_BROWN.value());
+            p_203402_0_.put(DyeColor.GREEN, RegistryEntries.ITEM_ENERGETIC_WOOL_GREEN.value());
+            p_203402_0_.put(DyeColor.RED, RegistryEntries.ITEM_ENERGETIC_WOOL_RED.value());
+            p_203402_0_.put(DyeColor.BLACK, RegistryEntries.ITEM_ENERGETIC_WOOL_BLACK.value());
         });
     }
 
     public static int getCapacity(DyeColor color) {
-        return getCapacity(color, EntityEnergeticSheepConfig.sheepBaseCapacity);
+        return getCapacity(color, EntityEnergeticSheepConfigCommon.sheepBaseCapacity);
     }
 
     public static int getCapacity(DyeColor color, int base) {
         return (int) (base * (1 + (DyeColor.values().length - color.ordinal() - 1)
-                * EntityEnergeticSheepConfig.additionalCapacityColorFactor));
+                * EntityEnergeticSheepConfigCommon.additionalCapacityColorFactor));
     }
 
-    @Nullable
-    public IEnergyStorage getEnergyStorage() {
-        return energyStorage;
-    }
+    public static void onLightning(Sheep sheep) {
+        EntityEnergeticSheepCommon energeticSheep = RegistryEntries.ENTITY_TYPE_ENERGETIC_SHEEP.value().create(sheep.level());
 
-    protected void setEnergyStorage(DyeColor color) {
-        this.energyStorage = new EnergyStorage(getCapacity(color)) {
-            @Override
-            public int receiveEnergy(int maxReceive, boolean simulate) {
-                int ret = super.receiveEnergy(maxReceive, simulate);
-                if (!simulate) {
-                    EntityEnergeticSheep.this.updateEnergy(energy);
-                }
-                return ret;
-            }
-
-            @Override
-            public int extractEnergy(int maxExtract, boolean simulate) {
-                int ret = super.extractEnergy(maxExtract, simulate);
-                if (!simulate) {
-                    EntityEnergeticSheep.this.updateEnergy(energy);
-                }
-                return ret;
-            }
-        };
-    }
-
-    @SubscribeEvent
-    public static void onLightning(EntityStruckByLightningEvent event) {
-        if (event.getEntity().getClass() == Sheep.class) {
-            Sheep sheep = (Sheep) event.getEntity();
-            EntityEnergeticSheep energeticSheep = RegistryEntries.ENTITY_TYPE_ENERGETIC_SHEEP.get().create(sheep.level());
-
-            if (sheep.hasCustomName()) {
-                energeticSheep.setCustomName(sheep.getCustomName());
-            }
-            energeticSheep.age = sheep.getAge();
-            energeticSheep.setSheared(sheep.isSheared());
-            energeticSheep.setFleeceColorInternal(sheep.getColor());
-            energeticSheep.absMoveTo(sheep.getX(), sheep.getY(), sheep.getZ(),
-                    sheep.yRotO, sheep.xRotO);
-
-            sheep.remove(RemovalReason.DISCARDED);
-            sheep.level().addFreshEntity(energeticSheep);
-
-            event.getLightning().remove(RemovalReason.KILLED);
+        if (sheep.hasCustomName()) {
+            energeticSheep.setCustomName(sheep.getCustomName());
         }
+        energeticSheep.age = sheep.getAge();
+        energeticSheep.setSheared(sheep.isSheared());
+        energeticSheep.setFleeceColorInternal(sheep.getColor());
+        energeticSheep.absMoveTo(sheep.getX(), sheep.getY(), sheep.getZ(),
+                sheep.yRotO, sheep.xRotO);
+
+        sheep.remove(RemovalReason.DISCARDED);
+        sheep.level().addFreshEntity(energeticSheep);
     }
 
     @Override
@@ -195,24 +150,36 @@ public class EntityEnergeticSheep extends Sheep implements PowerableMob {
         return this.entityData.get(ENERGY);
     }
 
-    public int getCapacity() {
-        return this.energyStorage != null ? this.energyStorage.getMaxEnergyStored() : 0;
-    }
+    public abstract int getCapacity();
 
     @Override
     public void ate() {
         super.ate();
-        if (this.energyStorage != null) {
-            this.energyStorage.receiveEnergy(this.energyStorage.getMaxEnergyStored(), false);
+        restoreAllEnergy();
+    }
+
+    protected abstract void initializeEnergy(DyeColor color);
+
+    protected abstract void restoreAllEnergy();
+
+    protected abstract void consumeAllEnergy();
+
+    @Override
+    public void shear(SoundSource soundSource) {
+        // We need to override this in case other mods are calling mobInteract with shears explicitly
+//        super.shear(p_29819_);
+
+        for (ItemStack item : this.onShearedInternal(null, null, null, null)) {
+            ItemEntity itementity = this.spawnAtLocation(item);
+            if (itementity != null) {
+                itementity.setDeltaMovement(itementity.getDeltaMovement().add((double)((this.random.nextFloat() - this.random.nextFloat()) * 0.1F), (double)(this.random.nextFloat() * 0.05F), (double)((this.random.nextFloat() - this.random.nextFloat()) * 0.1F)));
+            }
         }
     }
 
-    @Override
-    public List<ItemStack> onSheared(@Nullable Player player, ItemStack item, Level world, BlockPos pos) {
+    protected List<ItemStack> onShearedInternal(@Nullable Player player, ItemStack item, Level world, BlockPos pos) {
         this.setSheared(true);
-        if (this.energyStorage != null) {
-            this.energyStorage.extractEnergy(this.energyStorage.getMaxEnergyStored(), false);
-        }
+        consumeAllEnergy();
         int i = 1 + this.random.nextInt(3);
 
         List<ItemStack> ret = Lists.newArrayList();
@@ -225,32 +192,15 @@ public class EntityEnergeticSheep extends Sheep implements PowerableMob {
     }
 
     @Override
-    public void shear(SoundSource soundSource) {
-        // We need to override this in case other mods are calling mobInteract with shears explicitly
-//        super.shear(p_29819_);
-
-        for (ItemStack item : this.onSheared(null, null, null, null)) {
-            ItemEntity itementity = this.spawnAtLocation(item);
-            if (itementity != null) {
-                itementity.setDeltaMovement(itementity.getDeltaMovement().add((double)((this.random.nextFloat() - this.random.nextFloat()) * 0.1F), (double)(this.random.nextFloat() * 0.05F), (double)((this.random.nextFloat() - this.random.nextFloat()) * 0.1F)));
-            }
-        }
-    }
-
-    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        if (this.energyStorage != null) {
-            compound.putInt("energy", this.energyStorage.getEnergyStored());
-            compound.putBoolean("powerBreeding", powerBreeding);
-        }
+        compound.putBoolean("powerBreeding", powerBreeding);
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setFleeceColorInternal(DyeColor.byId(compound.getByte("Color")));
-        this.energyStorage.receiveEnergy(compound.getInt("energy"), false);
         this.powerBreeding = compound.getBoolean("powerBreeding");
     }
 
@@ -258,14 +208,14 @@ public class EntityEnergeticSheep extends Sheep implements PowerableMob {
     @Override
     public Sheep getBreedOffspring(ServerLevel world, AgeableMob ageable) {
         int chance = this.powerBreeding
-                ? EntityEnergeticSheepConfig.babyChancePowerBreeding : EntityEnergeticSheepConfig.babyChance;
+                ? EntityEnergeticSheepConfigCommon.babyChancePowerBreeding : EntityEnergeticSheepConfigCommon.babyChance;
         this.powerBreeding = false;
         if (chance > 0 && this.random.nextInt(chance) == 0) {
-            EntityEnergeticSheep child = RegistryEntries.ENTITY_TYPE_ENERGETIC_SHEEP.get().create(getCommandSenderWorld());
+            EntityEnergeticSheepCommon child = RegistryEntries.ENTITY_TYPE_ENERGETIC_SHEEP.value().create(getCommandSenderWorld());
 
             // If parents have equal color, child has same color, otherwise random.
             DyeColor color;
-            if (this.getColor() == ((EntityEnergeticSheep) ageable).getColor()) {
+            if (this.getColor() == ((EntityEnergeticSheepCommon) ageable).getColor()) {
                 color = this.getColor();
             } else {
                 color = getRandomColor(this.random);
@@ -332,7 +282,6 @@ public class EntityEnergeticSheep extends Sheep implements PowerableMob {
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
         SpawnGroupData livingdata = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn);
         this.setFleeceColorInternal(getRandomColor(this.random));
-        this.energyStorage.receiveEnergy(this.energyStorage.getMaxEnergyStored(), false);
         return livingdata;
     }
 
@@ -353,7 +302,7 @@ public class EntityEnergeticSheep extends Sheep implements PowerableMob {
 
     protected void setFleeceColorInternal(DyeColor color) {
         super.setColor(color);
-        this.setEnergyStorage(color);
+        this.initializeEnergy(color);
     }
 
     protected static DyeColor getRandomColor(RandomSource random) {
@@ -361,7 +310,7 @@ public class EntityEnergeticSheep extends Sheep implements PowerableMob {
     }
 
     protected boolean isPowerBreedingItem(ItemStack stack) {
-        for(String name : EntityEnergeticSheepConfig.powerBreedingItems) {
+        for(String name : EntityEnergeticSheepConfigCommon.powerBreedingItems) {
             if(BuiltInRegistries.ITEM.getKey(stack.getItem()).toString().equals(name)) {
                 return true;
             }

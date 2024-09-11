@@ -5,8 +5,8 @@ import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import org.cyclops.energeticsheep.EnergeticSheepNeoForge;
-import org.cyclops.energeticsheep.entity.EntityEnergeticSheep;
-import org.cyclops.energeticsheep.entity.EntityEnergeticSheepConfig;
+import org.cyclops.energeticsheep.entity.EntityEnergeticSheepCommon;
+import org.cyclops.energeticsheep.entity.EntityEnergeticSheepConfigCommon;
 import org.cyclops.energeticsheep.item.ItemBlockEnergeticWool;
 
 /**
@@ -26,7 +26,7 @@ public class BlockEnergeticWoolConfig extends BlockEnergeticWoolConfigCommon<Ene
         event.registerItem(
                 Capabilities.EnergyStorage.ITEM,
                 (stack, context) -> new ItemBlockEnergeticWool.EnergyStorage(
-                        EntityEnergeticSheep.getCapacity(((BlockEnergeticWool) this.getInstance()).getColor(), EntityEnergeticSheepConfig.woolBaseCapacity), stack),
+                        EntityEnergeticSheepCommon.getCapacity(((BlockEnergeticWool) this.getInstance()).getColor(), EntityEnergeticSheepConfigCommon.woolBaseCapacity), stack),
                 getInstance()
         );
     }

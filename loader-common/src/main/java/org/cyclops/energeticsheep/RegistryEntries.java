@@ -2,14 +2,17 @@ package org.cyclops.energeticsheep;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import org.cyclops.cyclopscore.config.DeferredHolderCommon;
+import org.cyclops.energeticsheep.entity.EntityEnergeticSheepCommon;
+
 
 /**
  * Referenced registry entries.
  * @author rubensworks
  */
-public class RegistryEntriesCommon { // TODO: rename
+public class RegistryEntries {
 
     public static final DeferredHolderCommon<Item, Item> ITEM_ENERGETIC_SHEARS = DeferredHolderCommon.create(Registries.ITEM, ResourceLocation.parse("energeticsheep:energetic_shears"));
     public static final DeferredHolderCommon<Item, Item> ITEM_ENERGETIC_WOOL_WHITE = DeferredHolderCommon.create(Registries.ITEM, ResourceLocation.parse("energeticsheep:white_energetic_wool"));
@@ -29,9 +32,6 @@ public class RegistryEntriesCommon { // TODO: rename
     public static final DeferredHolderCommon<Item, Item> ITEM_ENERGETIC_WOOL_RED = DeferredHolderCommon.create(Registries.ITEM, ResourceLocation.parse("energeticsheep:red_energetic_wool"));
     public static final DeferredHolderCommon<Item, Item> ITEM_ENERGETIC_WOOL_BLACK = DeferredHolderCommon.create(Registries.ITEM, ResourceLocation.parse("energeticsheep:black_energetic_wool"));
 
-    // TODO
-//    public static final DeferredHolderCommon<EntityType<?>, EntityType<EntityEnergeticSheep>> ENTITY_TYPE_ENERGETIC_SHEEP = DeferredHolderCommon.create(Registries.ENTITY_TYPE, ResourceLocation.parse("energeticsheep:energetic_sheep"));
-
-//    public static final DeferredHolderCommon<MapCodec<? extends BiomeModifier>, MapCodec<BiomeModifierSpawnEnergeticSheep>> BIOME_MODIFIER_SPAWN_ENERGETIC_SHEEP = DeferredHolderCommon.create(NeoForgeRegistries.BIOME_MODIFIER_SERIALIZERS.key(), ResourceLocation.parse("energeticsheep:spawn_energetic_sheep"));
+    public static final DeferredHolderCommon<EntityType<?>, EntityType<EntityEnergeticSheepCommon>> ENTITY_TYPE_ENERGETIC_SHEEP = DeferredHolderCommon.create(Registries.ENTITY_TYPE, ResourceLocation.parse("energeticsheep:energetic_sheep"));
 
 }

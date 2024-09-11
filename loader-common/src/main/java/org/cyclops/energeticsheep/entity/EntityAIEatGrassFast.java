@@ -1,10 +1,10 @@
 package org.cyclops.energeticsheep.entity;
 
 import com.google.common.base.Predicate;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.entity.ai.goal.EatBlockGoal;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.ai.goal.EatBlockGoal;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 
 /**
  * A faster version of {@link EatBlockGoal}.
@@ -14,9 +14,9 @@ public class EntityAIEatGrassFast extends EatBlockGoal {
 
     private static final Predicate<BlockState> IS_TALL_GRASS = (blockState) -> blockState.getBlock() == Blocks.TALL_GRASS;
 
-    private final EntityEnergeticSheep grassEaterEntity;
+    private final EntityEnergeticSheepCommon grassEaterEntity;
 
-    public EntityAIEatGrassFast(EntityEnergeticSheep grassEaterEntityIn) {
+    public EntityAIEatGrassFast(EntityEnergeticSheepCommon grassEaterEntityIn) {
         super(grassEaterEntityIn);
         this.grassEaterEntity = grassEaterEntityIn;
     }

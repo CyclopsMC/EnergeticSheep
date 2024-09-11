@@ -13,9 +13,9 @@ import org.cyclops.cyclopscore.init.ModBaseVersionable;
 import org.cyclops.cyclopscore.proxy.IClientProxy;
 import org.cyclops.cyclopscore.proxy.ICommonProxy;
 import org.cyclops.energeticsheep.biome.modifier.BiomeModifierSpawnEnergeticSheepConfig;
-import org.cyclops.energeticsheep.block.BlockEnergeticWoolConfig;
-import org.cyclops.energeticsheep.entity.EntityEnergeticSheepConfig;
-import org.cyclops.energeticsheep.item.ItemEnergeticShearsConfig;
+import org.cyclops.energeticsheep.block.BlockEnergeticWoolConfigNeoForge;
+import org.cyclops.energeticsheep.entity.EntityEnergeticSheepConfigNeoForge;
+import org.cyclops.energeticsheep.item.ItemEnergeticShearsConfigNeoForge;
 import org.cyclops.energeticsheep.proxy.ClientProxy;
 import org.cyclops.energeticsheep.proxy.CommonProxy;
 
@@ -60,12 +60,12 @@ public class EnergeticSheepNeoForge extends ModBaseVersionable<EnergeticSheepNeo
 
         configHandler.addConfigurable(new GeneralConfig(this));
 
-        configHandler.addConfigurable(new EntityEnergeticSheepConfig());
+        configHandler.addConfigurable(new EntityEnergeticSheepConfigNeoForge());
 
-        configHandler.addConfigurable(new ItemEnergeticShearsConfig());
+        configHandler.addConfigurable(new ItemEnergeticShearsConfigNeoForge());
 
         for (DyeColor color : DyeColor.values()) {
-            configHandler.addConfigurable(new BlockEnergeticWoolConfig(color));
+            configHandler.addConfigurable(new BlockEnergeticWoolConfigNeoForge(color));
         }
 
         configHandler.addConfigurable(new BiomeModifierSpawnEnergeticSheepConfig());

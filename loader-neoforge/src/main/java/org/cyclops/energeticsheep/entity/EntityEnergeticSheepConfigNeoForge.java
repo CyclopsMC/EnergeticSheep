@@ -18,9 +18,9 @@ import org.cyclops.energeticsheep.entity.layers.LayerEnergeticSheepCharge;
 /**
  * @author rubensworks
  */
-public class EntityEnergeticSheepConfig extends EntityEnergeticSheepConfigCommon<EnergeticSheepNeoForge, EntityEnergeticSheepNeoForge> {
+public class EntityEnergeticSheepConfigNeoForge extends EntityEnergeticSheepConfigCommon<EnergeticSheepNeoForge, EntityEnergeticSheepNeoForge> {
 
-    public EntityEnergeticSheepConfig() {
+    public EntityEnergeticSheepConfigNeoForge() {
         super(EnergeticSheepNeoForge._instance, EntityEnergeticSheepNeoForge::new);
         getMod().getModEventBus().addListener(this::onEntityAttributesCreation);
         if (getMod().getModHelpers().getMinecraftHelpers().isClientSide()) {

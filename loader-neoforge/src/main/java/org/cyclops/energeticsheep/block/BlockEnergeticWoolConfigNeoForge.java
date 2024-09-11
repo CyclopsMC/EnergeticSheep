@@ -7,17 +7,17 @@ import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import org.cyclops.energeticsheep.EnergeticSheepNeoForge;
 import org.cyclops.energeticsheep.entity.EntityEnergeticSheepCommon;
 import org.cyclops.energeticsheep.entity.EntityEnergeticSheepConfigCommon;
-import org.cyclops.energeticsheep.item.ItemBlockEnergeticWool;
+import org.cyclops.energeticsheep.item.ItemBlockEnergeticWoolNeoForge;
 
 /**
  * @author rubensworks
  */
-public class BlockEnergeticWoolConfig extends BlockEnergeticWoolConfigCommon<EnergeticSheepNeoForge> {
-    public BlockEnergeticWoolConfig(DyeColor color) {
+public class BlockEnergeticWoolConfigNeoForge extends BlockEnergeticWoolConfigCommon<EnergeticSheepNeoForge> {
+    public BlockEnergeticWoolConfigNeoForge(DyeColor color) {
         super(
                 EnergeticSheepNeoForge._instance,
                 color,
-                (eConfig, block) -> new ItemBlockEnergeticWool((BlockEnergeticWool) block, new Item.Properties())
+                (eConfig, block) -> new ItemBlockEnergeticWoolNeoForge((BlockEnergeticWool) block, new Item.Properties())
         );
         EnergeticSheepNeoForge._instance.getModEventBus().addListener(this::registerCapabilities);
     }
@@ -25,7 +25,7 @@ public class BlockEnergeticWoolConfig extends BlockEnergeticWoolConfigCommon<Ene
     public void registerCapabilities(RegisterCapabilitiesEvent event) {
         event.registerItem(
                 Capabilities.EnergyStorage.ITEM,
-                (stack, context) -> new ItemBlockEnergeticWool.EnergyStorage(
+                (stack, context) -> new BlockEnergeticWoolEnergyStorage(
                         EntityEnergeticSheepCommon.getCapacity(((BlockEnergeticWool) this.getInstance()).getColor(), EntityEnergeticSheepConfigCommon.woolBaseCapacity), stack),
                 getInstance()
         );

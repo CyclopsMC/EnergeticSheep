@@ -21,8 +21,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import org.cyclops.cyclopscore.helper.IModHelpers;
 import org.jetbrains.annotations.Nullable;
 
@@ -41,7 +39,6 @@ public abstract class ItemEnergeticShearsCommon extends ShearsItem {
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack itemStack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flagIn) {
         super.appendHoverText(itemStack, context, tooltip, flagIn);
         int capacity = getMaxEnergyStored(itemStack);

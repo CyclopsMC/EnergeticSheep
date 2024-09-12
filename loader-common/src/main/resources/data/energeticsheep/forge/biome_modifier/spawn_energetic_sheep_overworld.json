@@ -1,0 +1,8 @@
+{
+  "type": "energeticsheep:spawn_energetic_sheep",
+  "biomes": "#minecraft:is_overworld",
+  "biomesBlacklist": "#energeticsheep:is_not_energetic_sheep",
+  "spawnWeight": 3,
+  "minCount": 2,
+  "maxCount": 4
+}

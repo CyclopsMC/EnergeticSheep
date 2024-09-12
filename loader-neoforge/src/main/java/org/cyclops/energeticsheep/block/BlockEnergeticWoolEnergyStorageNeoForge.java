@@ -6,12 +6,12 @@ import net.neoforged.neoforge.energy.IEnergyStorage;
 /**
  * @author rubensworks
  */
-public class BlockEnergeticWoolEnergyStorage implements IEnergyStorage {
+public class BlockEnergeticWoolEnergyStorageNeoForge implements IEnergyStorage {
 
     private final int capacity;
     private final ItemStack itemStack;
 
-    public BlockEnergeticWoolEnergyStorage(int capacity, ItemStack itemStack) {
+    public BlockEnergeticWoolEnergyStorageNeoForge(int capacity, ItemStack itemStack) {
         this.capacity = capacity;
         this.itemStack = itemStack;
     }

@@ -14,6 +14,11 @@ public class ItemBlockEnergeticWoolFabric extends ItemBlockEnergeticWoolCommon {
     }
 
     @Override
+    protected String getEnergyUnitUnlocalized() {
+        return "general.energeticsheep.energy_unit_fabric";
+    }
+
+    @Override
     protected int getEnergyStored(ItemStack itemStack) {
         EnergyStorage energyStorage = EnergyStorage.ITEM.find(itemStack, ContainerItemContext.withConstant(itemStack));
         return (int) energyStorage.getAmount();

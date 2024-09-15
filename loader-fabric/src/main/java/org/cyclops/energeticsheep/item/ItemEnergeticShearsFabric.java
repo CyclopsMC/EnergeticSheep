@@ -33,6 +33,11 @@ public class ItemEnergeticShearsFabric extends ItemEnergeticShearsCommon {
     }
 
     @Override
+    protected String getEnergyUnitUnlocalized() {
+        return "general.energeticsheep.energy_unit_fabric";
+    }
+
+    @Override
     public boolean mineBlock(ItemStack itemStack, Level worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
         if (!worldIn.isClientSide) {
             if (entityLiving instanceof Player player) {

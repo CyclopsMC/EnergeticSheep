@@ -26,9 +26,13 @@ public abstract class ItemBlockEnergeticWoolCommon extends BlockItem {
         super.appendHoverText(itemStack, context, tooltip, flagIn);
         IL10NHelpers l10nHelpers = IModHelpers.get().getL10NHelpers();
         String line = String.format("%,d", getEnergyStored(itemStack)) + " "
-                + l10nHelpers.localize("general.energeticsheep.energy_unit");
+                + l10nHelpers.localize(getEnergyUnitUnlocalized());
         tooltip.add(Component.literal(line).withStyle(ChatFormatting.RED));
         l10nHelpers.addOptionalInfo(tooltip, "block.energeticsheep.energetic_wool");
+    }
+
+    protected String getEnergyUnitUnlocalized() {
+        return "general.energeticsheep.energy_unit";
     }
 
     protected abstract int getEnergyStored(ItemStack itemStack);

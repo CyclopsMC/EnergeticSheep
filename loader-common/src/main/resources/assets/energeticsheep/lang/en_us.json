@@ -1,6 +1,7 @@
 {
     "itemGroup.energeticsheep": "Energetic Sheep",
     "general.energeticsheep.energy_unit": "RF",
+    "general.energeticsheep.energy_unit_fabric": "E",
     "general.energeticsheep.description": "Sheep that generate energy",
 
     "_comment": "Items",

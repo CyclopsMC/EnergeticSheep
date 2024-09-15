@@ -45,9 +45,13 @@ public abstract class ItemEnergeticShearsCommon extends ShearsItem {
         if (capacity > 0) {
             int amount = getEnergyStored(itemStack);
             String line = String.format("%,d", amount) + " / " + String.format("%,d", capacity)
-                    + " " + IModHelpers.get().getL10NHelpers().localize("general.energeticsheep.energy_unit");
+                    + " " + IModHelpers.get().getL10NHelpers().localize(getEnergyUnitUnlocalized());
             tooltip.add(Component.literal(line).withStyle(ChatFormatting.RED));
         }
+    }
+
+    protected String getEnergyUnitUnlocalized() {
+        return "general.energeticsheep.energy_unit";
     }
 
     public abstract int getEnergyStored(ItemStack itemStack);

@@ -21,6 +21,8 @@ dependencies {
     }
 
     modApi "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${fabric_forgeconfigapiport_version}"
+    include modApi("teamreborn:energy:${fabric_teamrebornenergy_version}")
+    modApi "TechReborn:${fabric_techreborn_version}"
 
     if (secrets.flopper_version_local) {
         runtimeOnly "org.cyclops.flopper:flopper-${project.minecraft_version}-fabric:${secrets.flopper_version_local}:deobf"

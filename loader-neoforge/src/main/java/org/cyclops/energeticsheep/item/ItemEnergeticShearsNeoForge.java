@@ -71,7 +71,7 @@ public class ItemEnergeticShearsNeoForge extends ItemEnergeticShearsCommon {
     }
 
     @Override
-    public void consumeEnergy(ItemStack itemStack, int amount) {
+    public void consumeEnergy(ItemStack itemStack, int amount, Player player, InteractionHand hand) {
         IEnergyStorage energyStorage = getEnergyStorage(itemStack);
         if (energyStorage != null) {
             energyStorage.extractEnergy(amount, false);
@@ -79,7 +79,7 @@ public class ItemEnergeticShearsNeoForge extends ItemEnergeticShearsCommon {
     }
 
     @Override
-    protected int moveEnergyFromEntityToItem(LivingEntity entity, ItemStack itemStack, int usageTransferAmount) {
+    protected int moveEnergyFromEntityToItem(LivingEntity entity, ItemStack itemStack, int usageTransferAmount, Player player, InteractionHand hand) {
         Optional<IEnergyStorage> energyCapability = Optional.ofNullable(entity.getCapability(Capabilities.EnergyStorage.ENTITY, null));
         if (energyCapability.isPresent()) {
             IEnergyStorage entityEnergy = energyCapability.orElse(null);

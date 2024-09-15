@@ -35,7 +35,7 @@ public class ItemEnergeticShearsForge extends ItemEnergeticShearsCommon {
     @Override
     public boolean mineBlock(ItemStack itemStack, Level worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
         if (!worldIn.isClientSide) {
-            consumeOnShear(itemStack);
+            consumeOnShear(itemStack, null, null);
         }
 
         Block block = state.getBlock();
@@ -80,7 +80,7 @@ public class ItemEnergeticShearsForge extends ItemEnergeticShearsCommon {
     }
 
     @Override
-    public void consumeEnergy(ItemStack itemStack, int amount) {
+    public void consumeEnergy(ItemStack itemStack, int amount, Player player, InteractionHand hand) {
         IEnergyStorage energyStorage = getEnergyStorage(itemStack);
         if (energyStorage != null) {
             energyStorage.extractEnergy(amount, false);
@@ -88,7 +88,7 @@ public class ItemEnergeticShearsForge extends ItemEnergeticShearsCommon {
     }
 
     @Override
-    protected int moveEnergyFromEntityToItem(LivingEntity entity, ItemStack itemStack, int usageTransferAmount) {
+    protected int moveEnergyFromEntityToItem(LivingEntity entity, ItemStack itemStack, int usageTransferAmount, Player player, InteractionHand hand) {
         LazyOptional<IEnergyStorage> energyCapability = entity.getCapability(ForgeCapabilities.ENERGY, null);
         if (energyCapability.isPresent()) {
             IEnergyStorage entityEnergy = energyCapability.orElse(null);

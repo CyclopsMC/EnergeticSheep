@@ -54,9 +54,9 @@ public abstract class ItemEnergeticShearsCommon extends ShearsItem {
 
     public abstract int getMaxEnergyStored(ItemStack itemStack);
 
-    public abstract void consumeEnergy(ItemStack itemStack, int amount);
+    public abstract void consumeEnergy(ItemStack itemStack, int amount, Player player, InteractionHand hand);
 
-    protected abstract int moveEnergyFromEntityToItem(LivingEntity entity, ItemStack itemStack, int usageTransferAmount);
+    protected abstract int moveEnergyFromEntityToItem(LivingEntity entity, ItemStack itemStack, int usageTransferAmount, Player player, InteractionHand hand);
 
     @Nullable
     protected abstract List<ItemStack> getShearableDrops(Object maybeShearable, @Nullable Player player, ItemStack item, Level level, BlockPos pos);
@@ -65,8 +65,8 @@ public abstract class ItemEnergeticShearsCommon extends ShearsItem {
         return getEnergyStored(itemStack) > ItemEnergeticShearsConfigCommon.shearConsumption;
     }
 
-    protected void consumeOnShear(ItemStack itemStack) {
-        consumeEnergy(itemStack, ItemEnergeticShearsConfigCommon.shearConsumption);
+    protected void consumeOnShear(ItemStack itemStack, Player player, InteractionHand hand) {
+        consumeEnergy(itemStack, ItemEnergeticShearsConfigCommon.shearConsumption, player, hand);
     }
 
     @Override
@@ -92,7 +92,7 @@ public abstract class ItemEnergeticShearsCommon extends ShearsItem {
                 player.level().addFreshEntity(entityitem);
             }
 
-            consumeOnShear(itemStack);
+            consumeOnShear(itemStack, player, context.getHand());
             player.setItemInHand(player.getUsedItemHand(), itemStack);
             player.awardStat(Stats.BLOCK_MINED.get(block));
             player.level().setBlock(pos, Blocks.AIR.defaultBlockState(), 11);
@@ -123,7 +123,7 @@ public abstract class ItemEnergeticShearsCommon extends ShearsItem {
             return InteractionResult.PASS;
         }
 
-        if (moveEnergyFromEntityToItem(entity, itemStack, ItemEnergeticShearsConfigCommon.usageTransferAmount) > 0) {
+        if (moveEnergyFromEntityToItem(entity, itemStack, ItemEnergeticShearsConfigCommon.usageTransferAmount, player, hand) > 0) {
             player.setItemInHand(hand, itemStack);
             entity.playSound(SoundEvents.SHEEP_SHEAR, 1.0F, 1.0F);
             return InteractionResult.SUCCESS;
@@ -140,7 +140,7 @@ public abstract class ItemEnergeticShearsCommon extends ShearsItem {
                             (rand.nextFloat() - rand.nextFloat()) * 0.1F)
                     );
                 }
-                consumeOnShear(itemStack);
+                consumeOnShear(itemStack, player, hand);
                 player.setItemInHand(hand, itemStack);
                 return InteractionResult.SUCCESS;
             }

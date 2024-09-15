@@ -12,6 +12,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Shearable;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -49,15 +50,14 @@ public class ItemEnergeticShearsFabric extends ItemEnergeticShearsCommon {
         return !state.is(BlockTags.LEAVES) && block != Blocks.COBWEB && block != Blocks.GRASS_BLOCK && block != Blocks.FERN && block != Blocks.DEAD_BUSH && block != Blocks.VINE && block != Blocks.TRIPWIRE && !state.is(BlockTags.WOOL) ? super.mineBlock(itemStack, worldIn, state, pos, entityLiving) : true;
     }
 
-    // TODO: impl interacting with blocks with energy
-//    @Override
-//    public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context) {
-//        InteractionResult result = transferEnergy(context.getPlayer(), context.getClickedPos(), context.getClickedFace(), context.getHand());
-//        if (result == null) {
-//            return super.onItemUseFirst(stack, context);
-//        }
-//        return result;
-//    }
+    @Override
+    public InteractionResult useOn(UseOnContext context) {
+        InteractionResult result = ItemEnergeticShearsFabric.transferEnergy(context.getPlayer(), context.getClickedPos(), context.getClickedFace(), context.getHand());
+        if (result == null) {
+            return super.useOn(context);
+        }
+        return result;
+    }
 
     @Override
     public boolean allowComponentsUpdateAnimation(Player player, InteractionHand hand, ItemStack oldStack, ItemStack newStack) {
@@ -111,17 +111,15 @@ public class ItemEnergeticShearsFabric extends ItemEnergeticShearsCommon {
 
     public static InteractionResult transferEnergy(Player player, BlockPos pos, Direction side, InteractionHand hand) {
         Level worldIn = player.level();
-        if (!player.isCrouching()) {
-            try (Transaction transaction = Transaction.openOuter()) {
-                EnergyStorage source = EnergyStorage.ITEM.find(player.getItemInHand(hand), ContainerItemContext.ofPlayerHand(player, hand));
-                EnergyStorage target = EnergyStorage.SIDED.find(worldIn, pos, side);
-                if (target != null) {
-                    long moved = EnergyStorageUtil.move(source, target, ItemEnergeticShearsConfigCommon.usageTransferAmount, transaction);
-                    if (!worldIn.isClientSide) {
-                        transaction.commit();
-                    }
-                    return moved > 0 ? InteractionResult.SUCCESS :InteractionResult.FAIL;
+        try (Transaction transaction = Transaction.openOuter()) {
+            EnergyStorage source = EnergyStorage.ITEM.find(player.getItemInHand(hand), ContainerItemContext.ofPlayerHand(player, hand));
+            EnergyStorage target = EnergyStorage.SIDED.find(worldIn, pos, side);
+            if (target != null) {
+                long moved = EnergyStorageUtil.move(source, target, ItemEnergeticShearsConfigCommon.usageTransferAmount, transaction);
+                if (!worldIn.isClientSide) {
+                    transaction.commit();
                 }
+                return moved > 0 ? InteractionResult.SUCCESS :InteractionResult.FAIL;
             }
         }
         return null;

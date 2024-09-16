@@ -23,13 +23,18 @@ public class BlockEnergeticWoolEnergyStorageFabric extends SimpleItemEnergyStora
 
     @Override
     public long extract(long maxAmount, TransactionContext transaction) {
-        if (maxAmount < getCapacity()) {
+        // Make sure we can only extract a single item at a time
+        long capacitySingular = getCapacity() / ctx.getAmount();
+        if (maxAmount < capacitySingular) {
             return 0;
         }
+        maxAmount = capacitySingular;
 
-        long extracted = super.extract(maxAmount, transaction);
+        // Do actual extraction
+        // We don't call super, since we don't want to modify the data component, but only reduce the stack size
+        long extracted = maxAmount;
         if (extracted > 0) {
-            ctx.extract(ItemVariant.of(ctx.getItemVariant().toStack()), 1, transaction);
+            ctx.extract(ItemVariant.of(ctx.getItemVariant().toStack()), extracted / capacitySingular, transaction);
         }
         return extracted;
     }

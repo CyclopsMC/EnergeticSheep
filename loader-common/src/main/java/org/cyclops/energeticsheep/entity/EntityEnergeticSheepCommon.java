@@ -96,6 +96,10 @@ public abstract class EntityEnergeticSheepCommon extends Sheep implements Powera
         });
     }
 
+    public Map<DyeColor, ItemLike> getWoolByColor() {
+        return woolByColor;
+    }
+
     public static int getCapacity(DyeColor color) {
         return getCapacity(color, EntityEnergeticSheepConfigCommon.sheepBaseCapacity);
     }

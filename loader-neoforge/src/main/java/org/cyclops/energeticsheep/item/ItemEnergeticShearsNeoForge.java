@@ -59,6 +59,14 @@ public class ItemEnergeticShearsNeoForge extends ItemEnergeticShearsCommon {
     }
 
     @Override
+    public void setEnergyStored(ItemStack itemStack, int energy, Player player, InteractionHand hand) {
+        IEnergyStorage energyStorage = getEnergyStorage(itemStack);
+        if (energyStorage != null) {
+            energyStorage.receiveEnergy(energy, false);
+        }
+    }
+
+    @Override
     public int getEnergyStored(ItemStack itemStack) {
         IEnergyStorage energyStorage = getEnergyStorage(itemStack);
         return energyStorage != null ? energyStorage.getEnergyStored() : 0;

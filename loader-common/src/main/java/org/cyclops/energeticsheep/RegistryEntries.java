@@ -6,6 +6,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import org.cyclops.cyclopscore.config.DeferredHolderCommon;
 import org.cyclops.energeticsheep.entity.EntityEnergeticSheepCommon;
+import org.cyclops.energeticsheep.item.ItemEnergeticShearsCommon;
 
 
 /**
@@ -14,7 +15,7 @@ import org.cyclops.energeticsheep.entity.EntityEnergeticSheepCommon;
  */
 public class RegistryEntries {
 
-    public static final DeferredHolderCommon<Item, Item> ITEM_ENERGETIC_SHEARS = DeferredHolderCommon.create(Registries.ITEM, ResourceLocation.parse("energeticsheep:energetic_shears"));
+    public static final DeferredHolderCommon<Item, ItemEnergeticShearsCommon> ITEM_ENERGETIC_SHEARS = DeferredHolderCommon.create(Registries.ITEM, ResourceLocation.parse("energeticsheep:energetic_shears"));
     public static final DeferredHolderCommon<Item, Item> ITEM_ENERGETIC_WOOL_WHITE = DeferredHolderCommon.create(Registries.ITEM, ResourceLocation.parse("energeticsheep:white_energetic_wool"));
     public static final DeferredHolderCommon<Item, Item> ITEM_ENERGETIC_WOOL_ORANGE = DeferredHolderCommon.create(Registries.ITEM, ResourceLocation.parse("energeticsheep:orange_energetic_wool"));
     public static final DeferredHolderCommon<Item, Item> ITEM_ENERGETIC_WOOL_MAGENTA = DeferredHolderCommon.create(Registries.ITEM, ResourceLocation.parse("energeticsheep:magenta_energetic_wool"));

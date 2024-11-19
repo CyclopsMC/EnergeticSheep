@@ -12,6 +12,8 @@ import net.minecraft.world.level.block.state.BlockState;
  */
 public class EntityAIEatGrassFast extends EatBlockGoal {
 
+    public static int EAT_CHANCE = 200;
+
     private static final Predicate<BlockState> IS_TALL_GRASS = (blockState) -> blockState.getBlock() == Blocks.TALL_GRASS;
 
     private final EntityEnergeticSheepCommon grassEaterEntity;
@@ -24,7 +26,7 @@ public class EntityAIEatGrassFast extends EatBlockGoal {
     @Override
     public boolean canUse() {
         if (!this.grassEaterEntity.isSheared()
-                || this.grassEaterEntity.getRandom().nextInt(this.grassEaterEntity.isBaby() ? 10 : 200) != 0) {
+                || this.grassEaterEntity.getRandom().nextInt(this.grassEaterEntity.isBaby() ? 10 : EAT_CHANCE) != 0) {
             return false;
         } else {
             BlockPos blockpos = this.grassEaterEntity.getOnPos();

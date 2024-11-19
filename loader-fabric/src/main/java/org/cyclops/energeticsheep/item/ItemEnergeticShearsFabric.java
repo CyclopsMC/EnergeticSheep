@@ -70,6 +70,17 @@ public class ItemEnergeticShearsFabric extends ItemEnergeticShearsCommon {
     }
 
     @Override
+    public void setEnergyStored(ItemStack itemStack, int energy, Player player, InteractionHand hand) {
+        EnergyStorage energyStorage = EnergyStorage.ITEM.find(itemStack, ContainerItemContext.ofPlayerHand(player, hand));
+        if (energyStorage != null) {
+            try (Transaction transaction = Transaction.openOuter()) {
+                energyStorage.insert(energy, transaction);
+                transaction.commit();
+            }
+        }
+    }
+
+    @Override
     public int getMaxEnergyStored(ItemStack itemStack) {
         return (int) EnergyStorage.ITEM.find(itemStack, ContainerItemContext.withConstant(itemStack)).getCapacity();
     }

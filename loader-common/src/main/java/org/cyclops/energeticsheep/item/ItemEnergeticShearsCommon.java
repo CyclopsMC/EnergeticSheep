@@ -56,6 +56,8 @@ public abstract class ItemEnergeticShearsCommon extends ShearsItem {
 
     public abstract int getEnergyStored(ItemStack itemStack);
 
+    public abstract void setEnergyStored(ItemStack itemStack, int energy, Player player, InteractionHand hand);
+
     public abstract int getMaxEnergyStored(ItemStack itemStack);
 
     public abstract void consumeEnergy(ItemStack itemStack, int amount, Player player, InteractionHand hand);

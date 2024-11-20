@@ -4,5 +4,6 @@ org.cyclops.energeticsheep.block
 org.cyclops.energeticsheep.client.render.entity
 org.cyclops.energeticsheep.entity
 org.cyclops.energeticsheep.entity.layers
+org.cyclops.energeticsheep.gametest
 org.cyclops.energeticsheep.item
 org.cyclops.energeticsheep.proxy

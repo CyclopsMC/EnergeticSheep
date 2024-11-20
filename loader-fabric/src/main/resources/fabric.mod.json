@@ -26,6 +26,9 @@
     ]
   },
   "accessWidener" : "energeticsheep.accesswidener",
+  "mixins": [
+    "mixins.energeticsheep.json"
+  ],
 
   "depends": {
     "fabricloader": ">=${fabric_loader_version}",

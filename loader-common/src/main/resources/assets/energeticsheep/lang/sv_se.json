@@ -1,13 +1,7 @@
 {
-    "itemGroup.energeticsheep": "Energetic Sheep",
-    "general.energeticsheep.energy_unit": "RF",
     "general.energeticsheep.description": "Får som genererar energi",
-
-    "_comment": "Items",
     "item.energeticsheep.energetic_shears": "Energifylld sax",
     "item.energeticsheep.energetic_shears.info": "Klipper energi ifrån alla entiteter. Fungerar också som vanliga saxar som går på energi.",
-
-    "_comment": "Blocks",
     "block.energeticsheep.energetic_wool": "Energifylld ull",
     "block.energeticsheep.energetic_wool.info": "Chockerande!",
     "block.energeticsheep.white_energetic_wool": "Energifylld vit ull",
@@ -26,11 +20,7 @@
     "block.energeticsheep.green_energetic_wool": "Energifylld grön ull",
     "block.energeticsheep.red_energetic_wool": "Energifylld röd ull",
     "block.energeticsheep.black_energetic_wool": "Energifylld svart ull",
-
-    "_comment": "Entities",
     "entity.energeticsheep.energetic_sheep": "Energifyllt får",
-
-    "_comment": "Death messages",
     "death.attack.energeticwool.shock": "%1$s chockades till döds",
     "death.attack.energeticwool.shock.player": "%1$s chockades till döds i ett försök att fly från %2$s"
 }

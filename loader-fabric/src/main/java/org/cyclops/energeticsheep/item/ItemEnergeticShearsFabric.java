@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
@@ -113,8 +114,8 @@ public class ItemEnergeticShearsFabric extends ItemEnergeticShearsCommon {
     @Nullable
     @Override
     protected List<ItemStack> getShearableDrops(Object maybeShearable, @Nullable Player player, ItemStack item, Level level, BlockPos pos) {
-        if (maybeShearable instanceof Shearable shearable) {
-            shearable.shear(SoundSource.PLAYERS);
+        if (level instanceof ServerLevel serverLevel && maybeShearable instanceof Shearable shearable) {
+            shearable.shear(serverLevel, SoundSource.PLAYERS, item);
             return new ArrayList<>();
         }
         return null;

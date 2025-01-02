@@ -45,7 +45,7 @@ public class BlockEnergeticWool extends Block {
     @Override
     public void entityInside(BlockState state, Level worldIn, BlockPos pos, Entity entityIn) {
         entityIn.hurt(new DamageSource(
-                worldIn.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DAMAGE_TYPE_SHOCK)
+                worldIn.registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(DAMAGE_TYPE_SHOCK)
         ), 1.0F);
     }
 

@@ -6,12 +6,8 @@
     "WWW"
   ],
   "key": {
-    "W": {
-      "tag": "energeticsheep:wool_energetic"
-    },
-    "S": {
-      "item": "minecraft:shears"
-    }
+    "W": "#energeticsheep:wool_energetic",
+    "S": "minecraft:shears"
   },
   "result": {
     "id": "energeticsheep:energetic_shears"

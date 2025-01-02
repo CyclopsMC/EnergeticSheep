@@ -19,7 +19,7 @@ public class BlockEnergeticWoolConfigCommon<M extends IModBase> extends BlockCon
         super(
                 mod,
                 color.getName() + "_energetic_wool",
-                eConfig -> new BlockEnergeticWool(Block.Properties.of()
+                (eConfig, properties) -> new BlockEnergeticWool(properties
                         .mapColor(color)
                         .strength(0.8F)
                         .sound(SoundType.WOOL)

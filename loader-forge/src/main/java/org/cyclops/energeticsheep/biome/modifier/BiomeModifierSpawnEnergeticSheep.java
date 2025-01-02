@@ -21,6 +21,6 @@ public record BiomeModifierSpawnEnergeticSheep(HolderSet<Biome> biomes, HolderSe
 
     @Override
     public MapCodec<? extends BiomeModifier> codec() {
-        return RegistryEntriesForge.BIOME_MODIFIER_SPAWN_ENERGETIC_SHEEP;
+        return RegistryEntriesForge.BIOME_MODIFIER_SPAWN_ENERGETIC_SHEEP.get();
     }
 }

@@ -13,7 +13,7 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.common.IShearable;
 import net.neoforged.neoforge.energy.IEnergyStorage;
-import org.cyclops.cyclopscore.helper.BlockEntityHelpers;
+import org.cyclops.cyclopscore.helper.IModHelpersNeoForge;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -113,7 +113,7 @@ public class ItemEnergeticShearsNeoForge extends ItemEnergeticShearsCommon {
     public static InteractionResult transferEnergy(Player player, BlockPos pos, Direction side, InteractionHand hand) {
         Level worldIn = player.level();
         if (!player.isCrouching()) {
-            return BlockEntityHelpers.getCapability(worldIn, pos, side, Capabilities.EnergyStorage.BLOCK)
+            return IModHelpersNeoForge.get().getCapabilityHelpers().getCapability(worldIn, pos, side, Capabilities.EnergyStorage.BLOCK)
                     .map(energyTarget -> {
                         ItemStack itemStack = player.getItemInHand(hand);
                         return Optional.ofNullable(itemStack.getCapability(Capabilities.EnergyStorage.ITEM))

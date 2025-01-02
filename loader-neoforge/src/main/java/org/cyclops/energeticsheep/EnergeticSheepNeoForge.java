@@ -8,8 +8,8 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import org.apache.logging.log4j.Level;
-import org.cyclops.cyclopscore.config.ConfigHandler;
-import org.cyclops.cyclopscore.init.ModBaseVersionable;
+import org.cyclops.cyclopscore.config.ConfigHandlerCommon;
+import org.cyclops.cyclopscore.init.ModBaseNeoForge;
 import org.cyclops.cyclopscore.proxy.IClientProxy;
 import org.cyclops.cyclopscore.proxy.ICommonProxy;
 import org.cyclops.energeticsheep.biome.modifier.BiomeModifierSpawnEnergeticSheepConfig;
@@ -25,7 +25,7 @@ import org.cyclops.energeticsheep.proxy.CommonProxy;
  *
  */
 @Mod(Reference.MOD_ID)
-public class EnergeticSheepNeoForge extends ModBaseVersionable<EnergeticSheepNeoForge> {
+public class EnergeticSheepNeoForge extends ModBaseNeoForge<EnergeticSheepNeoForge> {
 
     /**
      * The unique instance of this mod.
@@ -55,7 +55,7 @@ public class EnergeticSheepNeoForge extends ModBaseVersionable<EnergeticSheepNeo
     }
 
     @Override
-    protected void onConfigsRegister(ConfigHandler configHandler) {
+    protected void onConfigsRegister(ConfigHandlerCommon configHandler) {
         super.onConfigsRegister(configHandler);
 
         configHandler.addConfigurable(new GeneralConfig(this));

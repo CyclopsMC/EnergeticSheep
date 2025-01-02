@@ -3,6 +3,7 @@ package org.cyclops.energeticsheep.item;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.Mth;
@@ -11,11 +12,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.ShearsItem;
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -138,13 +135,15 @@ public abstract class ItemEnergeticShearsCommon extends ShearsItem {
             List<ItemStack> drops = getShearableDrops(entity, player, itemStack, entity.level(), entity.getOnPos());
             if (drops != null) {
                 Random rand = new Random();
-                for(ItemStack stack : drops) {
-                    ItemEntity ent = entity.spawnAtLocation(stack, 1.0F);
-                    ent.setDeltaMovement(ent.getDeltaMovement().add(
-                            (rand.nextFloat() - rand.nextFloat()) * 0.1F,
-                            rand.nextFloat() * 0.05F,
-                            (rand.nextFloat() - rand.nextFloat()) * 0.1F)
-                    );
+                if (!entity.level().isClientSide) {
+                    for(ItemStack stack : drops) {
+                        ItemEntity ent = entity.spawnAtLocation((ServerLevel) entity.level(), stack, 1.0F);
+                        ent.setDeltaMovement(ent.getDeltaMovement().add(
+                                (rand.nextFloat() - rand.nextFloat()) * 0.1F,
+                                rand.nextFloat() * 0.05F,
+                                (rand.nextFloat() - rand.nextFloat()) * 0.1F)
+                        );
+                    }
                 }
                 consumeOnShear(itemStack, player, hand);
                 player.setItemInHand(hand, itemStack);

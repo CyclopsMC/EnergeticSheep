@@ -9,7 +9,7 @@ public class ItemEnergeticShearsConfigForge extends ItemEnergeticShearsConfigCom
     public ItemEnergeticShearsConfigForge() {
         super(
                 EnergeticSheepForge._instance,
-                eConfig -> new ItemEnergeticShearsForge(getProperties())
+                (eConfig, properties) -> new ItemEnergeticShearsForge(getProperties(properties))
         );
     }
 }

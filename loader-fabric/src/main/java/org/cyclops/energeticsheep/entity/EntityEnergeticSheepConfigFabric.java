@@ -10,11 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LightningBolt;
-import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.entity.SpawnPlacementTypes;
-import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Sheep;
 import net.minecraft.world.level.biome.Biome;
@@ -44,8 +40,8 @@ public class EntityEnergeticSheepConfigFabric extends EntityEnergeticSheepConfig
     }
 
     @Override
-    public void onForgeRegistered() {
-        super.onForgeRegistered();
+    public void onRegistryRegistered() {
+        super.onRegistryRegistered();
 
         // Handle biome spawning
         if (spawnWeight > 0) {

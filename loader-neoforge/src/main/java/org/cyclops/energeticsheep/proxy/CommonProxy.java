@@ -1,6 +1,6 @@
 package org.cyclops.energeticsheep.proxy;
 
-import org.cyclops.cyclopscore.init.ModBase;
+import org.cyclops.cyclopscore.init.ModBaseNeoForge;
 import org.cyclops.cyclopscore.proxy.CommonProxyComponent;
 import org.cyclops.energeticsheep.EnergeticSheepNeoForge;
 
@@ -12,7 +12,7 @@ import org.cyclops.energeticsheep.EnergeticSheepNeoForge;
 public class CommonProxy extends CommonProxyComponent {
 
     @Override
-    public ModBase getMod() {
+    public ModBaseNeoForge<EnergeticSheepNeoForge> getMod() {
         return EnergeticSheepNeoForge._instance;
     }
 

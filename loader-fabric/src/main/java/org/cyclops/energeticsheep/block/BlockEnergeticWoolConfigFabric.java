@@ -1,5 +1,8 @@
 package org.cyclops.energeticsheep.block;
 
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import org.cyclops.energeticsheep.EnergeticSheepFabric;
@@ -17,13 +20,15 @@ public class BlockEnergeticWoolConfigFabric extends BlockEnergeticWoolConfigComm
         super(
                 EnergeticSheepFabric._instance,
                 color,
-                (eConfig, block) -> new ItemBlockEnergeticWoolFabric((BlockEnergeticWool) block, new Item.Properties())
+                (eConfig, block) -> new ItemBlockEnergeticWoolFabric((BlockEnergeticWool) block, new Item.Properties()
+                        .setId(ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(eConfig.getMod().getModId(), eConfig.getNamedId())))
+                        .useBlockDescriptionPrefix())
         );
     }
 
     @Override
-    public void onForgeRegistered() {
-        super.onForgeRegistered();
+    public void onRegistryRegistered() {
+        super.onRegistryRegistered();
 
         final int capacity = EntityEnergeticSheepCommon.getCapacity(((BlockEnergeticWool) getInstance()).getColor(), EntityEnergeticSheepConfigCommon.woolBaseCapacity);
         EnergyStorage.ITEM.registerForItems(

@@ -8,7 +8,7 @@ import org.cyclops.cyclopscore.config.ModConfigLocation;
 import org.cyclops.cyclopscore.config.extendedconfig.ItemConfigCommon;
 import org.cyclops.cyclopscore.init.IModBase;
 
-import java.util.function.Function;
+import java.util.function.BiFunction;
 
 /**
  * Config for the {@link ItemEnergeticShearsCommon}.
@@ -26,7 +26,7 @@ public class ItemEnergeticShearsConfigCommon<M extends IModBase> extends ItemCon
     @ConfigurablePropertyCommon(category = "item", comment = "How much the regular shear action should consume.", isCommandable = true, configLocation = ModConfigLocation.SERVER)
     public static int shearConsumption = 100;
 
-    public ItemEnergeticShearsConfigCommon(M mod, Function<ItemConfigCommon<M>, ? extends Item> elementConstructor) {
+    public ItemEnergeticShearsConfigCommon(M mod, BiFunction<ItemConfigCommon<M>, Item.Properties, ? extends Item> elementConstructor) {
         super(
                 mod,
                 "energetic_shears",
@@ -34,8 +34,8 @@ public class ItemEnergeticShearsConfigCommon<M extends IModBase> extends ItemCon
         );
     }
 
-    protected static Item.Properties getProperties() {
-        return new Item.Properties()
+    protected static Item.Properties getProperties(Item.Properties properties) {
+        return properties
                 .component(RegistryEntriesCommon.COMPONENT_ENERGY_STORAGE.value(), 0)
                 .durability(1);
     }

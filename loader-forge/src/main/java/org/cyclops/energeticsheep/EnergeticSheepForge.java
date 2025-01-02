@@ -4,6 +4,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.cyclops.cyclopscore.config.ConfigHandlerCommon;
 import org.cyclops.cyclopscore.init.ModBaseForge;
 import org.cyclops.cyclopscore.proxy.IClientProxyCommon;
@@ -28,8 +29,8 @@ public class EnergeticSheepForge extends ModBaseForge<EnergeticSheepForge> {
      */
     public static EnergeticSheepForge _instance;
 
-    public EnergeticSheepForge() {
-        super(Reference.MOD_ID, (instance) -> _instance = instance);
+    public EnergeticSheepForge(FMLJavaModLoadingContext context) {
+        super(Reference.MOD_ID, (instance) -> _instance = instance, context);
     }
 
     @Override

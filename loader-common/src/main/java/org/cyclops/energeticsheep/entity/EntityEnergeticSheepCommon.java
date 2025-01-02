@@ -21,9 +21,8 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.PowerableMob;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.Sheep;
@@ -42,13 +41,14 @@ import org.cyclops.energeticsheep.RegistryEntries;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * A sheep that produces energy.
  * @author rubensworks
  *
  */
-public abstract class EntityEnergeticSheepCommon extends Sheep implements PowerableMob {
+public abstract class EntityEnergeticSheepCommon extends Sheep {
 
     public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_WHITE      = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/white"));
     public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_ORANGE     = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/orange"));
@@ -110,7 +110,7 @@ public abstract class EntityEnergeticSheepCommon extends Sheep implements Powera
     }
 
     public static void onLightning(Sheep sheep) {
-        EntityEnergeticSheepCommon energeticSheep = RegistryEntries.ENTITY_TYPE_ENERGETIC_SHEEP.value().create(sheep.level());
+        EntityEnergeticSheepCommon energeticSheep = RegistryEntries.ENTITY_TYPE_ENERGETIC_SHEEP.value().create(sheep.level(), EntitySpawnReason.CONVERSION);
 
         if (sheep.hasCustomName()) {
             energeticSheep.setCustomName(sheep.getCustomName());
@@ -169,12 +169,12 @@ public abstract class EntityEnergeticSheepCommon extends Sheep implements Powera
     protected abstract void consumeAllEnergy();
 
     @Override
-    public void shear(SoundSource soundSource) {
+    public void shear(ServerLevel level, SoundSource soundSource, ItemStack tool) {
         // We need to override this in case other mods are calling mobInteract with shears explicitly
 //        super.shear(p_29819_);
 
         for (ItemStack item : this.onShearedInternal(null, null, null, null)) {
-            ItemEntity itementity = this.spawnAtLocation(item);
+            ItemEntity itementity = this.spawnAtLocation(level, item);
             if (itementity != null) {
                 itementity.setDeltaMovement(itementity.getDeltaMovement().add((double)((this.random.nextFloat() - this.random.nextFloat()) * 0.1F), (double)(this.random.nextFloat() * 0.05F), (double)((this.random.nextFloat() - this.random.nextFloat()) * 0.1F)));
             }
@@ -215,7 +215,7 @@ public abstract class EntityEnergeticSheepCommon extends Sheep implements Powera
                 ? EntityEnergeticSheepConfigCommon.babyChancePowerBreeding : EntityEnergeticSheepConfigCommon.babyChance;
         this.powerBreeding = false;
         if (chance > 0 && this.random.nextInt(chance) == 0) {
-            EntityEnergeticSheepCommon child = RegistryEntries.ENTITY_TYPE_ENERGETIC_SHEEP.value().create(getCommandSenderWorld());
+            EntityEnergeticSheepCommon child = RegistryEntries.ENTITY_TYPE_ENERGETIC_SHEEP.value().create(getCommandSenderWorld(), EntitySpawnReason.BREEDING);
 
             // If parents have equal color, child has same color, otherwise random.
             DyeColor color;
@@ -238,52 +238,51 @@ public abstract class EntityEnergeticSheepCommon extends Sheep implements Powera
                 : (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.5F;
     }
 
-    @Nullable
     @Override
-    public ResourceKey<LootTable> getDefaultLootTable() {
+    public Optional<ResourceKey<LootTable>> getLootTable() {
         if (this.isSheared()) {
             return EntityType.SHEEP.getDefaultLootTable();
         } else {
             switch (this.getColor()) {
                 case WHITE:
                 default:
-                    return LOOTTABLE_SHEEP_WHITE;
+                    return Optional.of(LOOTTABLE_SHEEP_WHITE);
                 case ORANGE:
-                    return LOOTTABLE_SHEEP_ORANGE;
+                    return Optional.of(LOOTTABLE_SHEEP_ORANGE);
                 case MAGENTA:
-                    return LOOTTABLE_SHEEP_MAGENTA;
+                    return Optional.of(LOOTTABLE_SHEEP_MAGENTA);
                 case LIGHT_BLUE:
-                    return LOOTTABLE_SHEEP_LIGHT_BLUE;
+                    return Optional.of(LOOTTABLE_SHEEP_LIGHT_BLUE);
                 case YELLOW:
-                    return LOOTTABLE_SHEEP_YELLOW;
+                    return Optional.of(LOOTTABLE_SHEEP_YELLOW);
                 case LIME:
-                    return LOOTTABLE_SHEEP_LIME;
+                    return Optional.of(LOOTTABLE_SHEEP_LIME);
                 case PINK:
-                    return LOOTTABLE_SHEEP_PINK;
+                    return Optional.of(LOOTTABLE_SHEEP_PINK);
                 case GRAY:
-                    return LOOTTABLE_SHEEP_GRAY;
+                    return Optional.of(LOOTTABLE_SHEEP_GRAY);
                 case LIGHT_GRAY:
-                    return LOOTTABLE_SHEEP_LIGHT_GRAY;
+                    return Optional.of(LOOTTABLE_SHEEP_LIGHT_GRAY);
                 case CYAN:
-                    return LOOTTABLE_SHEEP_CYAN;
+                    return Optional.of(LOOTTABLE_SHEEP_CYAN);
                 case PURPLE:
-                    return LOOTTABLE_SHEEP_PURPLE;
+                    return Optional.of(LOOTTABLE_SHEEP_PURPLE);
                 case BLUE:
-                    return LOOTTABLE_SHEEP_BLUE;
+                    return Optional.of(LOOTTABLE_SHEEP_BLUE);
                 case BROWN:
-                    return LOOTTABLE_SHEEP_BROWN;
+                    return Optional.of(LOOTTABLE_SHEEP_BROWN);
                 case GREEN:
-                    return LOOTTABLE_SHEEP_GREEN;
+                    return Optional.of(LOOTTABLE_SHEEP_GREEN);
                 case RED:
-                    return LOOTTABLE_SHEEP_RED;
+                    return Optional.of(LOOTTABLE_SHEEP_RED);
                 case BLACK:
-                    return LOOTTABLE_SHEEP_BLACK;
+                    return Optional.of(LOOTTABLE_SHEEP_BLACK);
             }
         }
     }
 
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, EntitySpawnReason reason, @Nullable SpawnGroupData spawnDataIn) {
         SpawnGroupData livingdata = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn);
         this.setFleeceColorInternal(getRandomColor(this.random));
         return livingdata;
@@ -337,10 +336,5 @@ public abstract class EntityEnergeticSheepCommon extends Sheep implements Powera
             }
         }
         super.usePlayerItem(player, hand, stack);
-    }
-
-    @Override
-    public boolean isPowered() {
-        return this.getEnergyClient() > 0;
     }
 }

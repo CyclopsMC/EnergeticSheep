@@ -13,7 +13,7 @@ public class ItemEnergeticShearsConfigNeoForge extends ItemEnergeticShearsConfig
     public ItemEnergeticShearsConfigNeoForge() {
         super(
                 EnergeticSheepNeoForge._instance,
-                eConfig -> new ItemEnergeticShearsNeoForge(getProperties())
+                (eConfig, properties) -> new ItemEnergeticShearsNeoForge(getProperties(properties))
         );
         EnergeticSheepNeoForge._instance.getModEventBus().addListener(this::registerCapabilities);
     }

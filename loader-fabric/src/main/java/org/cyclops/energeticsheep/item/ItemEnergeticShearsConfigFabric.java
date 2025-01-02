@@ -1,6 +1,5 @@
 package org.cyclops.energeticsheep.item;
 
-import net.minecraft.world.item.Item;
 import org.cyclops.energeticsheep.EnergeticSheepFabric;
 import team.reborn.energy.api.EnergyStorage;
 import team.reborn.energy.api.base.SimpleEnergyItem;
@@ -12,15 +11,15 @@ public class ItemEnergeticShearsConfigFabric extends ItemEnergeticShearsConfigCo
     public ItemEnergeticShearsConfigFabric() {
         super(
                 EnergeticSheepFabric._instance,
-                eConfig -> new ItemEnergeticShearsFabric(new Item.Properties()
+                (eConfig, properties) -> new ItemEnergeticShearsFabric(properties
                         .component(EnergyStorage.ENERGY_COMPONENT, 0L)
                         .durability(1))
         );
     }
 
     @Override
-    public void onForgeRegistered() {
-        super.onForgeRegistered();
+    public void onRegistryRegistered() {
+        super.onRegistryRegistered();
 
         EnergyStorage.ITEM.registerForItems(
                 (itemStack, context) -> SimpleEnergyItem.createStorage(context, ItemEnergeticShearsConfigCommon.capacity, Integer.MAX_VALUE, Integer.MAX_VALUE),

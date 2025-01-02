@@ -6,8 +6,8 @@ import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.animal.Sheep;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
@@ -54,7 +54,7 @@ public class GameTestsCommon {
             // Right click with shears
             InteractionResult result = player.interactOn(entity, InteractionHand.MAIN_HAND);
             helper.assertItemEntityPresent(entity.getWoolByColor().get(entity.getColor()).asItem());
-            helper.assertTrue(result.indicateItemUse(), "Interaction failed");
+            helper.assertTrue(result == InteractionResult.SUCCESS || result == InteractionResult.SUCCESS_SERVER, "Interaction failed");
         });
     }
 
@@ -204,13 +204,13 @@ public class GameTestsCommon {
 
     protected static EntityEnergeticSheepCommon SPAWN(GameTestHelper helper) {
         EntityEnergeticSheepCommon entity = helper.spawn(RegistryEntries.ENTITY_TYPE_ENERGETIC_SHEEP.value(), POS.above());
-        entity.finalizeSpawn(helper.getLevel(), helper.getLevel().getCurrentDifficultyAt(POS), MobSpawnType.NATURAL, null);
+        entity.finalizeSpawn(helper.getLevel(), helper.getLevel().getCurrentDifficultyAt(POS), EntitySpawnReason.NATURAL, null);
         return entity;
     }
 
     protected static Sheep SPAWN_REGULAR(GameTestHelper helper) {
         Sheep entity = helper.spawn(EntityType.SHEEP, POS.above());
-        entity.finalizeSpawn(helper.getLevel(), helper.getLevel().getCurrentDifficultyAt(POS), MobSpawnType.NATURAL, null);
+        entity.finalizeSpawn(helper.getLevel(), helper.getLevel().getCurrentDifficultyAt(POS), EntitySpawnReason.NATURAL, null);
         return entity;
     }
 

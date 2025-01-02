@@ -3,13 +3,13 @@ package org.cyclops.energeticsheep.biome.modifier;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.level.biome.Biome;
-import org.cyclops.cyclopscore.config.extendedconfig.BiomeModifierConfig;
+import org.cyclops.cyclopscore.config.extendedconfig.BiomeModifierConfigNeoForge;
 import org.cyclops.energeticsheep.EnergeticSheepNeoForge;
 
 /**
  * @author rubensworks
  */
-public class BiomeModifierSpawnEnergeticSheepConfig extends BiomeModifierConfig<BiomeModifierSpawnEnergeticSheep> {
+public class BiomeModifierSpawnEnergeticSheepConfig extends BiomeModifierConfigNeoForge<BiomeModifierSpawnEnergeticSheep> {
 
     public BiomeModifierSpawnEnergeticSheepConfig() {
         super(

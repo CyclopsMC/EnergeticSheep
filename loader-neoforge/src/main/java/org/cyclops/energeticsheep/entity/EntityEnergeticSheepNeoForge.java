@@ -3,8 +3,8 @@ package org.cyclops.energeticsheep.entity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
@@ -96,7 +96,7 @@ public class EntityEnergeticSheepNeoForge extends EntityEnergeticSheepCommon {
     }
 
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @org.jetbrains.annotations.Nullable SpawnGroupData spawnDataIn) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, EntitySpawnReason reason, @org.jetbrains.annotations.Nullable SpawnGroupData spawnDataIn) {
         SpawnGroupData data = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn);
         this.energyStorage.receiveEnergy(this.energyStorage.getMaxEnergyStored(), false);
         return data;

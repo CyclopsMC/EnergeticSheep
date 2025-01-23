@@ -58,7 +58,7 @@ public class EntityEnergeticSheepConfigCommon<M extends IModBase, T extends Enti
     }
 
     @Override
-    public EntityClientConfig<M, T> getEntityClientConfig() {
+    public EntityClientConfig<M, T> constructEntityClientConfig() {
         return new EntityEnergeticSheepClientConfigCommon<>(this);
     }
 }

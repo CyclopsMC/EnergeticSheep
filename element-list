@@ -2,6 +2,7 @@ org.cyclops.energeticsheep
 org.cyclops.energeticsheep.biome.modifier
 org.cyclops.energeticsheep.block
 org.cyclops.energeticsheep.client.render.entity
+org.cyclops.energeticsheep.client.render.entity.state
 org.cyclops.energeticsheep.entity
 org.cyclops.energeticsheep.entity.layers
 org.cyclops.energeticsheep.gametest

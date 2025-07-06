@@ -1,7 +1,6 @@
 package org.cyclops.energeticsheep.entity;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
@@ -11,6 +10,8 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.energy.EnergyStorage;
 import net.neoforged.neoforge.energy.IEnergyStorage;
 
@@ -82,17 +83,17 @@ public class EntityEnergeticSheepNeoForge extends EntityEnergeticSheepCommon {
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
-        super.addAdditionalSaveData(compound);
+    public void addAdditionalSaveData(ValueOutput output) {
+        super.addAdditionalSaveData(output);
         if (this.energyStorage != null) {
-            compound.putInt("energy", this.energyStorage.getEnergyStored());
+            output.putInt("energy", this.energyStorage.getEnergyStored());
         }
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
-        super.readAdditionalSaveData(compound);
-        this.energyStorage.receiveEnergy(compound.getInt("energy"), false);
+    public void readAdditionalSaveData(ValueInput input) {
+        super.readAdditionalSaveData(input);
+        this.energyStorage.receiveEnergy(input.getInt("energy").orElseThrow(), false);
     }
 
     @Override

@@ -1,16 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "minecraft:item/template_spawn_egg",
-    "tints": [
-      {
-        "type": "minecraft:constant",
-        "value": 28524
-      },
-      {
-        "type": "minecraft:constant",
-        "value": 960419
-      }
-    ]
+    "model": "energeticsheep:item/energetic_sheep_spawn_egg"
   }
 }

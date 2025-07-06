@@ -3,6 +3,10 @@
         {
             "type": "minecraft:single",
             "resource": "energeticsheep:items/energetic_shears"
+        },
+        {
+            "type": "minecraft:single",
+            "resource": "energeticsheep:items/energetic_sheep_spawn_egg"
         }
     ]
 }

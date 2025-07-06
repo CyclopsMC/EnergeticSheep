@@ -1,7 +1,9 @@
 package org.cyclops.energeticsheep.item;
 
 
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ShearsItem;
 import org.cyclops.cyclopscore.RegistryEntriesCommon;
 import org.cyclops.cyclopscore.config.ConfigurablePropertyCommon;
 import org.cyclops.cyclopscore.config.ModConfigLocation;
@@ -37,6 +39,7 @@ public class ItemEnergeticShearsConfigCommon<M extends IModBase> extends ItemCon
     protected static Item.Properties getProperties(Item.Properties properties) {
         return properties
                 .component(RegistryEntriesCommon.COMPONENT_ENERGY_STORAGE.value(), 0)
+                .component(DataComponents.TOOL, ShearsItem.createToolProperties())
                 .durability(1);
     }
 

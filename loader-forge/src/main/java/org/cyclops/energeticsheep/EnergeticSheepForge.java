@@ -12,6 +12,7 @@ import org.cyclops.cyclopscore.proxy.ICommonProxyCommon;
 import org.cyclops.energeticsheep.biome.modifier.BiomeModifierSpawnEnergeticSheepConfig;
 import org.cyclops.energeticsheep.block.BlockEnergeticWoolConfigForge;
 import org.cyclops.energeticsheep.entity.EntityEnergeticSheepConfigForge;
+import org.cyclops.energeticsheep.gametest.GameTestsCommon;
 import org.cyclops.energeticsheep.item.ItemEnergeticShearsConfigForge;
 import org.cyclops.energeticsheep.proxy.ClientProxyForge;
 import org.cyclops.energeticsheep.proxy.CommonProxyForge;
@@ -69,5 +70,10 @@ public class EnergeticSheepForge extends ModBaseForge<EnergeticSheepForge> {
         }
 
         configHandler.addConfigurable(new BiomeModifierSpawnEnergeticSheepConfig());
+    }
+
+    @Override
+    public Class<?>[] getGameTestClasses() {
+        return new Class<?>[] { GameTestsCommon.class };
     }
 }

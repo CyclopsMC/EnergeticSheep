@@ -3,7 +3,7 @@ package org.cyclops.energeticsheep.entity;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.animal.Sheep;
+import net.minecraft.world.entity.animal.sheep.Sheep;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;

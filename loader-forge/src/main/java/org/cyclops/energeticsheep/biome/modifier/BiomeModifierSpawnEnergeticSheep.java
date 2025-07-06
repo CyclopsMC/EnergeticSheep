@@ -15,7 +15,7 @@ public record BiomeModifierSpawnEnergeticSheep(HolderSet<Biome> biomes, HolderSe
     @Override
     public void modify(Holder<Biome> biome, Phase phase, ModifiableBiomeInfo.BiomeInfo.Builder builder) {
         if (phase == Phase.ADD && biomes.contains(biome) && !biomesBlacklist.contains(biome)) {
-            builder.getMobSpawnSettings().addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(RegistryEntries.ENTITY_TYPE_ENERGETIC_SHEEP.value(), spawnWeight, minCount, maxCount));
+            builder.getMobSpawnSettings().addSpawn(MobCategory.CREATURE, spawnWeight, new MobSpawnSettings.SpawnerData(RegistryEntries.ENTITY_TYPE_ENERGETIC_SHEEP.value(), minCount, maxCount));
         }
     }
 

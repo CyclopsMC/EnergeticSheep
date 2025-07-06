@@ -1,7 +1,6 @@
 package org.cyclops.energeticsheep.entity;
 
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
@@ -9,6 +8,8 @@ import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import team.reborn.energy.api.EnergyStorage;
 import team.reborn.energy.api.base.SimpleEnergyStorage;
 
@@ -70,18 +71,18 @@ public class EntityEnergeticSheepFabric extends EntityEnergeticSheepCommon {
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
-        super.addAdditionalSaveData(compound);
+    public void addAdditionalSaveData(ValueOutput output) {
+        super.addAdditionalSaveData(output);
         if (this.energyStorage != null) {
-            compound.putLong("energy", this.energyStorage.getAmount());
+            output.putLong("energy", this.energyStorage.getAmount());
         }
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
-        super.readAdditionalSaveData(compound);
+    public void readAdditionalSaveData(ValueInput input) {
+        super.readAdditionalSaveData(input);
         try (Transaction transaction = Transaction.openOuter()) {
-            this.energyStorage.insert(compound.getLong("energy"), transaction);
+            this.energyStorage.insert(input.getLong("energy").orElseThrow(), transaction);
             transaction.commit();
         }
     }

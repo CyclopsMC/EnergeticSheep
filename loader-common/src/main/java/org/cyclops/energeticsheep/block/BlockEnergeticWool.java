@@ -7,6 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -43,7 +44,7 @@ public class BlockEnergeticWool extends Block {
     }
 
     @Override
-    public void entityInside(BlockState state, Level worldIn, BlockPos pos, Entity entityIn) {
+    public void entityInside(BlockState state, Level worldIn, BlockPos pos, Entity entityIn, InsideBlockEffectApplier effectApplier) {
         entityIn.hurt(new DamageSource(
                 worldIn.registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(DAMAGE_TYPE_SHOCK)
         ), 1.0F);

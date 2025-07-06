@@ -12,7 +12,7 @@ import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.animal.Sheep;
+import net.minecraft.world.entity.animal.sheep.Sheep;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.Heightmap;
 import org.cyclops.cyclopscore.config.ConfigurablePropertyCommon;

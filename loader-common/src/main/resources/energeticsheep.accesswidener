@@ -1,7 +1,7 @@
 accessWidener v1 named
 
 # Sheep
-accessible field net/minecraft/world/entity/animal/Sheep eatBlockGoal Lnet/minecraft/world/entity/ai/goal/EatBlockGoal;
+accessible field net/minecraft/world/entity/animal/sheep/Sheep eatBlockGoal Lnet/minecraft/world/entity/ai/goal/EatBlockGoal;
 
 # Mob
 extendable method net/minecraft/world/entity/Mob getLootTable ()Ljava/util/Optional;

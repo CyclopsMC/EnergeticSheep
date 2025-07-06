@@ -8,14 +8,14 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.neoforged.neoforge.common.world.BiomeModifier;
 import net.neoforged.neoforge.common.world.ModifiableBiomeInfo;
-import org.cyclops.energeticsheep.RegistryEntriesNeoForge;
 import org.cyclops.energeticsheep.RegistryEntries;
+import org.cyclops.energeticsheep.RegistryEntriesNeoForge;
 
 public record BiomeModifierSpawnEnergeticSheep(HolderSet<Biome> biomes, HolderSet<Biome> biomesBlacklist, int spawnWeight, int minCount, int maxCount) implements BiomeModifier {
     @Override
     public void modify(Holder<Biome> biome, Phase phase, ModifiableBiomeInfo.BiomeInfo.Builder builder) {
         if (phase == Phase.ADD && biomes.contains(biome) && !biomesBlacklist.contains(biome)) {
-            builder.getMobSpawnSettings().addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(RegistryEntries.ENTITY_TYPE_ENERGETIC_SHEEP.value(), spawnWeight, minCount, maxCount));
+            builder.getMobSpawnSettings().addSpawn(MobCategory.CREATURE, spawnWeight, new MobSpawnSettings.SpawnerData(RegistryEntries.ENTITY_TYPE_ENERGETIC_SHEEP.value(), minCount, maxCount));
         }
     }
 

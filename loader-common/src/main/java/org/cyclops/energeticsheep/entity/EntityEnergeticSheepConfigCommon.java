@@ -48,12 +48,7 @@ public class EntityEnergeticSheepConfigCommon<M extends IModBase, T extends Enti
                 eConfig -> EntityType.Builder.of(entityFactory, MobCategory.CREATURE)
                         .sized(0.9F, 1.3F)
                         .fireImmune(),
-                getDefaultSpawnEggItemConfigConstructor(
-                        mod,
-                        "energetic_sheep_spawn_egg",
-                        mod.getModHelpers().getBaseHelpers().RGBToInt(0, 111, 108),
-                        mod.getModHelpers().getBaseHelpers().RGBToInt(14, 167, 163)
-                )
+                getDefaultSpawnEggItemConfigConstructor(mod, "energetic_sheep_spawn_egg")
         );
     }
 

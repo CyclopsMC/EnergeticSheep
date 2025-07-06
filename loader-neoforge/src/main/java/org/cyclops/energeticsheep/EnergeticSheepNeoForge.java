@@ -3,8 +3,6 @@ package org.cyclops.energeticsheep;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import org.apache.logging.log4j.Level;
@@ -15,6 +13,7 @@ import org.cyclops.cyclopscore.proxy.ICommonProxy;
 import org.cyclops.energeticsheep.biome.modifier.BiomeModifierSpawnEnergeticSheepConfig;
 import org.cyclops.energeticsheep.block.BlockEnergeticWoolConfigNeoForge;
 import org.cyclops.energeticsheep.entity.EntityEnergeticSheepConfigNeoForge;
+import org.cyclops.energeticsheep.gametest.GameTestsCommon;
 import org.cyclops.energeticsheep.item.ItemEnergeticShearsConfigNeoForge;
 import org.cyclops.energeticsheep.proxy.ClientProxy;
 import org.cyclops.energeticsheep.proxy.CommonProxy;
@@ -37,13 +36,11 @@ public class EnergeticSheepNeoForge extends ModBaseNeoForge<EnergeticSheepNeoFor
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     protected IClientProxy constructClientProxy() {
         return new ClientProxy();
     }
 
     @Override
-    @OnlyIn(Dist.DEDICATED_SERVER)
     protected ICommonProxy constructCommonProxy() {
         return new CommonProxy();
     }
@@ -69,6 +66,11 @@ public class EnergeticSheepNeoForge extends ModBaseNeoForge<EnergeticSheepNeoFor
         }
 
         configHandler.addConfigurable(new BiomeModifierSpawnEnergeticSheepConfig());
+    }
+
+    @Override
+    public Class<?>[] getGameTestClasses() {
+        return new Class<?>[] { GameTestsCommon.class };
     }
 
     /**

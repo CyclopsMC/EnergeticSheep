@@ -2,13 +2,13 @@ package org.cyclops.energeticsheep.gametest;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.animal.Sheep;
+import net.minecraft.world.entity.animal.sheep.Sheep;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
@@ -18,6 +18,7 @@ import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import org.cyclops.cyclopscore.gametest.GameTest;
 import org.cyclops.energeticsheep.Reference;
 import org.cyclops.energeticsheep.RegistryEntries;
 import org.cyclops.energeticsheep.entity.EntityAIEatGrassFast;
@@ -37,7 +38,7 @@ public class GameTestsCommon {
 
         helper.succeedWhen(() -> {
             helper.assertEntitiesPresent(SHEEP(), POS, 1, 3);
-            helper.assertTrue(entity.getEnergyClient() > 500, "Sheep does not have enough energy");
+            helper.assertTrue(entity.getEnergyClient() > 500, Component.literal("Sheep does not have enough energy"));
         });
     }
 
@@ -54,7 +55,7 @@ public class GameTestsCommon {
             // Right click with shears
             InteractionResult result = player.interactOn(entity, InteractionHand.MAIN_HAND);
             helper.assertItemEntityPresent(entity.getWoolByColor().get(entity.getColor()).asItem());
-            helper.assertTrue(result == InteractionResult.SUCCESS || result == InteractionResult.SUCCESS_SERVER, "Interaction failed");
+            helper.assertTrue(result == InteractionResult.SUCCESS || result == InteractionResult.SUCCESS_SERVER, Component.literal("Interaction failed"));
         });
     }
 
@@ -71,8 +72,8 @@ public class GameTestsCommon {
             // Right click with energetic shears
             InteractionResult result = player.interactOn(entity, InteractionHand.MAIN_HAND);
             helper.assertItemEntityNotPresent(entity.getWoolByColor().get(entity.getColor()).asItem());
-            helper.assertTrue(RegistryEntries.ITEM_ENERGETIC_SHEARS.value().getEnergyStored(player.getMainHandItem()) > 500, "Shears do not have enough energy");
-            helper.assertTrue(result.equals(InteractionResult.SUCCESS), "Interaction failed");
+            helper.assertTrue(RegistryEntries.ITEM_ENERGETIC_SHEARS.value().getEnergyStored(player.getMainHandItem()) > 500, Component.literal("Shears do not have enough energy"));
+            helper.assertTrue(result.equals(InteractionResult.SUCCESS), Component.literal("Interaction failed"));
         });
     }
 
@@ -107,7 +108,7 @@ public class GameTestsCommon {
 
         helper.succeedWhen(() -> {
             helper.assertEntitiesPresent(SHEEP(), POS, 1, 3);
-            helper.assertTrue(entity.getEnergyClient() > 500, "Sheep does not have enough energy");
+            helper.assertTrue(entity.getEnergyClient() > 500, Component.literal("Sheep does not have enough energy"));
         });
     }
 
@@ -133,13 +134,13 @@ public class GameTestsCommon {
             // Break leaves with energetic shears
             BlockState blockState = helper.getBlockState(POS);
             InteractionResult interactionResult = itemStack.useOn(new UseOnContext(player, InteractionHand.MAIN_HAND, new BlockHitResult(POS.getCenter(), Direction.NORTH, helper.absolutePos(POS), false)));
-            helper.assertFalse(interactionResult == InteractionResult.FAIL, "Interaction must succeed");
-            helper.assertTrue(itemStack.getItem().mineBlock(itemStack, helper.getLevel(), blockState, helper.absolutePos(POS), player), "Item can not mine block");
-            helper.assertTrue(player.hasCorrectToolForDrops(blockState), "Player must have correct tool");
+            helper.assertFalse(interactionResult == InteractionResult.FAIL, Component.literal("Interaction must succeed"));
+            helper.assertTrue(itemStack.getItem().mineBlock(itemStack, helper.getLevel(), blockState, helper.absolutePos(POS), player), Component.literal("Item can not mine block"));
+            helper.assertTrue(player.hasCorrectToolForDrops(blockState), Component.literal("Player must have correct tool"));
             blockState.getBlock().playerDestroy(helper.getLevel(), player, helper.absolutePos(POS), blockState, null, itemStack);
 
             helper.assertItemEntityPresent(Items.ACACIA_LEAVES);
-            helper.assertTrue(RegistryEntries.ITEM_ENERGETIC_SHEARS.value().getEnergyStored(player.getMainHandItem()) < RegistryEntries.ITEM_ENERGETIC_SHEARS.value().getMaxEnergyStored(player.getMainHandItem()), "No energy was consumed from shears");
+            helper.assertTrue(RegistryEntries.ITEM_ENERGETIC_SHEARS.value().getEnergyStored(player.getMainHandItem()) < RegistryEntries.ITEM_ENERGETIC_SHEARS.value().getMaxEnergyStored(player.getMainHandItem()), Component.literal("No energy was consumed from shears"));
         });
     }
 
@@ -156,10 +157,10 @@ public class GameTestsCommon {
         helper.succeedWhen(() -> {
             // Attempt to break leaves with energetic shears that has no power
             InteractionResult interactionResult = itemStack.useOn(new UseOnContext(player, InteractionHand.MAIN_HAND, new BlockHitResult(POS.getCenter(), Direction.NORTH, helper.absolutePos(POS), false)));
-            helper.assertFalse(interactionResult == InteractionResult.FAIL, "Interaction must fail");
+            helper.assertFalse(interactionResult == InteractionResult.FAIL, Component.literal("Interaction must fail"));
 
             helper.assertItemEntityNotPresent(Items.ACACIA_LEAVES);
-            helper.assertTrue(RegistryEntries.ITEM_ENERGETIC_SHEARS.value().getEnergyStored(player.getMainHandItem()) == 0, "Energy must remain zero");
+            helper.assertTrue(RegistryEntries.ITEM_ENERGETIC_SHEARS.value().getEnergyStored(player.getMainHandItem()) == 0, Component.literal("Energy must remain zero"));
         });
     }
 
@@ -178,8 +179,8 @@ public class GameTestsCommon {
             // Right click with energetic shears
             InteractionResult result = player.interactOn(entity, InteractionHand.MAIN_HAND);
             helper.assertItemEntityPresent(Items.WHITE_WOOL);
-            helper.assertTrue(RegistryEntries.ITEM_ENERGETIC_SHEARS.value().getEnergyStored(player.getMainHandItem()) < RegistryEntries.ITEM_ENERGETIC_SHEARS.value().getMaxEnergyStored(player.getMainHandItem()), "No energy was consumed from shears");
-            helper.assertTrue(result.equals(InteractionResult.SUCCESS), "Interaction failed");
+            helper.assertTrue(RegistryEntries.ITEM_ENERGETIC_SHEARS.value().getEnergyStored(player.getMainHandItem()) < RegistryEntries.ITEM_ENERGETIC_SHEARS.value().getMaxEnergyStored(player.getMainHandItem()), Component.literal("No energy was consumed from shears"));
+            helper.assertTrue(result.equals(InteractionResult.SUCCESS), Component.literal("Interaction failed"));
         });
     }
 
@@ -197,8 +198,8 @@ public class GameTestsCommon {
             // Right click with energetic shears
             InteractionResult result = player.interactOn(entity, InteractionHand.MAIN_HAND);
             helper.assertItemEntityNotPresent(Items.WHITE_WOOL);
-            helper.assertTrue(RegistryEntries.ITEM_ENERGETIC_SHEARS.value().getEnergyStored(player.getMainHandItem()) == 0, "Shears do not have enough energy");
-            helper.assertTrue(result.equals(InteractionResult.PASS), "Interaction did not pass");
+            helper.assertTrue(RegistryEntries.ITEM_ENERGETIC_SHEARS.value().getEnergyStored(player.getMainHandItem()) == 0, Component.literal("Shears do not have enough energy"));
+            helper.assertTrue(result.equals(InteractionResult.PASS), Component.literal("Interaction did not pass"));
         });
     }
 

@@ -12,7 +12,11 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ShearsItem;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -23,6 +27,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Random;
+import java.util.function.Consumer;
 
 /**
  * Can shear energy off energetic shears.
@@ -36,14 +41,14 @@ public abstract class ItemEnergeticShearsCommon extends ShearsItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack itemStack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flagIn) {
-        super.appendHoverText(itemStack, context, tooltip, flagIn);
+    public void appendHoverText(ItemStack itemStack, Item.TooltipContext context, TooltipDisplay display, Consumer<Component> tooltipAdder, TooltipFlag flagIn) {
+        super.appendHoverText(itemStack, context, display, tooltipAdder, flagIn);
         int capacity = getMaxEnergyStored(itemStack);
         if (capacity > 0) {
             int amount = getEnergyStored(itemStack);
             String line = String.format("%,d", amount) + " / " + String.format("%,d", capacity)
                     + " " + IModHelpers.get().getL10NHelpers().localize(getEnergyUnitUnlocalized());
-            tooltip.add(Component.literal(line).withStyle(ChatFormatting.RED));
+            tooltipAdder.accept(Component.literal(line).withStyle(ChatFormatting.RED));
         }
     }
 
@@ -113,11 +118,6 @@ public abstract class ItemEnergeticShearsCommon extends ShearsItem {
             return superSpeed * factor;
         }
         return superSpeed;
-    }
-
-    @Override
-    public boolean isCorrectToolForDrops(ItemStack itemStack, BlockState blockIn) {
-        return Items.SHEARS.isCorrectToolForDrops(itemStack, blockIn);
     }
 
     @Override

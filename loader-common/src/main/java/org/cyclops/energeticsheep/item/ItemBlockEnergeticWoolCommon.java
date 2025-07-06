@@ -6,11 +6,12 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import org.cyclops.cyclopscore.helper.IL10NHelpers;
 import org.cyclops.cyclopscore.helper.IModHelpers;
 import org.cyclops.energeticsheep.block.BlockEnergeticWool;
 
-import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * @author rubensworks
@@ -22,13 +23,13 @@ public abstract class ItemBlockEnergeticWoolCommon extends BlockItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack itemStack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flagIn) {
-        super.appendHoverText(itemStack, context, tooltip, flagIn);
+    public void appendHoverText(ItemStack itemStack, Item.TooltipContext context, TooltipDisplay display, Consumer<Component> tooltipAdder, TooltipFlag flagIn) {
+        super.appendHoverText(itemStack, context, display, tooltipAdder, flagIn);
         IL10NHelpers l10nHelpers = IModHelpers.get().getL10NHelpers();
         String line = String.format("%,d", getEnergyStored(itemStack)) + " "
                 + l10nHelpers.localize(getEnergyUnitUnlocalized());
-        tooltip.add(Component.literal(line).withStyle(ChatFormatting.RED));
-        l10nHelpers.addOptionalInfo(tooltip, "block.energeticsheep.energetic_wool");
+        tooltipAdder.accept(Component.literal(line).withStyle(ChatFormatting.RED));
+        l10nHelpers.addOptionalInfo(tooltipAdder, "block.energeticsheep.energetic_wool");
     }
 
     protected String getEnergyUnitUnlocalized() {

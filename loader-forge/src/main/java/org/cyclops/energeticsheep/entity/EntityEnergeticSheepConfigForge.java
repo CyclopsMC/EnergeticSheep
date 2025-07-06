@@ -3,10 +3,9 @@ package org.cyclops.energeticsheep.entity;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.animal.Sheep;
+import net.minecraft.world.entity.animal.sheep.Sheep;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.EntityStruckByLightningEvent;
 import net.minecraftforge.event.entity.SpawnPlacementRegisterEvent;
@@ -20,12 +19,12 @@ public class EntityEnergeticSheepConfigForge extends EntityEnergeticSheepConfigC
 
     public EntityEnergeticSheepConfigForge() {
         super(EnergeticSheepForge._instance, EntityEnergeticSheepForge::new);
-        getMod().getModEventBus().addListener(this::onEntityAttributesCreation);
+        EntityAttributeCreationEvent.getBus(getMod().getModBusGroup()).addListener(this::onEntityAttributesCreation);
         if (getMod().getModHelpers().getMinecraftHelpers().isClientSide()) {
-            getMod().getModEventBus().addListener(this::loadLayerDefinitions);
+            EntityRenderersEvent.RegisterLayerDefinitions.getBus(getMod().getModBusGroup()).addListener(this::loadLayerDefinitions);
         }
-        getMod().getModEventBus().addListener(this::registerSpawnPlacements);
-        MinecraftForge.EVENT_BUS.addListener(this::onLightning);
+        SpawnPlacementRegisterEvent.getBus(getMod().getModBusGroup()).addListener(this::registerSpawnPlacements);
+        EntityStruckByLightningEvent.BUS.addListener(this::onLightning);
     }
 
     public void onEntityAttributesCreation(EntityAttributeCreationEvent event) {

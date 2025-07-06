@@ -7,7 +7,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -25,7 +24,7 @@ import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.animal.Sheep;
+import net.minecraft.world.entity.animal.sheep.Sheep;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
@@ -34,6 +33,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.storage.loot.LootTable;
 import org.cyclops.energeticsheep.Reference;
 import org.cyclops.energeticsheep.RegistryEntries;
@@ -118,7 +119,7 @@ public abstract class EntityEnergeticSheepCommon extends Sheep {
         energeticSheep.age = sheep.getAge();
         energeticSheep.setSheared(sheep.isSheared());
         energeticSheep.setFleeceColorInternal(sheep.getColor());
-        energeticSheep.absMoveTo(sheep.getX(), sheep.getY(), sheep.getZ(),
+        energeticSheep.absSnapTo(sheep.getX(), sheep.getY(), sheep.getZ(),
                 sheep.yRotO, sheep.xRotO);
 
         sheep.remove(RemovalReason.DISCARDED);
@@ -196,16 +197,16 @@ public abstract class EntityEnergeticSheepCommon extends Sheep {
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
-        super.addAdditionalSaveData(compound);
-        compound.putBoolean("powerBreeding", powerBreeding);
+    public void addAdditionalSaveData(ValueOutput output) {
+        super.addAdditionalSaveData(output);
+        output.putBoolean("powerBreeding", powerBreeding);
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
-        super.readAdditionalSaveData(compound);
-        this.setFleeceColorInternal(DyeColor.byId(compound.getByte("Color")));
-        this.powerBreeding = compound.getBoolean("powerBreeding");
+    public void readAdditionalSaveData(ValueInput input) {
+        super.readAdditionalSaveData(input);
+        this.setFleeceColorInternal(DyeColor.byId(input.getByteOr("Color", (byte) 0)));
+        this.powerBreeding = input.getBooleanOr("powerBreeding", false);
     }
 
     // MCP: createChild
@@ -215,7 +216,7 @@ public abstract class EntityEnergeticSheepCommon extends Sheep {
                 ? EntityEnergeticSheepConfigCommon.babyChancePowerBreeding : EntityEnergeticSheepConfigCommon.babyChance;
         this.powerBreeding = false;
         if (chance > 0 && this.random.nextInt(chance) == 0) {
-            EntityEnergeticSheepCommon child = RegistryEntries.ENTITY_TYPE_ENERGETIC_SHEEP.value().create(getCommandSenderWorld(), EntitySpawnReason.BREEDING);
+            EntityEnergeticSheepCommon child = RegistryEntries.ENTITY_TYPE_ENERGETIC_SHEEP.value().create(world, EntitySpawnReason.BREEDING);
 
             // If parents have equal color, child has same color, otherwise random.
             DyeColor color;
@@ -330,8 +331,8 @@ public abstract class EntityEnergeticSheepCommon extends Sheep {
     protected void usePlayerItem(Player player, InteractionHand hand, ItemStack stack) {
         if (isPowerBreedingItem(stack)) {
             powerBreeding = true;
-            if (!getCommandSenderWorld().isClientSide()) {
-                ((ServerLevel) getCommandSenderWorld()).sendParticles(ParticleTypes.INSTANT_EFFECT,
+            if (!level().isClientSide()) {
+                ((ServerLevel) level()).sendParticles(ParticleTypes.INSTANT_EFFECT,
                         this.getX(), this.getY(), this.getZ(), 10, 0.5F, 0.5F, 0.5F, 2F);
             }
         }

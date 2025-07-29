@@ -1,15 +1,8 @@
 {
-    "itemGroup.energeticsheep": "Energetic Sheep",
-    "general.energeticsheep.energy_unit": "RF",
-    "general.energeticsheep.energy_unit_fabric": "E",
     "general.energeticsheep.description": "Ovelhas que geram energia",
-
-    "_comment": "Items",
     "item.energeticsheep.energetic_shears": "Tesoura Energética",
     "item.energeticsheep.energetic_shears.info": "Extrai energia de qualquer entidade. Também funciona como uma tesoura comum que consome energia.",
     "item.energeticsheep.energetic_sheep_spawn_egg": "Ovo de Ovelha Energética",
-
-    "_comment": "Blocks",
     "block.energeticsheep.energetic_wool": "Lã Energética",
     "block.energeticsheep.energetic_wool.info": "Chocante!",
     "block.energeticsheep.white_energetic_wool": "Lã Branca Energética",
@@ -28,11 +21,7 @@
     "block.energeticsheep.green_energetic_wool": "Lã Verde Energética",
     "block.energeticsheep.red_energetic_wool": "Lã Vermelha Energética",
     "block.energeticsheep.black_energetic_wool": "Lã Preta Energética",
-
-    "_comment": "Entities",
     "entity.energeticsheep.energetic_sheep": "Ovelha Energética",
-
-    "_comment": "Death messages",
     "death.attack.energeticwool.shock": "%1$s morreu eletrocutado(a)",
     "death.attack.energeticwool.shock.player": "%1$s morreu eletrocutado(a) enquanto tentava escapar de %2$s"
 }

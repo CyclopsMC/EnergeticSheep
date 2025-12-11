@@ -41,7 +41,7 @@ public class EntityEnergeticSheepConfigNeoForge extends EntityEnergeticSheepConf
 
     public void registerCapabilities(RegisterCapabilitiesEvent event) {
         event.registerEntity(
-                Capabilities.EnergyStorage.ENTITY,
+                Capabilities.Energy.ENTITY,
                 getInstance(),
                 (entity, context) -> entity.getEnergyStorage()
         );

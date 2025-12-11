@@ -29,7 +29,7 @@ public class BlockEnergeticWoolConfigNeoForge extends BlockEnergeticWoolConfigCo
 
     public void registerCapabilities(RegisterCapabilitiesEvent event) {
         event.registerItem(
-                Capabilities.EnergyStorage.ITEM,
+                Capabilities.Energy.ITEM,
                 (stack, context) -> new BlockEnergeticWoolEnergyStorageNeoForge(
                         EntityEnergeticSheepCommon.getCapacity(((BlockEnergeticWool) this.getInstance()).getColor(), EntityEnergeticSheepConfigCommon.woolBaseCapacity), stack),
                 getInstance()

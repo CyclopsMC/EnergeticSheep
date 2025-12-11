@@ -82,7 +82,7 @@ public abstract class ItemEnergeticShearsCommon extends ShearsItem {
         Player player = context.getPlayer();
         ItemStack itemStack = context.getItemInHand();
         BlockPos pos = context.getClickedPos();
-        if (player.level().isClientSide || player.isCreative() || !canShear(itemStack)) {
+        if (player.level().isClientSide() || player.isCreative() || !canShear(itemStack)) {
             return super.useOn(context);
         }
         Block block = player.level().getBlockState(pos).getBlock();
@@ -122,7 +122,7 @@ public abstract class ItemEnergeticShearsCommon extends ShearsItem {
 
     @Override
     public InteractionResult interactLivingEntity(ItemStack itemStack, Player player, LivingEntity entity, InteractionHand hand) {
-        if (entity.level().isClientSide) {
+        if (entity.level().isClientSide()) {
             return InteractionResult.PASS;
         }
 
@@ -135,7 +135,7 @@ public abstract class ItemEnergeticShearsCommon extends ShearsItem {
             List<ItemStack> drops = getShearableDrops(entity, player, itemStack, entity.level(), entity.getOnPos());
             if (drops != null) {
                 Random rand = new Random();
-                if (!entity.level().isClientSide) {
+                if (!entity.level().isClientSide()) {
                     for(ItemStack stack : drops) {
                         ItemEntity ent = entity.spawnAtLocation((ServerLevel) entity.level(), stack, 1.0F);
                         ent.setDeltaMovement(ent.getDeltaMovement().add(

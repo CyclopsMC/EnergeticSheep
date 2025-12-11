@@ -4,7 +4,8 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.energy.IEnergyStorage;
+import net.neoforged.neoforge.transfer.access.ItemAccess;
+import net.neoforged.neoforge.transfer.energy.EnergyHandler;
 import org.cyclops.energeticsheep.block.BlockEnergeticWool;
 
 /**
@@ -17,8 +18,8 @@ public class ItemBlockEnergeticWoolNeoForge extends ItemBlockEnergeticWoolCommon
 
     @Override
     protected int getEnergyStored(ItemStack itemStack) {
-        IEnergyStorage energyStorage = itemStack.getCapability(Capabilities.EnergyStorage.ITEM);
-        return energyStorage.getEnergyStored();
+        EnergyHandler energyStorage = itemStack.getCapability(Capabilities.Energy.ITEM, ItemAccess.forStack(itemStack));
+        return energyStorage.getAmountAsInt();
     }
 
     @Override

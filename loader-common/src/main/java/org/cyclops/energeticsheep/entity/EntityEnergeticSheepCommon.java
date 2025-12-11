@@ -5,6 +5,7 @@ import com.google.common.collect.Maps;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.SpellParticleOption;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -332,7 +333,7 @@ public abstract class EntityEnergeticSheepCommon extends Sheep {
         if (isPowerBreedingItem(stack)) {
             powerBreeding = true;
             if (!level().isClientSide()) {
-                ((ServerLevel) level()).sendParticles(ParticleTypes.INSTANT_EFFECT,
+                ((ServerLevel) level()).sendParticles(SpellParticleOption.create(ParticleTypes.INSTANT_EFFECT, 0, 1),
                         this.getX(), this.getY(), this.getZ(), 10, 0.5F, 0.5F, 0.5F, 2F);
             }
         }

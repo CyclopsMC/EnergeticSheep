@@ -41,7 +41,7 @@ public class ItemEnergeticShearsFabric extends ItemEnergeticShearsCommon {
 
     @Override
     public boolean mineBlock(ItemStack itemStack, Level worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
-        if (!worldIn.isClientSide) {
+        if (!worldIn.isClientSide()) {
             if (entityLiving instanceof Player player) {
                 consumeOnShear(itemStack, player, player.getUsedItemHand());
             }
@@ -128,7 +128,7 @@ public class ItemEnergeticShearsFabric extends ItemEnergeticShearsCommon {
             EnergyStorage target = EnergyStorage.SIDED.find(worldIn, pos, side);
             if (target != null) {
                 long moved = EnergyStorageUtil.move(source, target, ItemEnergeticShearsConfigCommon.usageTransferAmount, transaction);
-                if (!worldIn.isClientSide) {
+                if (!worldIn.isClientSide()) {
                     transaction.commit();
                 }
                 return moved > 0 ? InteractionResult.SUCCESS :InteractionResult.FAIL;

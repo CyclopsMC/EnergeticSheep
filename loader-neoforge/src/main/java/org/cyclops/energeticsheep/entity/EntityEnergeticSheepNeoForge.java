@@ -12,8 +12,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.neoforged.neoforge.energy.EnergyStorage;
-import net.neoforged.neoforge.energy.IEnergyStorage;
+import net.neoforged.neoforge.transfer.energy.EnergyHandler;
+import net.neoforged.neoforge.transfer.energy.SimpleEnergyHandler;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -24,56 +25,50 @@ import java.util.List;
 public class EntityEnergeticSheepNeoForge extends EntityEnergeticSheepCommon {
 
     @Nullable
-    private IEnergyStorage energyStorage;
+    private EnergyHandler energyStorage;
 
     public EntityEnergeticSheepNeoForge(EntityType<? extends EntityEnergeticSheepCommon> type, Level world) {
         super(type, world);
     }
 
     @Nullable
-    public IEnergyStorage getEnergyStorage() {
+    public EnergyHandler getEnergyStorage() {
         return energyStorage;
     }
 
     @Override
     protected void initializeEnergy(DyeColor color) {
-        this.energyStorage = new EnergyStorage(getCapacity(color)) {
+        this.energyStorage = new SimpleEnergyHandler(getCapacity(color)) {
             @Override
-            public int receiveEnergy(int maxReceive, boolean simulate) {
-                int ret = super.receiveEnergy(maxReceive, simulate);
-                if (!simulate) {
-                    EntityEnergeticSheepNeoForge.this.updateEnergy(energy);
-                }
-                return ret;
-            }
-
-            @Override
-            public int extractEnergy(int maxExtract, boolean simulate) {
-                int ret = super.extractEnergy(maxExtract, simulate);
-                if (!simulate) {
-                    EntityEnergeticSheepNeoForge.this.updateEnergy(energy);
-                }
-                return ret;
+            protected void onEnergyChanged(int previousAmount) {
+                super.onEnergyChanged(previousAmount);
+                EntityEnergeticSheepNeoForge.this.updateEnergy(energy);
             }
         };
     }
 
     @Override
     public int getCapacity() {
-        return this.energyStorage != null ? this.energyStorage.getMaxEnergyStored() : 0;
+        return this.energyStorage != null ? this.energyStorage.getCapacityAsInt() : 0;
     }
 
     @Override
     protected void restoreAllEnergy() {
         if (this.energyStorage != null) {
-            this.energyStorage.receiveEnergy(this.energyStorage.getMaxEnergyStored(), false);
+            try (var tx = Transaction.openRoot()) {
+                this.energyStorage.insert(this.energyStorage.getCapacityAsInt(), tx);
+                tx.commit();
+            }
         }
     }
 
     @Override
     protected void consumeAllEnergy() {
         if (this.energyStorage != null) {
-            this.energyStorage.extractEnergy(this.energyStorage.getMaxEnergyStored(), false);
+            try (var tx = Transaction.openRoot()) {
+                this.energyStorage.extract(this.energyStorage.getCapacityAsInt(), tx);
+                tx.commit();
+            }
         }
     }
 
@@ -86,20 +81,26 @@ public class EntityEnergeticSheepNeoForge extends EntityEnergeticSheepCommon {
     public void addAdditionalSaveData(ValueOutput output) {
         super.addAdditionalSaveData(output);
         if (this.energyStorage != null) {
-            output.putInt("energy", this.energyStorage.getEnergyStored());
+            output.putInt("energy", this.energyStorage.getCapacityAsInt());
         }
     }
 
     @Override
     public void readAdditionalSaveData(ValueInput input) {
         super.readAdditionalSaveData(input);
-        this.energyStorage.receiveEnergy(input.getInt("energy").orElseThrow(), false);
+        try (var tx = Transaction.openRoot()) {
+            this.energyStorage.insert(input.getInt("energy").orElseThrow(), tx);
+            tx.commit();
+        }
     }
 
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, EntitySpawnReason reason, @org.jetbrains.annotations.Nullable SpawnGroupData spawnDataIn) {
         SpawnGroupData data = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn);
-        this.energyStorage.receiveEnergy(this.energyStorage.getMaxEnergyStored(), false);
+        try (var tx = Transaction.openRoot()) {
+            this.energyStorage.insert(this.energyStorage.getCapacityAsInt(), tx);
+            tx.commit();
+        }
         return data;
     }
 }

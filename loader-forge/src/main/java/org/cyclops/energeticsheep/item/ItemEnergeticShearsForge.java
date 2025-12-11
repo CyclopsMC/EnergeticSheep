@@ -34,7 +34,7 @@ public class ItemEnergeticShearsForge extends ItemEnergeticShearsCommon {
 
     @Override
     public boolean mineBlock(ItemStack itemStack, Level worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
-        if (!worldIn.isClientSide) {
+        if (!worldIn.isClientSide()) {
             consumeOnShear(itemStack, null, null);
         }
 
@@ -131,8 +131,8 @@ public class ItemEnergeticShearsForge extends ItemEnergeticShearsCommon {
                                                 energyTarget.receiveEnergy(
                                                         energyItem.extractEnergy(ItemEnergeticShearsConfigCommon.usageTransferAmount, true),
                                                         true),
-                                                worldIn.isClientSide),
-                                        worldIn.isClientSide) > 0 ? InteractionResult.SUCCESS : InteractionResult.FAIL)
+                                                worldIn.isClientSide()),
+                                        worldIn.isClientSide()) > 0 ? InteractionResult.SUCCESS : InteractionResult.FAIL)
                                 .orElse(null);
                     })
                     .orElse(null);

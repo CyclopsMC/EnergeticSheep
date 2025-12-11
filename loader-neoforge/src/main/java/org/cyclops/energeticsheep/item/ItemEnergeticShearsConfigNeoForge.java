@@ -2,7 +2,7 @@ package org.cyclops.energeticsheep.item;
 
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
-import net.neoforged.neoforge.energy.ComponentEnergyStorage;
+import net.neoforged.neoforge.transfer.energy.ItemAccessEnergyHandler;
 import org.cyclops.cyclopscore.RegistryEntries;
 import org.cyclops.energeticsheep.EnergeticSheepNeoForge;
 
@@ -20,8 +20,8 @@ public class ItemEnergeticShearsConfigNeoForge extends ItemEnergeticShearsConfig
 
     public void registerCapabilities(RegisterCapabilitiesEvent event) {
         event.registerItem(
-                Capabilities.EnergyStorage.ITEM,
-                (stack, context) -> new ComponentEnergyStorage(stack, RegistryEntries.COMPONENT_ENERGY_STORAGE.get(), ItemEnergeticShearsConfigCommon.capacity, Integer.MAX_VALUE, Integer.MAX_VALUE),
+                Capabilities.Energy.ITEM,
+                (stack, itemAccess) -> new ItemAccessEnergyHandler(itemAccess, RegistryEntries.COMPONENT_ENERGY_STORAGE.get(), ItemEnergeticShearsConfigCommon.capacity, Integer.MAX_VALUE, Integer.MAX_VALUE),
                 getInstance()
         );
     }

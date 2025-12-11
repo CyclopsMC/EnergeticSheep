@@ -1,8 +1,10 @@
 package org.cyclops.energeticsheep.entity.layers;
 
-import net.minecraft.client.model.SheepModel;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.SheepFurModel;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
@@ -16,18 +18,21 @@ import org.cyclops.energeticsheep.client.render.entity.state.EntityRenderStateEn
  * Layer renderer for the energy charge.
  * @author rubensworks
  */
-public class LayerEnergeticSheepCharge extends EnergySwirlLayer<SheepRenderState, SheepModel> {
+public class LayerEnergeticSheepCharge extends EnergySwirlLayer<SheepRenderState, EntityModel<SheepRenderState>> {
 
     public static ModelLayerLocation MODEL_LAYER_FUR_SCALED = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "sheep"), "fur");
 
     private static final ResourceLocation CHARGE_TEXTURE =
             ResourceLocation.withDefaultNamespace("textures/entity/creeper/creeper_armor.png");
 
-    private final SheepModel sheepModel;
+    private final EntityModel<SheepRenderState> adultModel;
+    private final EntityModel<SheepRenderState> babyModel;
+    private boolean isBaby;
 
-    public LayerEnergeticSheepCharge(RenderLayerParent<SheepRenderState, SheepModel> renderer, EntityModelSet entityModelSet) {
+    public LayerEnergeticSheepCharge(RenderLayerParent<SheepRenderState, EntityModel<SheepRenderState>> renderer, EntityModelSet entityModelSet) {
         super(renderer);
-        sheepModel = new SheepModel(entityModelSet.bakeLayer(MODEL_LAYER_FUR_SCALED));
+        this.adultModel = new SheepFurModel(entityModelSet.bakeLayer(ModelLayers.SHEEP_WOOL));
+        this.babyModel = new SheepFurModel(entityModelSet.bakeLayer(ModelLayers.SHEEP_BABY_WOOL));
     }
 
     public static LayerDefinition createFurLayer(float scale) {
@@ -54,6 +59,7 @@ public class LayerEnergeticSheepCharge extends EnergySwirlLayer<SheepRenderState
 
     @Override
     protected boolean isPowered(SheepRenderState renderStateEnergeticSheep) {
+        this.isBaby = renderStateEnergeticSheep.isBaby;
         return ((EntityRenderStateEnergeticSheep) renderStateEnergeticSheep).isPowered;
     }
 
@@ -68,7 +74,7 @@ public class LayerEnergeticSheepCharge extends EnergySwirlLayer<SheepRenderState
     }
 
     @Override
-    protected SheepModel model() {
-        return this.sheepModel;
+    protected EntityModel<SheepRenderState> model() {
+        return isBaby ? this.babyModel : this.adultModel;
     }
 }

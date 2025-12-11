@@ -53,5 +53,6 @@ public class RenderEntityEnergeticSheep extends AgeableMobRenderer<EntityEnerget
         renderState.isPowered = entity.getEnergyClient() > 0;
         renderState.woolColor = entity.getColor();
         renderState.isSheared = entity.getEnergyClient() == 0;
+        renderState.isBaby = entity.isBaby();
     }
 }

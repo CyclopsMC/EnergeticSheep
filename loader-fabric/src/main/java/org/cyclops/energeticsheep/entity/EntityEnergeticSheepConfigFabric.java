@@ -6,7 +6,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.fabric.api.lookup.v1.entity.EntityApiLookup;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.TagKey;
@@ -45,7 +45,7 @@ public class EntityEnergeticSheepConfigFabric extends EntityEnergeticSheepConfig
 
         // Handle biome spawning
         if (spawnWeight > 0) {
-            TagKey<Biome> biomeTagNotEnergeticSheep = TagKey.create(Registries.BIOME, ResourceLocation.parse("energeticsheep:is_not_energetic_sheep"));
+            TagKey<Biome> biomeTagNotEnergeticSheep = TagKey.create(Registries.BIOME, Identifier.parse("energeticsheep:is_not_energetic_sheep"));
             BiomeModifications.addSpawn(
                     biome -> biome.hasTag(BiomeTags.IS_OVERWORLD) && !biome.hasTag(biomeTagNotEnergeticSheep),
                     MobCategory.CREATURE,

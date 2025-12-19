@@ -1,7 +1,7 @@
 package org.cyclops.energeticsheep.entity.layers;
 
 import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.model.SheepFurModel;
+import net.minecraft.client.model.animal.sheep.SheepFurModel;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelLayers;
@@ -10,7 +10,7 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.EnergySwirlLayer;
 import net.minecraft.client.renderer.entity.state.SheepRenderState;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.cyclops.energeticsheep.Reference;
 import org.cyclops.energeticsheep.client.render.entity.state.EntityRenderStateEnergeticSheep;
 
@@ -20,10 +20,10 @@ import org.cyclops.energeticsheep.client.render.entity.state.EntityRenderStateEn
  */
 public class LayerEnergeticSheepCharge extends EnergySwirlLayer<SheepRenderState, EntityModel<SheepRenderState>> {
 
-    public static ModelLayerLocation MODEL_LAYER_FUR_SCALED = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "sheep"), "fur");
+    public static ModelLayerLocation MODEL_LAYER_FUR_SCALED = new ModelLayerLocation(Identifier.fromNamespaceAndPath(Reference.MOD_ID, "sheep"), "fur");
 
-    private static final ResourceLocation CHARGE_TEXTURE =
-            ResourceLocation.withDefaultNamespace("textures/entity/creeper/creeper_armor.png");
+    private static final Identifier CHARGE_TEXTURE =
+            Identifier.withDefaultNamespace("textures/entity/creeper/creeper_armor.png");
 
     private final EntityModel<SheepRenderState> adultModel;
     private final EntityModel<SheepRenderState> babyModel;
@@ -69,7 +69,7 @@ public class LayerEnergeticSheepCharge extends EnergySwirlLayer<SheepRenderState
     }
 
     @Override
-    protected ResourceLocation getTextureLocation() {
+    protected Identifier getTextureLocation() {
         return CHARGE_TEXTURE;
     }
 

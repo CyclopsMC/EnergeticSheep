@@ -2,7 +2,7 @@ package org.cyclops.energeticsheep;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.lookup.v1.entity.EntityApiLookup;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
@@ -31,7 +31,7 @@ public class EnergeticSheepFabric extends ModBaseFabric<EnergeticSheepFabric> im
     public static EnergeticSheepFabric _instance;
 
     public static EntityApiLookup<EnergyStorage, @Nullable Void> ENERGY_STORAGE_ENTITY =
-            EntityApiLookup.get(ResourceLocation.fromNamespaceAndPath("teamreborn", "energy"), EnergyStorage.class, Void.class);
+            EntityApiLookup.get(Identifier.fromNamespaceAndPath("teamreborn", "energy"), EnergyStorage.class, Void.class);
 
     public EnergeticSheepFabric() {
         super(Reference.MOD_ID, (instance) -> _instance = instance);

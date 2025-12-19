@@ -24,7 +24,7 @@ dependencies {
     include modApi("teamreborn:energy:${fabric_teamrebornenergy_version}")
 
     // This is only for testing
-    modRuntimeOnly "TechReborn:${fabric_techreborn_version}"
+//    modRuntimeOnly "TechReborn:${fabric_techreborn_version}"
 }
 
 task publishCurseForge(type: TaskPublishCurseForge) {

@@ -2,7 +2,7 @@ package org.cyclops.energeticsheep.block;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.capabilities.Capabilities;
@@ -21,7 +21,7 @@ public class BlockEnergeticWoolConfigNeoForge extends BlockEnergeticWoolConfigCo
                 EnergeticSheepNeoForge._instance,
                 color,
                 (eConfig, block) -> new ItemBlockEnergeticWoolNeoForge((BlockEnergeticWool) block, new Item.Properties()
-                        .setId(ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(eConfig.getMod().getModId(), eConfig.getNamedId())))
+                        .setId(ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(eConfig.getMod().getModId(), eConfig.getNamedId())))
                         .useBlockDescriptionPrefix())
         );
         EnergeticSheepNeoForge._instance.getModEventBus().addListener(this::registerCapabilities);

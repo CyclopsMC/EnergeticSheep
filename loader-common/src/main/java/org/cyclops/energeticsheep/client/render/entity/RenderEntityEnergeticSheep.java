@@ -1,13 +1,13 @@
 package org.cyclops.energeticsheep.client.render.entity;
 
-import net.minecraft.client.model.SheepModel;
+import net.minecraft.client.model.animal.sheep.SheepModel;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.entity.AgeableMobRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.entity.layers.SheepWoolLayer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.cyclops.cyclopscore.config.extendedconfig.ExtendedConfigCommon;
 import org.cyclops.energeticsheep.Reference;
 import org.cyclops.energeticsheep.client.render.entity.state.EntityRenderStateEnergeticSheep;
@@ -22,7 +22,7 @@ import org.cyclops.energeticsheep.entity.layers.LayerEnergeticSheepCharge;
  */
 public class RenderEntityEnergeticSheep extends AgeableMobRenderer<EntityEnergeticSheepCommon, EntityRenderStateEnergeticSheep, SheepModel> {
 
-    private ResourceLocation texture;
+    private Identifier texture;
 
     /**
      * Make a new instance.
@@ -33,11 +33,11 @@ public class RenderEntityEnergeticSheep extends AgeableMobRenderer<EntityEnerget
         super(renderContext, new SheepModel(renderContext.bakeLayer(ModelLayers.SHEEP)), new SheepModel(renderContext.bakeLayer(ModelLayers.SHEEP_BABY)), 0.7F);
         this.addLayer((RenderLayer) new SheepWoolLayer((RenderLayerParent) this, renderContext.getModelSet()));
         this.addLayer((RenderLayer) new LayerEnergeticSheepCharge((RenderLayerParent) this, renderContext.getModelSet()));
-        texture = ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "textures/entities/" + config.getNamedId() + ".png");
+        texture = Identifier.fromNamespaceAndPath(Reference.MOD_ID, "textures/entities/" + config.getNamedId() + ".png");
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityRenderStateEnergeticSheep renderState) {
+    public Identifier getTextureLocation(EntityRenderStateEnergeticSheep renderState) {
         return texture;
     }
 

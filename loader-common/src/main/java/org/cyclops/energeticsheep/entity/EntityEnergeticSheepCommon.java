@@ -2,7 +2,7 @@ package org.cyclops.energeticsheep.entity;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SpellParticleOption;
@@ -12,7 +12,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -52,22 +52,22 @@ import java.util.Optional;
  */
 public abstract class EntityEnergeticSheepCommon extends Sheep {
 
-    public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_WHITE      = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/white"));
-    public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_ORANGE     = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/orange"));
-    public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_MAGENTA    = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/magenta"));
-    public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_LIGHT_BLUE = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/light_blue"));
-    public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_YELLOW     = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/yellow"));
-    public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_LIME       = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/lime"));
-    public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_PINK       = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/pink"));
-    public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_GRAY       = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/gray"));
-    public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_LIGHT_GRAY = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/light_gray"));
-    public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_CYAN       = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/cyan"));
-    public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_PURPLE     = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/purple"));
-    public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_BLUE       = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/blue"));
-    public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_BROWN      = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/brown"));
-    public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_GREEN      = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/green"));
-    public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_RED        = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/red"));
-    public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_BLACK      = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/black"));
+    public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_WHITE      = ResourceKey.create(Registries.LOOT_TABLE, Identifier.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/white"));
+    public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_ORANGE     = ResourceKey.create(Registries.LOOT_TABLE, Identifier.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/orange"));
+    public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_MAGENTA    = ResourceKey.create(Registries.LOOT_TABLE, Identifier.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/magenta"));
+    public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_LIGHT_BLUE = ResourceKey.create(Registries.LOOT_TABLE, Identifier.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/light_blue"));
+    public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_YELLOW     = ResourceKey.create(Registries.LOOT_TABLE, Identifier.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/yellow"));
+    public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_LIME       = ResourceKey.create(Registries.LOOT_TABLE, Identifier.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/lime"));
+    public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_PINK       = ResourceKey.create(Registries.LOOT_TABLE, Identifier.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/pink"));
+    public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_GRAY       = ResourceKey.create(Registries.LOOT_TABLE, Identifier.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/gray"));
+    public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_LIGHT_GRAY = ResourceKey.create(Registries.LOOT_TABLE, Identifier.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/light_gray"));
+    public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_CYAN       = ResourceKey.create(Registries.LOOT_TABLE, Identifier.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/cyan"));
+    public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_PURPLE     = ResourceKey.create(Registries.LOOT_TABLE, Identifier.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/purple"));
+    public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_BLUE       = ResourceKey.create(Registries.LOOT_TABLE, Identifier.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/blue"));
+    public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_BROWN      = ResourceKey.create(Registries.LOOT_TABLE, Identifier.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/brown"));
+    public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_GREEN      = ResourceKey.create(Registries.LOOT_TABLE, Identifier.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/green"));
+    public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_RED        = ResourceKey.create(Registries.LOOT_TABLE, Identifier.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/red"));
+    public static final ResourceKey<LootTable> LOOTTABLE_SHEEP_BLACK      = ResourceKey.create(Registries.LOOT_TABLE, Identifier.fromNamespaceAndPath(Reference.MOD_ID, "entities/energetic_sheep/black"));
 
     protected final Map<DyeColor, ItemLike> woolByColor;
 

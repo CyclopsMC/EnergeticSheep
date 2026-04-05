@@ -2,7 +2,6 @@ package org.cyclops.energeticsheep.entity;
 
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.ItemRenderer;
 import org.cyclops.cyclopscore.config.extendedconfig.EntityClientConfig;
 import org.cyclops.cyclopscore.config.extendedconfig.EntityConfigCommon;
 import org.cyclops.cyclopscore.init.IModBase;
@@ -18,7 +17,7 @@ public class EntityEnergeticSheepClientConfigCommon<M extends IModBase, T extend
     }
 
     @Override
-    public EntityRenderer<? super EntityEnergeticSheepCommon, EntityRenderStateEnergeticSheep> getRender(EntityRendererProvider.Context renderContext, ItemRenderer renderItem) {
+    public EntityRenderer<? super EntityEnergeticSheepCommon, EntityRenderStateEnergeticSheep> getRender(EntityRendererProvider.Context renderContext) {
         return new RenderEntityEnergeticSheep(renderContext, getEntityConfig());
     }
 }

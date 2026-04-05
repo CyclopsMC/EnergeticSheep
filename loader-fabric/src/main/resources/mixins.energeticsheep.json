@@ -1,7 +1,7 @@
 {
   "minVersion": "0.8.5",
   "required": true,
-  "compatibilityLevel": "JAVA_17",
+  "compatibilityLevel": "JAVA_25",
   "package": "org.cyclops.energeticsheep.mixin",
   "mixins": [
     "MixinItemPredicate"

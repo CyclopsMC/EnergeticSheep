@@ -1,4 +1,4 @@
-accessWidener v1 named
+accessWidener v1 official
 
 # Sheep
 accessible field net/minecraft/world/entity/animal/sheep/Sheep eatBlockGoal Lnet/minecraft/world/entity/ai/goal/EatBlockGoal;

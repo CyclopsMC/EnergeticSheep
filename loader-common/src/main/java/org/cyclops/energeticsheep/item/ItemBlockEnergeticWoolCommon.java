@@ -29,7 +29,7 @@ public abstract class ItemBlockEnergeticWoolCommon extends BlockItem {
         String line = String.format("%,d", getEnergyStored(itemStack)) + " "
                 + l10nHelpers.localize(getEnergyUnitUnlocalized());
         tooltipAdder.accept(Component.literal(line).withStyle(ChatFormatting.RED));
-        l10nHelpers.addOptionalInfo(tooltipAdder, "block.energeticsheep.energetic_wool");
+        l10nHelpers.addOptionalInfo(tooltipAdder, "block.energeticsheep.energetic_wool", flagIn);
     }
 
     protected String getEnergyUnitUnlocalized() {

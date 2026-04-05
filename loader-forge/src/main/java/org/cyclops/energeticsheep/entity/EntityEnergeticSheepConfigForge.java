@@ -19,11 +19,11 @@ public class EntityEnergeticSheepConfigForge extends EntityEnergeticSheepConfigC
 
     public EntityEnergeticSheepConfigForge() {
         super(EnergeticSheepForge._instance, EntityEnergeticSheepForge::new);
-        EntityAttributeCreationEvent.getBus(getMod().getModBusGroup()).addListener(this::onEntityAttributesCreation);
+        EntityAttributeCreationEvent.BUS.addListener(this::onEntityAttributesCreation);
         if (getMod().getModHelpers().getMinecraftHelpers().isClientSide()) {
-            EntityRenderersEvent.RegisterLayerDefinitions.getBus(getMod().getModBusGroup()).addListener(this::loadLayerDefinitions);
+            EntityRenderersEvent.RegisterLayerDefinitions.BUS.addListener(this::loadLayerDefinitions);
         }
-        SpawnPlacementRegisterEvent.getBus(getMod().getModBusGroup()).addListener(this::registerSpawnPlacements);
+        SpawnPlacementRegisterEvent.BUS.addListener(this::registerSpawnPlacements);
         EntityStruckByLightningEvent.BUS.addListener(this::onLightning);
     }
 

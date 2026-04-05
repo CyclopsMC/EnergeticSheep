@@ -53,7 +53,7 @@ public class GameTestsCommon {
 
         helper.succeedWhen(() -> {
             // Right click with shears
-            InteractionResult result = player.interactOn(entity, InteractionHand.MAIN_HAND);
+            InteractionResult result = player.interactOn(entity, InteractionHand.MAIN_HAND, entity.position());
             helper.assertItemEntityPresent(entity.getWoolByColor().get(entity.getColor()).asItem());
             helper.assertTrue(result == InteractionResult.SUCCESS || result == InteractionResult.SUCCESS_SERVER, Component.literal("Interaction failed"));
         });
@@ -70,7 +70,7 @@ public class GameTestsCommon {
 
         helper.succeedWhen(() -> {
             // Right click with energetic shears
-            InteractionResult result = player.interactOn(entity, InteractionHand.MAIN_HAND);
+            InteractionResult result = player.interactOn(entity, InteractionHand.MAIN_HAND, entity.position());
             helper.assertItemEntityNotPresent(entity.getWoolByColor().get(entity.getColor()).asItem());
             helper.assertTrue(RegistryEntries.ITEM_ENERGETIC_SHEARS.value().getEnergyStored(player.getMainHandItem()) > 500, Component.literal("Shears do not have enough energy"));
             helper.assertTrue(result.equals(InteractionResult.SUCCESS), Component.literal("Interaction failed"));
@@ -89,7 +89,7 @@ public class GameTestsCommon {
         player.setItemInHand(InteractionHand.MAIN_HAND, itemStack);
 
         // Right click with shears
-        player.interactOn(entity, InteractionHand.MAIN_HAND);
+        player.interactOn(entity, InteractionHand.MAIN_HAND, entity.position());
 
         // Place grass under sheep
         helper.setBlock(POS.below().east(), Blocks.GRASS_BLOCK);
@@ -177,7 +177,7 @@ public class GameTestsCommon {
 
         helper.succeedWhen(() -> {
             // Right click with energetic shears
-            InteractionResult result = player.interactOn(entity, InteractionHand.MAIN_HAND);
+            InteractionResult result = player.interactOn(entity, InteractionHand.MAIN_HAND, entity.position());
             helper.assertItemEntityPresent(Items.WHITE_WOOL);
             helper.assertTrue(RegistryEntries.ITEM_ENERGETIC_SHEARS.value().getEnergyStored(player.getMainHandItem()) < RegistryEntries.ITEM_ENERGETIC_SHEARS.value().getMaxEnergyStored(player.getMainHandItem()), Component.literal("No energy was consumed from shears"));
             helper.assertTrue(result.equals(InteractionResult.SUCCESS), Component.literal("Interaction failed"));
@@ -196,7 +196,7 @@ public class GameTestsCommon {
 
         helper.succeedWhen(() -> {
             // Right click with energetic shears
-            InteractionResult result = player.interactOn(entity, InteractionHand.MAIN_HAND);
+            InteractionResult result = player.interactOn(entity, InteractionHand.MAIN_HAND, entity.position());
             helper.assertItemEntityNotPresent(Items.WHITE_WOOL);
             helper.assertTrue(RegistryEntries.ITEM_ENERGETIC_SHEARS.value().getEnergyStored(player.getMainHandItem()) == 0, Component.literal("Shears do not have enough energy"));
             helper.assertTrue(result.equals(InteractionResult.PASS), Component.literal("Interaction did not pass"));

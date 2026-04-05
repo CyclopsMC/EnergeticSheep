@@ -1,7 +1,7 @@
 package org.cyclops.energeticsheep.entity;
 
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
-import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.ModelLayerRegistry;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.fabric.api.lookup.v1.entity.EntityApiLookup;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
@@ -76,7 +76,7 @@ public class EntityEnergeticSheepConfigFabric extends EntityEnergeticSheepConfig
     }
 
     private void registerClientSideLayer() {
-        EntityModelLayerRegistry.registerModelLayer(LayerEnergeticSheepCharge.MODEL_LAYER_FUR_SCALED, () -> LayerEnergeticSheepCharge.createFurLayer(1.05F));
+        ModelLayerRegistry.registerModelLayer(LayerEnergeticSheepCharge.MODEL_LAYER_FUR_SCALED, () -> LayerEnergeticSheepCharge.createFurLayer(1.05F));
     }
 
     public void onLightning(Entity entity, ServerLevel world) {

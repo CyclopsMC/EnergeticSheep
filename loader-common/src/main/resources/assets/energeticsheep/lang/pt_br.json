@@ -1,5 +1,9 @@
 {
+    "itemGroup.energeticsheep": "Energetic Sheep",
+    "general.energeticsheep.energy_unit": "RF",
+    "general.energeticsheep.energy_unit_fabric": "E",
     "general.energeticsheep.description": "Ovelhas que geram energia",
+    "_comment": "Mensagens de morte",
     "item.energeticsheep.energetic_shears": "Tesoura Energética",
     "item.energeticsheep.energetic_shears.info": "Extrai energia de qualquer entidade. Também funciona como uma tesoura comum que consome energia.",
     "item.energeticsheep.energetic_sheep_spawn_egg": "Ovo de Ovelha Energética",

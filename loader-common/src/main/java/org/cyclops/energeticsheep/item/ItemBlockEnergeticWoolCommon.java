@@ -36,11 +36,6 @@ public abstract class ItemBlockEnergeticWoolCommon extends BlockItem {
         return "general.energeticsheep.energy_unit";
     }
 
-    @Override
-    public boolean isFoil(ItemStack itemStack) {
-        return super.isFoil(itemStack) || getEnergyStored(itemStack) > 0;
-    }
-
     protected abstract int getEnergyStored(ItemStack itemStack);
 
 }

@@ -1,3 +1,7 @@
 {
-    "parent": "block/magenta_wool"
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "minecraft:block/magenta_wool",
+        "layer1": "energeticsheep:item/energetic_wool_charge_overlay"
+    }
 }

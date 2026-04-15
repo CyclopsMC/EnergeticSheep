@@ -19,7 +19,7 @@ public class ItemBlockEnergeticWoolNeoForge extends ItemBlockEnergeticWoolCommon
     @Override
     protected int getEnergyStored(ItemStack itemStack) {
         EnergyHandler energyStorage = itemStack.getCapability(Capabilities.Energy.ITEM, ItemAccess.forStack(itemStack));
-        return energyStorage.getAmountAsInt();
+        return energyStorage == null ? 0 : energyStorage.getAmountAsInt();
     }
 
     @Override

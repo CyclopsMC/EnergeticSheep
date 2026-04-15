@@ -16,7 +16,8 @@ public class ItemBlockEnergeticWoolForge extends ItemBlockEnergeticWoolCommon {
 
     @Override
     protected int getEnergyStored(ItemStack itemStack) {
-        return itemStack.get(RegistryEntriesCommon.COMPONENT_ENERGY_STORAGE.value());
+        Integer energy = itemStack.get(RegistryEntriesCommon.COMPONENT_ENERGY_STORAGE.value());
+        return energy == null ? 0 : energy;
     }
 
     @Override

@@ -23,7 +23,7 @@ public class ItemBlockEnergeticWoolFabric extends ItemBlockEnergeticWoolCommon {
     @Override
     protected int getEnergyStored(ItemStack itemStack) {
         EnergyStorage energyStorage = EnergyStorage.ITEM.find(itemStack, ContainerItemContext.withConstant(itemStack));
-        return (int) energyStorage.getAmount();
+        return energyStorage == null ? 0 : (int) energyStorage.getAmount();
     }
 
     @Override

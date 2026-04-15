@@ -2,6 +2,6 @@
     "parent": "item/generated",
     "textures": {
         "layer0": "minecraft:block/black_wool",
-        "layer1": "energeticsheep:item/energetic_wool_charge_overlay"
+        "layer1": "energeticsheep:block/energetic_wool_charge_overlay"
     }
 }

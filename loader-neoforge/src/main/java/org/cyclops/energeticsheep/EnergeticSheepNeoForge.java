@@ -12,6 +12,7 @@ import org.cyclops.cyclopscore.proxy.IClientProxy;
 import org.cyclops.cyclopscore.proxy.ICommonProxy;
 import org.cyclops.energeticsheep.biome.modifier.BiomeModifierSpawnEnergeticSheepConfig;
 import org.cyclops.energeticsheep.block.BlockEnergeticWoolConfigNeoForge;
+import org.cyclops.energeticsheep.block.blockentity.BlockEntityEnergeticWoolConfigNeoForge;
 import org.cyclops.energeticsheep.entity.EntityEnergeticSheepConfigNeoForge;
 import org.cyclops.energeticsheep.gametest.GameTestsCommon;
 import org.cyclops.energeticsheep.item.ItemEnergeticShearsConfigNeoForge;
@@ -64,6 +65,8 @@ public class EnergeticSheepNeoForge extends ModBaseNeoForge<EnergeticSheepNeoFor
         for (DyeColor color : DyeColor.values()) {
             configHandler.addConfigurable(new BlockEnergeticWoolConfigNeoForge(color));
         }
+
+        configHandler.addConfigurable(new BlockEntityEnergeticWoolConfigNeoForge());
 
         configHandler.addConfigurable(new BiomeModifierSpawnEnergeticSheepConfig());
     }

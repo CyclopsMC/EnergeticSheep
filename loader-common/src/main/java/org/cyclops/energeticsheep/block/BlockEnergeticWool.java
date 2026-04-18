@@ -12,16 +12,20 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.cyclops.energeticsheep.Reference;
+import org.cyclops.energeticsheep.RegistryEntries;
+import org.cyclops.energeticsheep.block.blockentity.BlockEntityEnergeticWool;
 
 /**
  * A block that can delay variables.
  * @author rubensworks
  */
-public class BlockEnergeticWool extends Block {
+public class BlockEnergeticWool extends Block implements EntityBlock {
 
     public static final ResourceKey<DamageType> DAMAGE_TYPE_SHOCK = ResourceKey.create(Registries.DAMAGE_TYPE, Identifier.fromNamespaceAndPath(Reference.MOD_ID, "energeticwool_shock"));
 
@@ -41,6 +45,11 @@ public class BlockEnergeticWool extends Block {
     @Override
     public VoxelShape getCollisionShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
         return COLLISION_SHAPE;
+    }
+
+    @Override
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new BlockEntityEnergeticWool(RegistryEntries.BLOCK_ENTITY_TYPE_ENERGETIC_WOOL.value(), pos, state);
     }
 
     @Override

@@ -4,7 +4,9 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import org.cyclops.cyclopscore.config.DeferredHolderCommon;
+import org.cyclops.energeticsheep.block.blockentity.BlockEntityEnergeticWool;
 import org.cyclops.energeticsheep.entity.EntityEnergeticSheepCommon;
 import org.cyclops.energeticsheep.item.ItemEnergeticShearsCommon;
 
@@ -34,5 +36,7 @@ public class RegistryEntries {
     public static final DeferredHolderCommon<Item, Item> ITEM_ENERGETIC_WOOL_BLACK = DeferredHolderCommon.create(Registries.ITEM, Identifier.parse("energeticsheep:black_energetic_wool"));
 
     public static final DeferredHolderCommon<EntityType<?>, EntityType<EntityEnergeticSheepCommon>> ENTITY_TYPE_ENERGETIC_SHEEP = DeferredHolderCommon.create(Registries.ENTITY_TYPE, Identifier.parse("energeticsheep:energetic_sheep"));
+
+    public static final DeferredHolderCommon<BlockEntityType<?>, BlockEntityType<BlockEntityEnergeticWool>> BLOCK_ENTITY_TYPE_ENERGETIC_WOOL = DeferredHolderCommon.create(Registries.BLOCK_ENTITY_TYPE, Identifier.parse("energeticsheep:energetic_wool"));
 
 }

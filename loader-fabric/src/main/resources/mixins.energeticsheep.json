@@ -6,6 +6,9 @@
   "mixins": [
     "MixinItemPredicate"
   ],
+  "client": [
+    "MixinSpecialModelRenderers"
+  ],
   "injectors": {
     "defaultRequire": 1
   },

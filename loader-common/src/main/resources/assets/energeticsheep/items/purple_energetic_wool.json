@@ -1,15 +1,6 @@
 {
     "model": {
-        "type": "minecraft:composite",
-        "models": [
-            {
-                "type": "minecraft:model",
-                "model": "minecraft:block/purple_wool"
-            },
-            {
-                "type": "minecraft:model",
-                "model": "energeticsheep:block/energetic_wool_charge_overlay_cube"
-            }
-        ]
+        "type": "minecraft:model",
+        "model": "energeticsheep:block/purple_energetic_wool"
     }
 }

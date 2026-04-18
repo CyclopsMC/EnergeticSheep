@@ -1,0 +1,10 @@
+{
+    "parent": "cyclopscore:block/cube_double_layer_all",
+    "textures": {
+        "all0": "minecraft:block/gray_wool",
+        "all1": {
+            "force_translucent": true,
+            "sprite": "energeticsheep:block/energetic_wool_charge_overlay"
+        }
+    }
+}

@@ -1,5 +1,7 @@
 {
   "variants": {
-    "": { "model": "block/purple_wool" }
+    "": {
+      "model": "energeticsheep:block/purple_energetic_wool"
+    }
   }
 }

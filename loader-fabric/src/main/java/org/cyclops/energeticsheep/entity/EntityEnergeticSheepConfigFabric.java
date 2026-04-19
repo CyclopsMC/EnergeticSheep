@@ -1,7 +1,6 @@
 package org.cyclops.energeticsheep.entity;
 
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
-import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.ModelLayerRegistry;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.fabric.api.lookup.v1.entity.EntityApiLookup;
@@ -19,8 +18,7 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import org.cyclops.cyclopscore.config.ConfigurablePropertyCommon;
 import org.cyclops.cyclopscore.config.ModConfigLocation;
 import org.cyclops.energeticsheep.EnergeticSheepFabric;
-import org.cyclops.energeticsheep.RegistryEntries;
-import org.cyclops.energeticsheep.client.render.blockentity.RenderBlockEntityEnergeticWool;
+import org.cyclops.energeticsheep.client.render.blockentity.ItemEnergeticWoolChargeSpecialRenderer;
 import org.cyclops.energeticsheep.entity.layers.LayerEnergeticSheepCharge;
 import org.jetbrains.annotations.Nullable;
 import team.reborn.energy.api.EnergyStorage;
@@ -80,8 +78,7 @@ public class EntityEnergeticSheepConfigFabric extends EntityEnergeticSheepConfig
 
     private void registerClientSideLayer() {
         ModelLayerRegistry.registerModelLayer(LayerEnergeticSheepCharge.MODEL_LAYER_FUR_SCALED, () -> LayerEnergeticSheepCharge.createFurLayer(1.05F));
-        ModelLayerRegistry.registerModelLayer(RenderBlockEntityEnergeticWool.MODEL_LAYER, RenderBlockEntityEnergeticWool::createLayer);
-        BlockEntityRendererRegistry.register(RegistryEntries.BLOCK_ENTITY_TYPE_ENERGETIC_WOOL.value(), RenderBlockEntityEnergeticWool::new);
+        ModelLayerRegistry.registerModelLayer(ItemEnergeticWoolChargeSpecialRenderer.MODEL_LAYER, ItemEnergeticWoolChargeSpecialRenderer::createLayer);
     }
 
     public void onLightning(Entity entity, ServerLevel world) {

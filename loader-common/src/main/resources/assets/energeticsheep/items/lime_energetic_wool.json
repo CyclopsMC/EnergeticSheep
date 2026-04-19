@@ -1,9 +1,18 @@
 {
     "model": {
-        "type": "minecraft:special",
-        "base": "energeticsheep:item/lime_energetic_wool",
-        "model": {
-            "type": "energeticsheep:energetic_wool_charge"
-        }
+        "type": "minecraft:composite",
+        "models": [
+            {
+                "type": "minecraft:model",
+                "model": "energeticsheep:item/lime_energetic_wool"
+            },
+            {
+                "type": "minecraft:special",
+                "base": "energeticsheep:item/lime_energetic_wool",
+                "model": {
+                    "type": "energeticsheep:energetic_wool_charge"
+                }
+            }
+        ]
     }
 }

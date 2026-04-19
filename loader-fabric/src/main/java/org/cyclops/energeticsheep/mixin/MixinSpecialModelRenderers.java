@@ -23,7 +23,7 @@ public class MixinSpecialModelRenderers {
     private static void registerEnergeticWoolChargeRenderer(CallbackInfo ci) {
         ID_MAPPER.put(
                 Identifier.fromNamespaceAndPath(Reference.MOD_ID, "energetic_wool_charge"),
-                ItemEnergeticWoolChargeSpecialRenderer.EnergeticWoolChargeUnbaked.CODEC
+                ItemEnergeticWoolChargeSpecialRenderer.Unbaked.CODEC
         );
     }
 

@@ -11,7 +11,6 @@ import org.cyclops.cyclopscore.init.ModBaseFabric;
 import org.cyclops.cyclopscore.proxy.IClientProxyCommon;
 import org.cyclops.cyclopscore.proxy.ICommonProxyCommon;
 import org.cyclops.energeticsheep.block.BlockEnergeticWoolConfigFabric;
-import org.cyclops.energeticsheep.block.blockentity.BlockEntityEnergeticWoolConfigFabric;
 import org.cyclops.energeticsheep.entity.EntityEnergeticSheepConfigFabric;
 import org.cyclops.energeticsheep.gametest.GameTestsCommon;
 import org.cyclops.energeticsheep.item.ItemEnergeticShearsConfigFabric;
@@ -67,8 +66,6 @@ public class EnergeticSheepFabric extends ModBaseFabric<EnergeticSheepFabric> im
         for (DyeColor color : DyeColor.values()) {
             configHandler.addConfigurable(new BlockEnergeticWoolConfigFabric(color));
         }
-
-        configHandler.addConfigurable(new BlockEntityEnergeticWoolConfigFabric());
     }
 
     @Override

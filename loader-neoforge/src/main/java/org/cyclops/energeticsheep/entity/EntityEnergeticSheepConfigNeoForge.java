@@ -15,9 +15,7 @@ import net.neoforged.neoforge.event.entity.EntityStruckByLightningEvent;
 import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 import org.cyclops.energeticsheep.EnergeticSheepNeoForge;
 import org.cyclops.energeticsheep.Reference;
-import org.cyclops.energeticsheep.RegistryEntries;
 import org.cyclops.energeticsheep.client.render.blockentity.ItemEnergeticWoolChargeSpecialRenderer;
-import org.cyclops.energeticsheep.client.render.blockentity.RenderBlockEntityEnergeticWool;
 import org.cyclops.energeticsheep.entity.layers.LayerEnergeticSheepCharge;
 import net.minecraft.resources.Identifier;
 
@@ -45,17 +43,16 @@ public class EntityEnergeticSheepConfigNeoForge extends EntityEnergeticSheepConf
 
     public void loadLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(LayerEnergeticSheepCharge.MODEL_LAYER_FUR_SCALED, () -> LayerEnergeticSheepCharge.createFurLayer(1.05F));
-        event.registerLayerDefinition(RenderBlockEntityEnergeticWool.MODEL_LAYER, RenderBlockEntityEnergeticWool::createLayer);
+        event.registerLayerDefinition(ItemEnergeticWoolChargeSpecialRenderer.MODEL_LAYER, ItemEnergeticWoolChargeSpecialRenderer::createLayer);
     }
 
     public void registerBlockEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        event.registerBlockEntityRenderer(RegistryEntries.BLOCK_ENTITY_TYPE_ENERGETIC_WOOL.value(), RenderBlockEntityEnergeticWool::new);
     }
 
     public void registerSpecialModelRenderers(RegisterSpecialModelRendererEvent event) {
         event.register(
                 Identifier.fromNamespaceAndPath(Reference.MOD_ID, "energetic_wool_charge"),
-                ItemEnergeticWoolChargeSpecialRenderer.EnergeticWoolChargeUnbaked.CODEC);
+                ItemEnergeticWoolChargeSpecialRenderer.Unbaked.CODEC);
     }
 
     public void registerCapabilities(RegisterCapabilitiesEvent event) {

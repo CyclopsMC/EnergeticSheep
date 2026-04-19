@@ -68,8 +68,11 @@ public class ItemEnergeticWoolChargeSpecialRenderer implements NoDataSpecialMode
         RenderType renderType = RenderTypes.energySwirl(CHARGE_TEXTURE, xOffset, yOffset);
         WoolChargeState state = new WoolChargeState();
         model.setupAnim(state);
+        // Alpha must be 0 so that the additive blend does not write to the atlas alpha channel.
+        // When the GUI atlas is blitted with premultiplied-alpha, pixels with alpha=0 act as
+        // additive overlays (result = swirl_rgb + screen_rgb), matching the in-world appearance.
         collector.order(1).submitModel(model, state, poseStack, renderType,
-                lightCoords, OverlayTexture.NO_OVERLAY, -8355712, null, 0, null);
+                lightCoords, OverlayTexture.NO_OVERLAY, 0x00808080, null, 0, null);
     }
 
     /**

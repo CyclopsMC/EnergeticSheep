@@ -8,6 +8,7 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterItemModelsEvent;
 import net.neoforged.neoforge.client.event.RegisterSpecialModelRendererEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
@@ -16,6 +17,7 @@ import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 import org.cyclops.energeticsheep.EnergeticSheepNeoForge;
 import org.cyclops.energeticsheep.Reference;
 import org.cyclops.energeticsheep.client.render.blockentity.ItemEnergeticWoolChargeSpecialRenderer;
+import org.cyclops.energeticsheep.client.render.item.AnimatedEnergeticWoolChargeItemModel;
 import org.cyclops.energeticsheep.entity.layers.LayerEnergeticSheepCharge;
 import net.minecraft.resources.Identifier;
 
@@ -31,6 +33,7 @@ public class EntityEnergeticSheepConfigNeoForge extends EntityEnergeticSheepConf
             getMod().getModEventBus().addListener(this::loadLayerDefinitions);
             getMod().getModEventBus().addListener(this::registerBlockEntityRenderers);
             getMod().getModEventBus().addListener(this::registerSpecialModelRenderers);
+            getMod().getModEventBus().addListener(this::registerItemModels);
         }
         getMod().getModEventBus().addListener(this::registerCapabilities);
         getMod().getModEventBus().addListener(this::registerSpawnPlacements);
@@ -53,6 +56,12 @@ public class EntityEnergeticSheepConfigNeoForge extends EntityEnergeticSheepConf
         event.register(
                 Identifier.fromNamespaceAndPath(Reference.MOD_ID, "energetic_wool_charge"),
                 ItemEnergeticWoolChargeSpecialRenderer.Unbaked.CODEC);
+    }
+
+    public void registerItemModels(RegisterItemModelsEvent event) {
+        event.register(
+                Identifier.fromNamespaceAndPath(Reference.MOD_ID, "energetic_wool_charge_item"),
+                AnimatedEnergeticWoolChargeItemModel.Unbaked.CODEC);
     }
 
     public void registerCapabilities(RegisterCapabilitiesEvent event) {

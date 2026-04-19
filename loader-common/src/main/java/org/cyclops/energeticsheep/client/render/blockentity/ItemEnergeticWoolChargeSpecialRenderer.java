@@ -15,6 +15,7 @@ import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
+import org.cyclops.energeticsheep.client.EnergeticSheepRenderTypes;
 import net.minecraft.client.renderer.special.NoDataSpecialModelRenderer;
 import net.minecraft.client.renderer.special.SpecialModelRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -65,14 +66,11 @@ public class ItemEnergeticWoolChargeSpecialRenderer implements NoDataSpecialMode
                 : 0f;
         float xOffset = t * 0.01F;
         float yOffset = t * 0.01F;
-        RenderType renderType = RenderTypes.energySwirl(CHARGE_TEXTURE, xOffset, yOffset);
+        RenderType renderType = EnergeticSheepRenderTypes.energySwirlPreserveAlpha(CHARGE_TEXTURE, xOffset, yOffset);
         WoolChargeState state = new WoolChargeState();
         model.setupAnim(state);
-        // Alpha must be 0 so that the additive blend does not write to the atlas alpha channel.
-        // When the GUI atlas is blitted with premultiplied-alpha, pixels with alpha=0 act as
-        // additive overlays (result = swirl_rgb + screen_rgb), matching the in-world appearance.
         collector.order(1).submitModel(model, state, poseStack, renderType,
-                lightCoords, OverlayTexture.NO_OVERLAY, 0x00808080, null, 0, null);
+                lightCoords, OverlayTexture.NO_OVERLAY, -8355712, null, 0, null);
     }
 
     /**

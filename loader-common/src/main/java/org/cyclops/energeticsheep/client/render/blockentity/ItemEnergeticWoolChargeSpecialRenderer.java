@@ -12,8 +12,6 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
@@ -23,6 +21,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.Level;
 import org.cyclops.energeticsheep.Reference;
+import org.cyclops.energeticsheep.client.EnergeticSheepRenderTypes;
 
 import java.util.function.Consumer;
 
@@ -70,8 +69,14 @@ public class ItemEnergeticWoolChargeSpecialRenderer implements NoDataSpecialMode
         RenderType renderType = EnergeticSheepRenderTypes.energySwirlPreserveAlpha(CHARGE_TEXTURE, xOffset, yOffset);
         WoolChargeState state = new WoolChargeState();
         model.setupAnim(state);
-        collector.order(1).submitModel(model, state, poseStack, renderType,
-                lightCoords, OverlayTexture.NO_OVERLAY, -8355712, null, 0, null);
+        // Use submitCustomGeometry so the swirl is submitted to the translucent pass (hasBlending=true),
+        // which executes AFTER the solid wool geometry. This ensures the swirl renders on top of the wool
+        // rather than being overwritten by it.
+        collector.submitCustomGeometry(poseStack, renderType, (capturedPose, buffer) -> {
+            PoseStack ps = new PoseStack();
+            ps.last().set(capturedPose);
+            model.renderToBuffer(ps, buffer, lightCoords, OverlayTexture.NO_OVERLAY, -8355712);
+        });
     }
 
     /**

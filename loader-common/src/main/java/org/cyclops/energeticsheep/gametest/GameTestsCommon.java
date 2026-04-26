@@ -4,8 +4,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.sheep.Sheep;
@@ -18,6 +20,7 @@ import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import org.cyclops.energeticsheep.entity.EntityEnergeticSheepConfigCommon;
 import org.cyclops.cyclopscore.gametest.GameTest;
 import org.cyclops.energeticsheep.Reference;
 import org.cyclops.energeticsheep.RegistryEntries;
@@ -200,6 +203,177 @@ public class GameTestsCommon {
             helper.assertItemEntityNotPresent(Items.WHITE_WOOL);
             helper.assertTrue(RegistryEntries.ITEM_ENERGETIC_SHEARS.value().getEnergyStored(player.getMainHandItem()) == 0, Component.literal("Shears do not have enough energy"));
             helper.assertTrue(result.equals(InteractionResult.PASS), Component.literal("Interaction did not pass"));
+        });
+    }
+
+    @GameTest(template = TEMPLATE_EMPTY)
+    public void testBreedEnergeticWithRegularCanMate(GameTestHelper helper) {
+        EntityEnergeticSheepCommon energetic = SPAWN(helper);
+        Sheep regular = SPAWN_REGULAR(helper);
+
+        energetic.setInLove(null);
+        regular.setInLove(null);
+
+        helper.succeedWhen(() -> {
+            helper.assertTrue(energetic.canMate(regular), Component.literal("Energetic sheep should be able to mate with regular sheep"));
+        });
+    }
+
+    @GameTest(template = TEMPLATE_EMPTY)
+    public void testBreedEnergeticWithRegularCanNotMateWhenNotInLove(GameTestHelper helper) {
+        EntityEnergeticSheepCommon energetic = SPAWN(helper);
+        Sheep regular = SPAWN_REGULAR(helper);
+
+        // Neither in love
+        helper.succeedWhen(() -> {
+            helper.assertFalse(energetic.canMate(regular), Component.literal("Energetic sheep should not be able to mate with regular sheep when not in love"));
+        });
+    }
+
+    @GameTest(template = TEMPLATE_EMPTY)
+    public void testBreedEnergeticWithEnergeticCanMate(GameTestHelper helper) {
+        EntityEnergeticSheepCommon energetic1 = SPAWN(helper);
+        EntityEnergeticSheepCommon energetic2 = SPAWN(helper);
+
+        energetic1.setInLove(null);
+        energetic2.setInLove(null);
+
+        helper.succeedWhen(() -> {
+            helper.assertTrue(energetic1.canMate(energetic2), Component.literal("Energetic sheep should be able to mate with another energetic sheep"));
+        });
+    }
+
+    @GameTest(template = TEMPLATE_EMPTY)
+    public void testBreedEnergeticWithRegularProducesEnergetic(GameTestHelper helper) {
+        EntityEnergeticSheepCommon energetic = SPAWN(helper);
+        Sheep regular = SPAWN_REGULAR(helper);
+
+        // Force energetic offspring by setting chance to 1
+        int oldChance = EntityEnergeticSheepConfigCommon.babyChance;
+        EntityEnergeticSheepConfigCommon.babyChance = 1;
+        energetic.setInLove(null);
+        regular.setInLove(null);
+
+        helper.succeedWhen(() -> {
+            AgeableMob offspring = energetic.getBreedOffspring((ServerLevel) helper.getLevel(), regular);
+            EntityEnergeticSheepConfigCommon.babyChance = oldChance;
+            helper.assertTrue(offspring instanceof EntityEnergeticSheepCommon, Component.literal("Offspring should be an energetic sheep when chance is 1"));
+        });
+    }
+
+    @GameTest(template = TEMPLATE_EMPTY)
+    public void testBreedEnergeticWithRegularProducesRegular(GameTestHelper helper) {
+        EntityEnergeticSheepCommon energetic = SPAWN(helper);
+        Sheep regular = SPAWN_REGULAR(helper);
+
+        // Force regular offspring by setting chance to 0
+        int oldChance = EntityEnergeticSheepConfigCommon.babyChance;
+        EntityEnergeticSheepConfigCommon.babyChance = 0;
+        energetic.setInLove(null);
+        regular.setInLove(null);
+
+        helper.succeedWhen(() -> {
+            AgeableMob offspring = energetic.getBreedOffspring((ServerLevel) helper.getLevel(), regular);
+            EntityEnergeticSheepConfigCommon.babyChance = oldChance;
+            helper.assertFalse(offspring instanceof EntityEnergeticSheepCommon, Component.literal("Offspring should be a regular sheep when chance is 0"));
+            helper.assertTrue(offspring instanceof Sheep, Component.literal("Offspring should be a Sheep"));
+        });
+    }
+
+    @GameTest(template = TEMPLATE_EMPTY)
+    public void testBreedEnergeticWithEnergeticProducesEnergetic(GameTestHelper helper) {
+        EntityEnergeticSheepCommon energetic1 = SPAWN(helper);
+        EntityEnergeticSheepCommon energetic2 = SPAWN(helper);
+
+        // Force energetic offspring
+        int oldChance = EntityEnergeticSheepConfigCommon.babyChance;
+        EntityEnergeticSheepConfigCommon.babyChance = 1;
+        energetic1.setInLove(null);
+        energetic2.setInLove(null);
+
+        helper.succeedWhen(() -> {
+            AgeableMob offspring = energetic1.getBreedOffspring((ServerLevel) helper.getLevel(), energetic2);
+            EntityEnergeticSheepConfigCommon.babyChance = oldChance;
+            helper.assertTrue(offspring instanceof EntityEnergeticSheepCommon, Component.literal("Offspring should be an energetic sheep when both parents are energetic"));
+        });
+    }
+
+    @GameTest(template = TEMPLATE_EMPTY)
+    public void testBreedEnergeticSameColorKeepsColor(GameTestHelper helper) {
+        EntityEnergeticSheepCommon energetic1 = SPAWN(helper);
+        EntityEnergeticSheepCommon energetic2 = SPAWN(helper);
+        energetic1.setFleeceColorInternal(DyeColor.RED);
+        energetic2.setFleeceColorInternal(DyeColor.RED);
+
+        int oldChance = EntityEnergeticSheepConfigCommon.babyChance;
+        EntityEnergeticSheepConfigCommon.babyChance = 1;
+        energetic1.setInLove(null);
+        energetic2.setInLove(null);
+
+        helper.succeedWhen(() -> {
+            AgeableMob offspring = energetic1.getBreedOffspring((ServerLevel) helper.getLevel(), energetic2);
+            EntityEnergeticSheepConfigCommon.babyChance = oldChance;
+            helper.assertTrue(offspring instanceof EntityEnergeticSheepCommon, Component.literal("Offspring should be energetic"));
+            helper.assertTrue(((Sheep) offspring).getColor() == DyeColor.RED, Component.literal("Same-colored parents should produce same-colored energetic offspring"));
+        });
+    }
+
+    @GameTest(template = TEMPLATE_EMPTY)
+    public void testBreedEnergeticWithRegularSameColorKeepsColor(GameTestHelper helper) {
+        EntityEnergeticSheepCommon energetic = SPAWN(helper);
+        energetic.setFleeceColorInternal(DyeColor.BLUE);
+        Sheep regular = SPAWN_REGULAR(helper);
+        regular.setColor(DyeColor.BLUE);
+
+        int oldChance = EntityEnergeticSheepConfigCommon.babyChance;
+        EntityEnergeticSheepConfigCommon.babyChance = 1;
+        energetic.setInLove(null);
+        regular.setInLove(null);
+
+        helper.succeedWhen(() -> {
+            AgeableMob offspring = energetic.getBreedOffspring((ServerLevel) helper.getLevel(), regular);
+            EntityEnergeticSheepConfigCommon.babyChance = oldChance;
+            helper.assertTrue(offspring instanceof EntityEnergeticSheepCommon, Component.literal("Offspring should be energetic"));
+            helper.assertTrue(((Sheep) offspring).getColor() == DyeColor.BLUE, Component.literal("Same-colored parents should produce same-colored energetic offspring"));
+        });
+    }
+
+    @GameTest(template = TEMPLATE_EMPTY, timeoutTicks = 200)
+    public void testBreedEnergeticWithRegularViaBreedGoal(GameTestHelper helper) {
+        EntityEnergeticSheepCommon energetic = SPAWN(helper);
+        Sheep regular = SPAWN_REGULAR(helper);
+
+        // Put both sheep in love mode directly (Animal.mobInteract only calls setInLove for ServerPlayer,
+        // but we want to test that the BreedGoal itself works when both are in love)
+        energetic.setInLove(null);
+        regular.setInLove(null);
+
+        helper.assertTrue(energetic.isInLove(), Component.literal("Energetic sheep should be in love"));
+        helper.assertTrue(regular.isInLove(), Component.literal("Regular sheep should be in love"));
+
+        // Wait for the BreedGoal to run and produce a baby (love mode will be cleared after breeding)
+        helper.succeedWhen(() -> {
+            long totalBabies = helper.getLevel().getEntitiesOfClass(Sheep.class, energetic.getBoundingBox().inflate(16), e -> e.isBaby()).size();
+            helper.assertTrue(totalBabies >= 1, Component.literal("A baby sheep should have spawned from the cross-breed"));
+        });
+    }
+
+    @GameTest(template = TEMPLATE_EMPTY, timeoutTicks = 200)
+    public void testBreedEnergeticWithEnergeticViaBreedGoal(GameTestHelper helper) {
+        EntityEnergeticSheepCommon energetic1 = SPAWN(helper);
+        EntityEnergeticSheepCommon energetic2 = SPAWN(helper);
+
+        // Put both energetic sheep in love mode directly
+        energetic1.setInLove(null);
+        energetic2.setInLove(null);
+
+        helper.assertTrue(energetic1.isInLove(), Component.literal("Energetic sheep 1 should be in love"));
+        helper.assertTrue(energetic2.isInLove(), Component.literal("Energetic sheep 2 should be in love"));
+
+        // Wait for the BreedGoal to run and produce a baby (love mode will be cleared after breeding)
+        helper.succeedWhen(() -> {
+            long totalBabies = helper.getLevel().getEntitiesOfClass(Sheep.class, energetic1.getBoundingBox().inflate(16), e -> e.isBaby()).size();
+            helper.assertTrue(totalBabies >= 1, Component.literal("A baby sheep should have spawned from energetic x energetic breeding"));
         });
     }
 

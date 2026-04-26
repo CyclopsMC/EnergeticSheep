@@ -22,9 +22,11 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
 import net.minecraft.world.entity.animal.sheep.Sheep;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -133,6 +135,10 @@ public abstract class EntityEnergeticSheepCommon extends Sheep {
         this.targetSelector.removeGoal(this.eatBlockGoal);
         this.eatBlockGoal = new EntityAIEatGrassFast(this);
         this.targetSelector.addGoal(5, this.eatBlockGoal);
+        // Replace the vanilla BreedGoal (which only searches for same-class entities) with one
+        // that uses Sheep.class as partnerClass, so energetic sheep can also breed with regular sheep.
+        this.goalSelector.removeAllGoals(goal -> goal instanceof BreedGoal);
+        this.goalSelector.addGoal(2, new BreedGoal(this, 1.0, Sheep.class));
     }
 
     @Override
@@ -210,18 +216,35 @@ public abstract class EntityEnergeticSheepCommon extends Sheep {
         this.powerBreeding = input.getBooleanOr("powerBreeding", false);
     }
 
+    @Override
+    public boolean canMate(Animal otherAnimal) {
+        if (otherAnimal == this) {
+            return false;
+        }
+        if (!this.isInLove() || !otherAnimal.isInLove()) {
+            return false;
+        }
+        // Allow mating with regular sheep as well as other energetic sheep
+        return otherAnimal instanceof Sheep;
+    }
+
     // MCP: createChild
     @Override
     public Sheep getBreedOffspring(ServerLevel world, AgeableMob ageable) {
         int chance = this.powerBreeding
                 ? EntityEnergeticSheepConfigCommon.babyChancePowerBreeding : EntityEnergeticSheepConfigCommon.babyChance;
         this.powerBreeding = false;
+
+        // Determine the other parent's color (works for both regular and energetic sheep)
+        Sheep otherSheep = (Sheep) ageable;
+        boolean otherIsEnergetic = ageable instanceof EntityEnergeticSheepCommon;
+
         if (chance > 0 && this.random.nextInt(chance) == 0) {
             EntityEnergeticSheepCommon child = RegistryEntries.ENTITY_TYPE_ENERGETIC_SHEEP.value().create(world, EntitySpawnReason.BREEDING);
 
             // If parents have equal color, child has same color, otherwise random.
             DyeColor color;
-            if (this.getColor() == ((EntityEnergeticSheepCommon) ageable).getColor()) {
+            if (this.getColor() == otherSheep.getColor()) {
                 color = this.getColor();
             } else {
                 color = getRandomColor(this.random);
@@ -230,6 +253,12 @@ public abstract class EntityEnergeticSheepCommon extends Sheep {
 
             return child;
         }
+
+        // When cross-breeding with a regular sheep, produce a regular sheep baby
+        if (!otherIsEnergetic) {
+            return super.getBreedOffspring(world, ageable);
+        }
+
         return super.getBreedOffspring(world, ageable);
     }
 
@@ -305,7 +334,7 @@ public abstract class EntityEnergeticSheepCommon extends Sheep {
         // Do nothing, we don't allow custom color setting
     }
 
-    protected void setFleeceColorInternal(DyeColor color) {
+    public void setFleeceColorInternal(DyeColor color) {
         super.setColor(color);
         this.initializeEnergy(color);
     }

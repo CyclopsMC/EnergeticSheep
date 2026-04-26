@@ -1,0 +1,6 @@
+As always, don't forget to backup your world before updating!
+Requires CyclopsCore version 1.29.5 or higher.
+
+Fixes:
+* Fix broken baby energetic sheep model since 26.1 update
+* Allow cross-breeding with regular sheep

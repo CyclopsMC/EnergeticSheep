@@ -1,5 +1,6 @@
 package org.cyclops.energeticsheep.client.render.entity;
 
+import net.minecraft.client.model.animal.sheep.BabySheepModel;
 import net.minecraft.client.model.animal.sheep.SheepModel;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.entity.AgeableMobRenderer;
@@ -23,6 +24,7 @@ import org.cyclops.energeticsheep.entity.layers.LayerEnergeticSheepCharge;
 public class RenderEntityEnergeticSheep extends AgeableMobRenderer<EntityEnergeticSheepCommon, EntityRenderStateEnergeticSheep, SheepModel> {
 
     private Identifier texture;
+    private Identifier textureBaby;
 
     /**
      * Make a new instance.
@@ -30,15 +32,16 @@ public class RenderEntityEnergeticSheep extends AgeableMobRenderer<EntityEnerget
      * @param config Then config.
      */
     public RenderEntityEnergeticSheep(EntityRendererProvider.Context renderContext, ExtendedConfigCommon<?, ?, ?> config) {
-        super(renderContext, new SheepModel(renderContext.bakeLayer(ModelLayers.SHEEP)), new SheepModel(renderContext.bakeLayer(ModelLayers.SHEEP_BABY)), 0.7F);
+        super(renderContext, new SheepModel(renderContext.bakeLayer(ModelLayers.SHEEP)), new BabySheepModel(renderContext.bakeLayer(ModelLayers.SHEEP_BABY)), 0.7F);
         this.addLayer((RenderLayer) new SheepWoolLayer((RenderLayerParent) this, renderContext.getModelSet()));
         this.addLayer((RenderLayer) new LayerEnergeticSheepCharge((RenderLayerParent) this, renderContext.getModelSet()));
         texture = Identifier.fromNamespaceAndPath(Reference.MOD_ID, "textures/entities/" + config.getNamedId() + ".png");
+        textureBaby = Identifier.fromNamespaceAndPath(Reference.MOD_ID, "textures/entities/" + config.getNamedId() + "_baby.png");
     }
 
     @Override
     public Identifier getTextureLocation(EntityRenderStateEnergeticSheep renderState) {
-        return texture;
+        return renderState.isBaby ? textureBaby : texture;
     }
 
     @Override

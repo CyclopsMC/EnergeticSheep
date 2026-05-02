@@ -1,8 +1,16 @@
 # Changelog for Minecraft 26.1.2
 All notable changes to this project will be documented in this file.
 
+<a name="26.1.2-1.2.0"></a>
+## [26.1.2-1.2.0](https://github.com/CyclopsMC/EnergeticSheep/compare/26.1.2-1.1.20...26.1.2-1.2.0) - 2026-05-02 15:36:00
+
+
+### Added
+* Add Dispenser actions for Energetic Shears, Closes #46
+* Add charged animation overlay to energetic wool items (#53)
+
 <a name="26.1.2-1.1.20"></a>
-## [26.1.2-1.1.20](https://github.com/CyclopsMC/EnergeticSheep/compare/26.1.2-1.1.19...26.1.2-1.1.20) - 2026-04-26 15:26:26
+## [26.1.2-1.1.20](https://github.com/CyclopsMC/EnergeticSheep/compare/26.1.2-1.1.19...26.1.2-1.1.20) - 2026-04-26 15:26:26 +0200
 
 
 ### Fixed

@@ -19,6 +19,7 @@ import net.minecraft.client.renderer.special.NoDataSpecialModelRenderer;
 import net.minecraft.client.renderer.special.SpecialModelRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.ARGB;
 import net.minecraft.world.level.Level;
 import org.cyclops.energeticsheep.Reference;
 import org.cyclops.energeticsheep.client.EnergeticSheepRenderTypes;
@@ -75,7 +76,7 @@ public class ItemEnergeticWoolChargeSpecialRenderer implements NoDataSpecialMode
         collector.submitCustomGeometry(poseStack, renderType, (capturedPose, buffer) -> {
             PoseStack ps = new PoseStack();
             ps.last().set(capturedPose);
-            model.renderToBuffer(ps, buffer, lightCoords, OverlayTexture.NO_OVERLAY, -8355712);
+            model.renderToBuffer(ps, buffer, lightCoords, OverlayTexture.NO_OVERLAY, ARGB.color(100, 255, 255, 255));
         });
     }
 

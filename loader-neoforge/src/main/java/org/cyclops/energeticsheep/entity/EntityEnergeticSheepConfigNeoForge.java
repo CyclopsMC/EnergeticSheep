@@ -14,9 +14,7 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.entity.EntityStruckByLightningEvent;
 import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
-import net.neoforged.neoforge.client.event.RegisterRenderPipelinesEvent;
 import org.cyclops.energeticsheep.EnergeticSheepNeoForge;
-import org.cyclops.energeticsheep.client.EnergeticSheepRenderTypes;
 import org.cyclops.energeticsheep.Reference;
 import org.cyclops.energeticsheep.client.render.blockentity.ItemEnergeticWoolChargeSpecialRenderer;
 import org.cyclops.energeticsheep.client.render.item.AnimatedEnergeticWoolChargeItemModel;
@@ -33,10 +31,8 @@ public class EntityEnergeticSheepConfigNeoForge extends EntityEnergeticSheepConf
         getMod().getModEventBus().addListener(this::onEntityAttributesCreation);
         if (getMod().getModHelpers().getMinecraftHelpers().isClientSide()) {
             getMod().getModEventBus().addListener(this::loadLayerDefinitions);
-            getMod().getModEventBus().addListener(this::registerBlockEntityRenderers);
             getMod().getModEventBus().addListener(this::registerSpecialModelRenderers);
             getMod().getModEventBus().addListener(this::registerItemModels);
-            getMod().getModEventBus().addListener(this::registerRenderPipelines);
         }
         getMod().getModEventBus().addListener(this::registerCapabilities);
         getMod().getModEventBus().addListener(this::registerSpawnPlacements);
@@ -50,13 +46,6 @@ public class EntityEnergeticSheepConfigNeoForge extends EntityEnergeticSheepConf
     public void loadLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(LayerEnergeticSheepCharge.MODEL_LAYER_FUR_SCALED, () -> LayerEnergeticSheepCharge.createFurLayer(1.05F));
         event.registerLayerDefinition(ItemEnergeticWoolChargeSpecialRenderer.MODEL_LAYER, ItemEnergeticWoolChargeSpecialRenderer::createLayer);
-    }
-
-    public void registerBlockEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
-    }
-
-    public void registerRenderPipelines(RegisterRenderPipelinesEvent event) {
-        event.registerPipeline(EnergeticSheepRenderTypes.ENERGY_SWIRL_PRESERVE_ALPHA);
     }
 
     public void registerSpecialModelRenderers(RegisterSpecialModelRendererEvent event) {

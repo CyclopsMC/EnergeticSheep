@@ -18,6 +18,7 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import org.cyclops.cyclopscore.config.ConfigurablePropertyCommon;
 import org.cyclops.cyclopscore.config.ModConfigLocation;
 import org.cyclops.energeticsheep.EnergeticSheepFabric;
+import org.cyclops.energeticsheep.client.render.blockentity.ItemEnergeticWoolChargeSpecialRenderer;
 import org.cyclops.energeticsheep.entity.layers.LayerEnergeticSheepCharge;
 import org.jetbrains.annotations.Nullable;
 import team.reborn.energy.api.EnergyStorage;
@@ -77,6 +78,7 @@ public class EntityEnergeticSheepConfigFabric extends EntityEnergeticSheepConfig
 
     private void registerClientSideLayer() {
         ModelLayerRegistry.registerModelLayer(LayerEnergeticSheepCharge.MODEL_LAYER_FUR_SCALED, () -> LayerEnergeticSheepCharge.createFurLayer(1.05F));
+        ModelLayerRegistry.registerModelLayer(ItemEnergeticWoolChargeSpecialRenderer.MODEL_LAYER, ItemEnergeticWoolChargeSpecialRenderer::createLayer);
     }
 
     public void onLightning(Entity entity, ServerLevel world) {

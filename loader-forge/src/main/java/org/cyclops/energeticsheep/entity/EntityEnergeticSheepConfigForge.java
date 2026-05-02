@@ -10,6 +10,7 @@ import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.EntityStruckByLightningEvent;
 import net.minecraftforge.event.entity.SpawnPlacementRegisterEvent;
 import org.cyclops.energeticsheep.EnergeticSheepForge;
+import org.cyclops.energeticsheep.client.render.blockentity.ItemEnergeticWoolChargeSpecialRenderer;
 import org.cyclops.energeticsheep.entity.layers.LayerEnergeticSheepCharge;
 
 /**
@@ -33,6 +34,7 @@ public class EntityEnergeticSheepConfigForge extends EntityEnergeticSheepConfigC
 
     public void loadLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(LayerEnergeticSheepCharge.MODEL_LAYER_FUR_SCALED, () -> LayerEnergeticSheepCharge.createFurLayer(1.05F));
+        event.registerLayerDefinition(ItemEnergeticWoolChargeSpecialRenderer.MODEL_LAYER, ItemEnergeticWoolChargeSpecialRenderer::createLayer);
     }
 
     public void registerSpawnPlacements(SpawnPlacementRegisterEvent event) {

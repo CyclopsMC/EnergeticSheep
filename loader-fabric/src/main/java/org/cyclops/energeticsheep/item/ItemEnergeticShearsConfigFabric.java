@@ -1,5 +1,6 @@
 package org.cyclops.energeticsheep.item;
 
+import net.minecraft.core.dispenser.DispenseItemBehavior;
 import org.cyclops.energeticsheep.EnergeticSheepFabric;
 import team.reborn.energy.api.EnergyStorage;
 import team.reborn.energy.api.base.SimpleEnergyItem;
@@ -25,5 +26,10 @@ public class ItemEnergeticShearsConfigFabric extends ItemEnergeticShearsConfigCo
                 (itemStack, context) -> SimpleEnergyItem.createStorage(context, ItemEnergeticShearsConfigCommon.capacity, Integer.MAX_VALUE, Integer.MAX_VALUE),
                 getInstance()
         );
+    }
+
+    @Override
+    protected DispenseItemBehavior createDispenseBehavior() {
+        return new EnergeticShearsDispenseItemBehaviorFabric();
     }
 }

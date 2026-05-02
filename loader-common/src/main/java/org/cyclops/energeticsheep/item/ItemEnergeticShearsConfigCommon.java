@@ -2,8 +2,11 @@ package org.cyclops.energeticsheep.item;
 
 
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.dispenser.DispenseItemBehavior;
+import net.minecraft.core.dispenser.ShearsDispenseItemBehavior;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ShearsItem;
+import net.minecraft.world.level.block.DispenserBlock;
 import org.cyclops.cyclopscore.RegistryEntriesCommon;
 import org.cyclops.cyclopscore.config.ConfigurablePropertyCommon;
 import org.cyclops.cyclopscore.config.ModConfigLocation;
@@ -43,4 +46,13 @@ public class ItemEnergeticShearsConfigCommon<M extends IModBase> extends ItemCon
                 .durability(1);
     }
 
+    @Override
+    public void onRegistryRegistered() {
+        super.onRegistryRegistered();
+        DispenserBlock.registerBehavior(getInstance(), createDispenseBehavior());
+    }
+
+    protected DispenseItemBehavior createDispenseBehavior() {
+        return new ShearsDispenseItemBehavior();
+    }
 }

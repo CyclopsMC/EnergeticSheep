@@ -2,6 +2,8 @@ package org.cyclops.energeticsheep.gametest;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.dispenser.BlockSource;
+import net.minecraft.core.dispenser.DispenseItemBehavior;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -18,6 +20,8 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.DispenserBlock;
+import net.minecraft.world.level.block.entity.DispenserBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import org.cyclops.energeticsheep.entity.EntityEnergeticSheepConfigCommon;
@@ -376,6 +380,71 @@ public class GameTestsCommon {
             helper.assertTrue(totalBabies >= 1, Component.literal("A baby sheep should have spawned from energetic x energetic breeding"));
         });
     }
+
+    @GameTest(template = TEMPLATE_EMPTY)
+    public void testDispenseEnergeticShears(GameTestHelper helper) {
+        // Place dispenser facing east
+        BlockPos dispenserPos = POS.west();
+        helper.setBlock(dispenserPos, Blocks.DISPENSER.defaultBlockState().setValue(DispenserBlock.FACING, Direction.EAST));
+
+        // Spawn energetic sheep directly in front of the dispenser (at POS)
+        EntityEnergeticSheepCommon entity = helper.spawn(RegistryEntries.ENTITY_TYPE_ENERGETIC_SHEEP.value(), POS);
+        entity.finalizeSpawn(helper.getLevel(), helper.getLevel().getCurrentDifficultyAt(helper.absolutePos(POS)), EntitySpawnReason.NATURAL, null);
+
+        // Put energetic shears (empty, no charge) into the dispenser
+        DispenserBlockEntity dispenserBlockEntity = (DispenserBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(dispenserPos));
+        ItemStack shearsStack = new ItemStack(RegistryEntries.ITEM_ENERGETIC_SHEARS);
+        dispenserBlockEntity.setItem(0, shearsStack);
+
+        helper.succeedWhen(() -> {
+            // Trigger the dispense behavior directly
+            BlockState dispenserState = helper.getBlockState(dispenserPos);
+            BlockSource blockSource = new BlockSource(helper.getLevel(), helper.absolutePos(dispenserPos), dispenserState, dispenserBlockEntity);
+            DispenseItemBehavior behavior = DispenserBlock.DISPENSER_REGISTRY.get(RegistryEntries.ITEM_ENERGETIC_SHEARS.value());
+            ItemStack result = behavior.dispense(blockSource, dispenserBlockEntity.getItem(0));
+            dispenserBlockEntity.setItem(0, result);
+
+            // Energy should have been transferred from sheep to shears
+            helper.assertTrue(RegistryEntries.ITEM_ENERGETIC_SHEARS.value().getEnergyStored(result) > 0, Component.literal("Shears should have energy after dispensing on energetic sheep"));
+            // No wool should have been dropped
+            helper.assertItemEntityNotPresent(entity.getWoolByColor().get(entity.getColor()).asItem());
+        });
+    }
+
+    @GameTest(template = TEMPLATE_EMPTY)
+    public void testDispenseEnergeticShearsOnRegularSheep(GameTestHelper helper) {
+        // Place dispenser facing east
+        BlockPos dispenserPos = POS.west();
+        helper.setBlock(dispenserPos, Blocks.DISPENSER.defaultBlockState().setValue(DispenserBlock.FACING, Direction.EAST));
+
+        // Spawn regular white sheep directly in front of the dispenser (at POS)
+        Sheep entity = helper.spawn(EntityType.SHEEP, POS);
+        entity.finalizeSpawn(helper.getLevel(), helper.getLevel().getCurrentDifficultyAt(helper.absolutePos(POS)), EntitySpawnReason.NATURAL, null);
+        entity.setColor(DyeColor.WHITE);
+
+        // Put energetic shears (fully charged) into the dispenser
+        DispenserBlockEntity dispenserBlockEntity = (DispenserBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(dispenserPos));
+        Player tempPlayer = helper.makeMockPlayer(GameType.SURVIVAL);
+        ItemStack shearsStack = new ItemStack(RegistryEntries.ITEM_ENERGETIC_SHEARS);
+        tempPlayer.setItemInHand(InteractionHand.MAIN_HAND, shearsStack);
+        RegistryEntries.ITEM_ENERGETIC_SHEARS.value().setEnergyStored(shearsStack, RegistryEntries.ITEM_ENERGETIC_SHEARS.value().getMaxEnergyStored(shearsStack), tempPlayer, InteractionHand.MAIN_HAND);
+        dispenserBlockEntity.setItem(0, tempPlayer.getMainHandItem());
+
+        helper.succeedWhen(() -> {
+            // Trigger the dispense behavior directly
+            BlockState dispenserState = helper.getBlockState(dispenserPos);
+            BlockSource blockSource = new BlockSource(helper.getLevel(), helper.absolutePos(dispenserPos), dispenserState, dispenserBlockEntity);
+            DispenseItemBehavior behavior = DispenserBlock.DISPENSER_REGISTRY.get(RegistryEntries.ITEM_ENERGETIC_SHEARS.value());
+            ItemStack result = behavior.dispense(blockSource, dispenserBlockEntity.getItem(0));
+            dispenserBlockEntity.setItem(0, result);
+
+            // Regular wool should have been dropped
+            helper.assertItemEntityPresent(Items.WHITE_WOOL);
+            // Some energy should have been consumed from the shears
+            helper.assertTrue(RegistryEntries.ITEM_ENERGETIC_SHEARS.value().getEnergyStored(result) < RegistryEntries.ITEM_ENERGETIC_SHEARS.value().getMaxEnergyStored(result), Component.literal("Energy should have been consumed from shears after shearing regular sheep"));
+        });
+    }
+
 
     protected static EntityEnergeticSheepCommon SPAWN(GameTestHelper helper) {
         EntityEnergeticSheepCommon entity = helper.spawn(RegistryEntries.ENTITY_TYPE_ENERGETIC_SHEEP.value(), POS.above());

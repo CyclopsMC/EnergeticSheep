@@ -1,5 +1,6 @@
 package org.cyclops.energeticsheep.item;
 
+import net.minecraft.core.dispenser.DispenseItemBehavior;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.transfer.energy.ItemAccessEnergyHandler;
@@ -24,5 +25,10 @@ public class ItemEnergeticShearsConfigNeoForge extends ItemEnergeticShearsConfig
                 (stack, itemAccess) -> new ItemAccessEnergyHandler(itemAccess, RegistryEntries.COMPONENT_ENERGY_STORAGE.get(), ItemEnergeticShearsConfigCommon.capacity, Integer.MAX_VALUE, Integer.MAX_VALUE),
                 getInstance()
         );
+    }
+
+    @Override
+    protected DispenseItemBehavior createDispenseBehavior() {
+        return new EnergeticShearsDispenseItemBehaviorNeoForge();
     }
 }

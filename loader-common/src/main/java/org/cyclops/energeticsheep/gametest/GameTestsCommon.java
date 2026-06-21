@@ -12,6 +12,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.animal.sheep.Sheep;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
@@ -24,12 +25,13 @@ import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.entity.DispenserBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import org.cyclops.energeticsheep.entity.EntityEnergeticSheepConfigCommon;
+import net.minecraft.world.phys.Vec3;
 import org.cyclops.cyclopscore.gametest.GameTest;
 import org.cyclops.energeticsheep.Reference;
 import org.cyclops.energeticsheep.RegistryEntries;
 import org.cyclops.energeticsheep.entity.EntityAIEatGrassFast;
 import org.cyclops.energeticsheep.entity.EntityEnergeticSheepCommon;
+import org.cyclops.energeticsheep.entity.EntityEnergeticSheepConfigCommon;
 
 /**
  * @author rubensworks
@@ -72,7 +74,7 @@ public class GameTestsCommon {
 
         // Give energetic shears to player
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        ItemStack itemStack = new ItemStack(RegistryEntries.ITEM_ENERGETIC_SHEARS);
+        ItemStack itemStack = new ItemStack(RegistryEntries.ITEM_ENERGETIC_SHEARS.getHolder());
         player.setItemInHand(InteractionHand.MAIN_HAND, itemStack);
 
         helper.succeedWhen(() -> {
@@ -133,14 +135,14 @@ public class GameTestsCommon {
 
         // Give energetic shears with power to player
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        ItemStack itemStack = new ItemStack(RegistryEntries.ITEM_ENERGETIC_SHEARS);
+        ItemStack itemStack = new ItemStack(RegistryEntries.ITEM_ENERGETIC_SHEARS.getHolder());
         player.setItemInHand(InteractionHand.MAIN_HAND, itemStack);
         RegistryEntries.ITEM_ENERGETIC_SHEARS.value().setEnergyStored(itemStack, RegistryEntries.ITEM_ENERGETIC_SHEARS.value().getMaxEnergyStored(itemStack), player, player.getUsedItemHand());
 
         helper.succeedWhen(() -> {
             // Break leaves with energetic shears
             BlockState blockState = helper.getBlockState(POS);
-            InteractionResult interactionResult = itemStack.useOn(new UseOnContext(player, InteractionHand.MAIN_HAND, new BlockHitResult(POS.getCenter(), Direction.NORTH, helper.absolutePos(POS), false)));
+            InteractionResult interactionResult = itemStack.useOn(new UseOnContext(player, InteractionHand.MAIN_HAND, new BlockHitResult(Vec3.atCenterOf(POS), Direction.NORTH, helper.absolutePos(POS), false)));
             helper.assertFalse(interactionResult == InteractionResult.FAIL, Component.literal("Interaction must succeed"));
             helper.assertTrue(itemStack.getItem().mineBlock(itemStack, helper.getLevel(), blockState, helper.absolutePos(POS), player), Component.literal("Item can not mine block"));
             helper.assertTrue(player.hasCorrectToolForDrops(blockState), Component.literal("Player must have correct tool"));
@@ -158,12 +160,12 @@ public class GameTestsCommon {
 
         // Give energetic shears without power to player
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        ItemStack itemStack = new ItemStack(RegistryEntries.ITEM_ENERGETIC_SHEARS);
+        ItemStack itemStack = new ItemStack(RegistryEntries.ITEM_ENERGETIC_SHEARS.getHolder());
         player.setItemInHand(InteractionHand.MAIN_HAND, itemStack);
 
         helper.succeedWhen(() -> {
             // Attempt to break leaves with energetic shears that has no power
-            InteractionResult interactionResult = itemStack.useOn(new UseOnContext(player, InteractionHand.MAIN_HAND, new BlockHitResult(POS.getCenter(), Direction.NORTH, helper.absolutePos(POS), false)));
+            InteractionResult interactionResult = itemStack.useOn(new UseOnContext(player, InteractionHand.MAIN_HAND, new BlockHitResult(Vec3.atCenterOf(POS), Direction.NORTH, helper.absolutePos(POS), false)));
             helper.assertFalse(interactionResult == InteractionResult.FAIL, Component.literal("Interaction must fail"));
 
             helper.assertItemEntityNotPresent(Items.ACACIA_LEAVES);
@@ -178,14 +180,14 @@ public class GameTestsCommon {
 
         // Give energetic shears to player
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        ItemStack itemStack = new ItemStack(RegistryEntries.ITEM_ENERGETIC_SHEARS);
+        ItemStack itemStack = new ItemStack(RegistryEntries.ITEM_ENERGETIC_SHEARS.getHolder());
         player.setItemInHand(InteractionHand.MAIN_HAND, itemStack);
         RegistryEntries.ITEM_ENERGETIC_SHEARS.value().setEnergyStored(itemStack, RegistryEntries.ITEM_ENERGETIC_SHEARS.value().getMaxEnergyStored(itemStack), player, player.getUsedItemHand());
 
         helper.succeedWhen(() -> {
             // Right click with energetic shears
             InteractionResult result = player.interactOn(entity, InteractionHand.MAIN_HAND, entity.position());
-            helper.assertItemEntityPresent(Items.WHITE_WOOL);
+            helper.assertItemEntityPresent(Items.WOOL.white());
             helper.assertTrue(RegistryEntries.ITEM_ENERGETIC_SHEARS.value().getEnergyStored(player.getMainHandItem()) < RegistryEntries.ITEM_ENERGETIC_SHEARS.value().getMaxEnergyStored(player.getMainHandItem()), Component.literal("No energy was consumed from shears"));
             helper.assertTrue(result.equals(InteractionResult.SUCCESS), Component.literal("Interaction failed"));
         });
@@ -198,13 +200,13 @@ public class GameTestsCommon {
 
         // Give energetic shears to player
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        ItemStack itemStack = new ItemStack(RegistryEntries.ITEM_ENERGETIC_SHEARS);
+        ItemStack itemStack = new ItemStack(RegistryEntries.ITEM_ENERGETIC_SHEARS.getHolder());
         player.setItemInHand(InteractionHand.MAIN_HAND, itemStack);
 
         helper.succeedWhen(() -> {
             // Right click with energetic shears
             InteractionResult result = player.interactOn(entity, InteractionHand.MAIN_HAND, entity.position());
-            helper.assertItemEntityNotPresent(Items.WHITE_WOOL);
+            helper.assertItemEntityNotPresent(Items.WOOL.white());
             helper.assertTrue(RegistryEntries.ITEM_ENERGETIC_SHEARS.value().getEnergyStored(player.getMainHandItem()) == 0, Component.literal("Shears do not have enough energy"));
             helper.assertTrue(result.equals(InteractionResult.PASS), Component.literal("Interaction did not pass"));
         });
@@ -393,7 +395,7 @@ public class GameTestsCommon {
 
         // Put energetic shears (empty, no charge) into the dispenser
         DispenserBlockEntity dispenserBlockEntity = (DispenserBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(dispenserPos));
-        ItemStack shearsStack = new ItemStack(RegistryEntries.ITEM_ENERGETIC_SHEARS);
+        ItemStack shearsStack = new ItemStack(RegistryEntries.ITEM_ENERGETIC_SHEARS.getHolder());
         dispenserBlockEntity.setItem(0, shearsStack);
 
         helper.succeedWhen(() -> {
@@ -418,14 +420,14 @@ public class GameTestsCommon {
         helper.setBlock(dispenserPos, Blocks.DISPENSER.defaultBlockState().setValue(DispenserBlock.FACING, Direction.EAST));
 
         // Spawn regular white sheep directly in front of the dispenser (at POS)
-        Sheep entity = helper.spawn(EntityType.SHEEP, POS);
+        Sheep entity = helper.spawn(EntityTypes.SHEEP, POS);
         entity.finalizeSpawn(helper.getLevel(), helper.getLevel().getCurrentDifficultyAt(helper.absolutePos(POS)), EntitySpawnReason.NATURAL, null);
         entity.setColor(DyeColor.WHITE);
 
         // Put energetic shears (fully charged) into the dispenser
         DispenserBlockEntity dispenserBlockEntity = (DispenserBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(dispenserPos));
         Player tempPlayer = helper.makeMockPlayer(GameType.SURVIVAL);
-        ItemStack shearsStack = new ItemStack(RegistryEntries.ITEM_ENERGETIC_SHEARS);
+        ItemStack shearsStack = new ItemStack(RegistryEntries.ITEM_ENERGETIC_SHEARS.getHolder());
         tempPlayer.setItemInHand(InteractionHand.MAIN_HAND, shearsStack);
         RegistryEntries.ITEM_ENERGETIC_SHEARS.value().setEnergyStored(shearsStack, RegistryEntries.ITEM_ENERGETIC_SHEARS.value().getMaxEnergyStored(shearsStack), tempPlayer, InteractionHand.MAIN_HAND);
         dispenserBlockEntity.setItem(0, tempPlayer.getMainHandItem());
@@ -439,7 +441,7 @@ public class GameTestsCommon {
             dispenserBlockEntity.setItem(0, result);
 
             // Regular wool should have been dropped
-            helper.assertItemEntityPresent(Items.WHITE_WOOL);
+            helper.assertItemEntityPresent(Items.WOOL.white());
             // Some energy should have been consumed from the shears
             helper.assertTrue(RegistryEntries.ITEM_ENERGETIC_SHEARS.value().getEnergyStored(result) < RegistryEntries.ITEM_ENERGETIC_SHEARS.value().getMaxEnergyStored(result), Component.literal("Energy should have been consumed from shears after shearing regular sheep"));
         });
@@ -453,7 +455,7 @@ public class GameTestsCommon {
     }
 
     protected static Sheep SPAWN_REGULAR(GameTestHelper helper) {
-        Sheep entity = helper.spawn(EntityType.SHEEP, POS.above());
+        Sheep entity = helper.spawn(EntityTypes.SHEEP, POS.above());
         entity.finalizeSpawn(helper.getLevel(), helper.getLevel().getCurrentDifficultyAt(POS), EntitySpawnReason.NATURAL, null);
         return entity;
     }

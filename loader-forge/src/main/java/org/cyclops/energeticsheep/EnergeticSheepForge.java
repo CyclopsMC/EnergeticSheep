@@ -52,7 +52,7 @@ public class EnergeticSheepForge extends ModBaseForge<EnergeticSheepForge> {
     @Override
     protected CreativeModeTab.Builder constructDefaultCreativeModeTab(CreativeModeTab.Builder builder) {
         return super.constructDefaultCreativeModeTab(builder)
-                .icon(() -> new ItemStack(RegistryEntries.ITEM_ENERGETIC_SHEARS));
+                .icon(() -> new ItemStack(RegistryEntries.ITEM_ENERGETIC_SHEARS.getHolder()));
     }
 
     @Override

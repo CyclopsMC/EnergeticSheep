@@ -1,6 +1,6 @@
 package org.cyclops.energeticsheep.mixin;
 
-import net.minecraft.advancements.criterion.ItemPredicate;
+import net.minecraft.advancements.predicates.ItemPredicate;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemInstance;
 import org.cyclops.energeticsheep.RegistryEntries;

@@ -2,10 +2,13 @@ package org.cyclops.energeticsheep.item;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Shearable;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
@@ -13,14 +16,16 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.IForgeShearable;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import org.cyclops.cyclopscore.RegistryEntriesCommon;
 import org.cyclops.cyclopscore.helper.IModHelpersForge;
+import org.cyclops.energeticsheep.RegistryEntries;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +35,7 @@ import java.util.Optional;
 public class ItemEnergeticShearsForge extends ItemEnergeticShearsCommon {
     public ItemEnergeticShearsForge(Properties builder) {
         super(builder);
+        PlayerInteractEvent.EntityInteractSpecific.BUS.addListener(this::onSheepShear);
     }
 
     @Override
@@ -113,8 +119,9 @@ public class ItemEnergeticShearsForge extends ItemEnergeticShearsCommon {
     @Nullable
     @Override
     protected List<ItemStack> getShearableDrops(Object maybeShearable, @Nullable Player player, ItemStack item, Level level, BlockPos pos) {
-        if (maybeShearable instanceof IForgeShearable shearable && shearable.isShearable(item, level, pos)) {
-            return shearable.onSheared(player, item, level, pos, 0);
+        if (level instanceof ServerLevel serverLevel && maybeShearable instanceof Shearable shearable) {
+            shearable.shear(serverLevel, SoundSource.PLAYERS, item);
+            return new ArrayList<>();
         }
         return null;
     }
@@ -138,6 +145,20 @@ public class ItemEnergeticShearsForge extends ItemEnergeticShearsCommon {
                     .orElse(null);
         }
         return null;
+    }
+
+    public boolean onSheepShear(PlayerInteractEvent.EntityInteractSpecific event) {
+        if (event.getTarget() instanceof LivingEntity livingEntity
+                && livingEntity.getType() != RegistryEntries.ENTITY_TYPE_ENERGETIC_SHEEP.value()) {
+            event.setCancellationResult(interactLivingEntity(
+                    event.getItemStack(),
+                    event.getEntity(),
+                    livingEntity,
+                    event.getHand()
+            ));
+            return true;
+        }
+        return false;
     }
 
     // TODO: restore when item caps are restored in Forge

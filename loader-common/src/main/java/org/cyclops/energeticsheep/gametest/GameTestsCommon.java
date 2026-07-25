@@ -189,7 +189,7 @@ public class GameTestsCommon {
             InteractionResult result = player.interactOn(entity, InteractionHand.MAIN_HAND, entity.position());
             helper.assertItemEntityPresent(Items.WOOL.white());
             helper.assertTrue(RegistryEntries.ITEM_ENERGETIC_SHEARS.value().getEnergyStored(player.getMainHandItem()) < RegistryEntries.ITEM_ENERGETIC_SHEARS.value().getMaxEnergyStored(player.getMainHandItem()), Component.literal("No energy was consumed from shears"));
-            helper.assertTrue(result.equals(InteractionResult.SUCCESS), Component.literal("Interaction failed"));
+            helper.assertTrue(result.equals(InteractionResult.SUCCESS) || result.equals(InteractionResult.CONSUME), Component.literal("Interaction failed"));
         });
     }
 

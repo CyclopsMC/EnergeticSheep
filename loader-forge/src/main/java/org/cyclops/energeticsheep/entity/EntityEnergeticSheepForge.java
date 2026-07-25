@@ -1,14 +1,11 @@
 package org.cyclops.energeticsheep.entity;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.SpawnGroupData;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.storage.ValueInput;
@@ -20,7 +17,6 @@ import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.energy.IEnergyStorage;
 
 import javax.annotation.Nullable;
-import java.util.List;
 
 /**
  * @author rubensworks
@@ -79,11 +75,6 @@ public class EntityEnergeticSheepForge extends EntityEnergeticSheepCommon {
         if (this.energyStorage != null) {
             this.energyStorage.extractEnergy(this.energyStorage.getMaxEnergyStored(), false);
         }
-    }
-
-    @Override
-    public List<ItemStack> onSheared(@Nullable Player player, ItemStack item, Level world, BlockPos pos, int fortune) {
-        return onShearedInternal(player, item, world, pos);
     }
 
     @Override

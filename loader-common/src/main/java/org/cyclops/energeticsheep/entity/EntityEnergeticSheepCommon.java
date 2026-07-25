@@ -323,6 +323,10 @@ public abstract class EntityEnergeticSheepCommon extends Sheep {
         if (player.getItemInHand(hand).getItem() instanceof DyeItem) {
             return InteractionResult.CONSUME;
         }
+        // Don't obtain wool blocks when using energetic shears.
+        if (player.getItemInHand(hand).getItem() == RegistryEntries.ITEM_ENERGETIC_SHEARS.value()) {
+            return InteractionResult.PASS;
+        }
         return super.mobInteract(player, hand);
     }
 

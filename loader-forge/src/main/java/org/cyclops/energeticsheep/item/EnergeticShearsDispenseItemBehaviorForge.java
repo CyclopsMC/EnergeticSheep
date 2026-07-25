@@ -4,14 +4,14 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.dispenser.BlockSource;
 import net.minecraft.core.dispenser.OptionalDispenseItemBehavior;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.Containers;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
+import net.minecraft.world.entity.Shearable;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.common.IForgeShearable;
 import net.minecraftforge.energy.IEnergyStorage;
 import org.cyclops.energeticsheep.entity.EntityEnergeticSheepForge;
 
@@ -60,9 +60,8 @@ public class EnergeticShearsDispenseItemBehaviorForge extends OptionalDispenseIt
             }
 
             // For other shearable entities (e.g. regular sheep): shear and consume energy
-            if (entity instanceof IForgeShearable shearable && shearable.isShearable(stack, source.level(), blockPos)) {
-                shearable.onSheared(null, stack, source.level(), blockPos, 0)
-                        .forEach(drop -> Containers.dropItemStack(source.level(), entity.getX(), entity.getY(), entity.getZ(), drop));
+            if (entity instanceof Shearable shearable) {
+                shearable.shear(source.level(), SoundSource.MASTER, stack);
                 source.level().gameEvent(null, GameEvent.SHEAR, entity.position());
                 this.setSuccess(true);
                 // Consume energy instead of calling hurtAndBreak

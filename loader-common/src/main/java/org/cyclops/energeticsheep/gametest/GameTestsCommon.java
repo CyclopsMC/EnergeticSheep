@@ -14,6 +14,7 @@ import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.animal.sheep.Sheep;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
@@ -134,7 +135,7 @@ public class GameTestsCommon {
         helper.setBlock(POS, Blocks.ACACIA_LEAVES);
 
         // Give energetic shears with power to player
-        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        ServerPlayer player = (ServerPlayer) helper.makeMockServerPlayer(GameType.SURVIVAL);
         ItemStack itemStack = new ItemStack(RegistryEntries.ITEM_ENERGETIC_SHEARS.getHolder());
         player.setItemInHand(InteractionHand.MAIN_HAND, itemStack);
         RegistryEntries.ITEM_ENERGETIC_SHEARS.value().setEnergyStored(itemStack, RegistryEntries.ITEM_ENERGETIC_SHEARS.value().getMaxEnergyStored(itemStack), player, player.getUsedItemHand());

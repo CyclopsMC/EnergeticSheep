@@ -18,7 +18,6 @@ public record BiomeModifierSpawnEnergeticSheep(HolderSet<Biome> biomes, HolderSe
     @Override
     public void modify(Holder<Biome> biome, Phase phase, ModifiableBiomeInfo.BiomeInfo.Builder builder) {
         if (phase == Phase.ADD && biomes.contains(biome) && !biomesBlacklist.contains(biome)) {
-            // Mob spawns moved to the NATURAL_MOB_SPAWNS environment attribute, and Forge has no builder shim for it
             var entry = builder.attributes().get(EnvironmentAttributes.NATURAL_MOB_SPAWNS);
             if (entry == null || entry.modifier() != MobSpawnSettingsModifier.overlay()) {
                 return;

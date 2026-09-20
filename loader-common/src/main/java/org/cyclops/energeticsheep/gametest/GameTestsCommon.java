@@ -12,6 +12,11 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.util.random.Weighted;
+import net.minecraft.util.valueproviders.IntProvider;
+import net.minecraft.world.attribute.EnvironmentAttributes;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.animal.sheep.Sheep;
 import net.minecraft.server.level.ServerPlayer;
@@ -34,6 +39,8 @@ import org.cyclops.energeticsheep.entity.EntityAIEatGrassFast;
 import org.cyclops.energeticsheep.entity.EntityEnergeticSheepCommon;
 import org.cyclops.energeticsheep.entity.EntityEnergeticSheepConfigCommon;
 
+import java.util.Optional;
+
 /**
  * @author rubensworks
  */
@@ -41,6 +48,26 @@ public class GameTestsCommon {
 
     public static final String TEMPLATE_EMPTY = Reference.MOD_ID + ":empty10";
     public static final BlockPos POS = BlockPos.ZERO.offset(2, 1, 2);
+
+    @GameTest(template = TEMPLATE_EMPTY)
+    public void testBiomeSpawnEntry(GameTestHelper helper) {
+        // Read through the same path NaturalSpawner uses, so this fails if the biome modifier did not apply
+        MobSpawnSettings spawns = helper.getLevel().environmentAttributes()
+                .getValue(EnvironmentAttributes.NATURAL_MOB_SPAWNS, helper.absolutePos(POS));
+        Optional<Weighted<MobSpawnSettings.SpawnerData>> entry = spawns.getMobsToSpawn(MobCategory.CREATURE)
+                .unwrap()
+                .stream()
+                .filter(weighted -> weighted.value().type() == RegistryEntries.ENTITY_TYPE_ENERGETIC_SHEEP.value())
+                .findFirst();
+
+        helper.assertTrue(entry.isPresent(), Component.literal("The biome modifier did not add an energetic sheep spawn entry"));
+        helper.assertValueEqual(entry.get().weight(), 3, Component.literal("Spawn weight"));
+        IntProvider count = entry.get().value().count();
+        helper.assertValueEqual(count.minInclusive(), 2, Component.literal("Minimum spawn count"));
+        helper.assertValueEqual(count.maxInclusive(), 4, Component.literal("Maximum spawn count"));
+
+        helper.succeed();
+    }
 
     @GameTest(template = TEMPLATE_EMPTY)
     public void testSpawn(GameTestHelper helper) {

@@ -3,6 +3,7 @@ package org.cyclops.energeticsheep.biome.modifier;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.Biome;
@@ -13,7 +14,7 @@ import org.cyclops.energeticsheep.RegistryEntriesNeoForge;
 
 public record BiomeModifierSpawnEnergeticSheep(HolderSet<Biome> biomes, HolderSet<Biome> biomesBlacklist, int spawnWeight, int minCount, int maxCount) implements BiomeModifier {
     @Override
-    public void modify(Holder<Biome> biome, Phase phase, ModifiableBiomeInfo.BiomeInfo.Builder builder) {
+    public void modify(RegistryAccess registries, Holder<Biome> biome, Phase phase, ModifiableBiomeInfo.BiomeInfo.Builder builder) {
         if (phase == Phase.ADD && biomes.contains(biome) && !biomesBlacklist.contains(biome)) {
             builder.getMobSpawnSettings().addSpawn(RegistryEntries.ENTITY_TYPE_ENERGETIC_SHEEP.value(), MobCategory.CREATURE, spawnWeight, UniformInt.of(minCount, maxCount));
         }
